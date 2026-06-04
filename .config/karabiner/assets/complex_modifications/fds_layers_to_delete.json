@@ -1,0 +1,73 @@
+{
+  "title": "Hold F/D/S + J for delete variants",
+  "rules": [
+    {
+      "description": "Hold F = Backspace, D = Option+Backspace, S = Command+Backspace (via J)",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": { "key_code": "f", "modifiers": { "optional": ["any"] } },
+          "to": [
+            { "key_code": "f" },
+            { "set_variable": { "name": "f_is_held", "value": 1 } }
+          ],
+          "to_after_key_up": [
+            { "set_variable": { "name": "f_is_held", "value": 0 } }
+          ]
+        },
+        {
+          "type": "basic",
+          "from": { "key_code": "d", "modifiers": { "optional": ["any"] } },
+          "to": [
+            { "key_code": "d" },
+            { "set_variable": { "name": "d_is_held", "value": 1 } }
+          ],
+          "to_after_key_up": [
+            { "set_variable": { "name": "d_is_held", "value": 0 } }
+          ]
+        },
+        {
+          "type": "basic",
+          "from": { "key_code": "s", "modifiers": { "optional": ["any"] } },
+          "to": [
+            { "key_code": "s" },
+            { "set_variable": { "name": "s_is_held", "value": 1 } }
+          ],
+          "to_after_key_up": [
+            { "set_variable": { "name": "s_is_held", "value": 0 } }
+          ]
+        },
+        {
+          "type": "basic",
+          "from": { "key_code": "j", "modifiers": { "optional": ["any"] } },
+          "conditions": [
+            { "type": "variable_if", "name": "f_is_held", "value": 1 }
+          ],
+          "to": [
+            { "key_code": "delete_or_backspace" }
+          ]
+        },
+        {
+          "type": "basic",
+          "from": { "key_code": "j", "modifiers": { "optional": ["any"] } },
+          "conditions": [
+            { "type": "variable_if", "name": "d_is_held", "value": 1 }
+          ],
+          "to": [
+            { "key_code": "delete_or_backspace", "modifiers": ["option"] }
+          ]
+        },
+        {
+          "type": "basic",
+          "from": { "key_code": "j", "modifiers": { "optional": ["any"] } },
+          "conditions": [
+            { "type": "variable_if", "name": "s_is_held", "value": 1 }
+          ],
+          "to": [
+            { "key_code": "delete_or_backspace", "modifiers": ["command"] }
+          ]
+        }
+      ]
+    }
+  ]
+}

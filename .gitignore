@@ -1,0 +1,10 @@
+# macOS / editor cruft
+.DS_Store
+*.swp
+*.swo
+
+# Machine-specific Claude settings (not portable)
+**/.claude/settings.local.json
+
+# Karabiner rewrites these on every change — regenerated, not config
+.config/karabiner/automatic_backups/
