@@ -64,7 +64,7 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
-  -- LaTeX: <leader>ll builds with latexmk into build/ and opens the PDF
+  -- LaTeX: <leader>ll builds with latexmk (aux files in build/, PDF beside .tex) and opens the PDF
   vim.api.nvim_create_autocmd("FileType", {
     pattern = { "tex", "plaintex" },
     callback = function(args)
@@ -77,7 +77,7 @@ vim.api.nvim_create_autocmd("FileType", {
         local cmd = {
           "latexmk", "-pdf", "-cd",
           "-interaction=nonstopmode",
-          "-output-directory=build",
+          "-auxdir=build",
           file,
         }
         vim.notify("latexmk: building " .. name .. ".tex ...")
@@ -86,7 +86,7 @@ vim.api.nvim_create_autocmd("FileType", {
           stderr_buffered = true,
           on_exit = function(_, code)
             if code == 0 then
-              vim.fn.jobstart({ "open", dir .. "/build/" .. name .. ".pdf" })
+              vim.fn.jobstart({ "open", dir .. "/" .. name .. ".pdf" })
             else
               vim.notify("latexmk failed (exit " .. code .. ")", vim.log.levels.ERROR)
               vim.cmd("cfile " .. vim.fn.fnameescape(dir .. "/build/" .. name .. ".log"))
