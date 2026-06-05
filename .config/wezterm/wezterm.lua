@@ -1,7 +1,7 @@
 local wezterm = require("wezterm")
 local config = {}
 
-config.font_size = 16.5
+config.font_size = 15
 config.window_background_opacity = 0.90
 config.macos_window_background_blur = 92
 config.text_background_opacity = 1
