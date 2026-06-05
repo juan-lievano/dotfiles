@@ -34,44 +34,35 @@ live symlink — run it if a config ever seems to have "detached".
 
 ## Restoring on a new machine
 
-Clone the repo, then run the script below to recreate every symlink. It backs
-up anything already sitting at each target (as `*.pre-dotfiles.<timestamp>`)
-before linking, and is safe to re-run.
+Clone the repo into your **home folder** and run `install.sh`:
 
 ```sh
-git clone <repo-url> ~/dotfiles   # or any path you like, e.g. ~/Documents/dotfiles
+git clone <repo-url> ~/dotfiles
+cd ~/dotfiles
+./install.sh
 ```
 
-```sh
-#!/usr/bin/env bash
-# Recreate dotfile symlinks after cloning the repo. Safe to re-run.
-# Self-locating: works from whatever path you cloned into.
-set -euo pipefail
-DOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+`install.sh` recreates every symlink. It backs up anything already sitting at
+each target (as `*.pre-dotfiles.<timestamp>`) before linking, and is safe to
+re-run. It's self-locating (finds its own directory via `BASH_SOURCE`), so it
+works from whatever path you cloned into — but see the note below on *where* to
+clone.
 
-link() {                      # link <path relative to repo / $HOME>
-  local rel="$1" src="$HOME/$rel" dest="$DOT/$rel"
-  mkdir -p "$(dirname "$src")"
-  if [ -e "$src" ] && [ ! -L "$src" ]; then
-    mv "$src" "$src.pre-dotfiles.$(date +%s)"   # stash whatever was there
-  fi
-  ln -sfn "$dest" "$src"                          # -n: replace, don't nest
-  echo "linked ~/$rel"
-}
+### Why `~/dotfiles` and not `~/Documents` (or any iCloud folder)
 
-link .zshrc
-link .zprofile
-link .gitconfig
-link .config/git
-link .config/nvim
-link .config/karabiner
-link .config/wezterm
-link .config/qalculate
+Keep this repo **outside iCloud Drive** (i.e. not in `~/Documents` or `~/Desktop`
+if those sync to iCloud). Two reasons:
 
-echo "done — open a new shell."
-```
+1. **iCloud evicts files.** With "Optimize Mac Storage" on, iCloud silently
+   replaces files you haven't touched lately with placeholder stubs that
+   re-download on access. Since `~/.zshrc` is a *symlink into this repo*, an
+   evicted target means your shell can hang or fail to start — especially
+   offline or early in boot, exactly when you can't afford it. Config files need
+   to be always-present and instant; iCloud optimizes for the opposite.
+2. **`.git` corruption.** File-sync services sync individual files without
+   understanding git's locking, so a `.git` directory living in iCloud can get
+   corrupted by a partial or concurrent sync.
 
-To run it: save it as `install.sh` inside the cloned repo and run `bash install.sh`
-from there. Because the script locates itself (via `BASH_SOURCE`), it links against
-whatever path you cloned into — don't paste the block straight into the terminal, as
-that leaves it unable to find its own location.
+You don't need iCloud for backup anyway — **the GitHub remote already is the
+backup**, with full version history (which iCloud doesn't give you). The home
+folder is local-only and never evicted, so it's the right home for the live repo.
