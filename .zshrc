@@ -161,12 +161,15 @@ export PATH="$HOME/.local/bin:$PATH"
 bindkey '^F' fzf-file-widget
 bindkey '^G' fzf-cd-widget
 
-# dotcheck: verify every tracked dotfile is still symlinked into ~/dotfiles.
+# dotcheck: verify every tracked dotfile is still symlinked into the repo.
 # Catches the rare case where an editor replaced a symlink with a real copy
 # (a "detached" config). Run it after big editor/app config changes.
+# Locates the repo by following ~/.zshrc's own symlink, so it works no matter
+# where the repo was cloned. Override with: export DOTFILES_DIR=/path/to/repo
 dotcheck() {
-  local repo="$HOME/dotfiles" rel bad=0
-  [[ -d "$repo/.git" ]] || { echo "no dotfiles repo at $repo"; return 1; }
+  local link="$HOME/.zshrc" repo rel bad=0
+  repo="${DOTFILES_DIR:-${link:A:h}}"   # :A resolve symlink, :h strip filename
+  [[ -d "$repo/.git" ]] || { echo "no dotfiles repo found (looked in $repo)"; return 1; }
   while IFS= read -r rel; do
     # repo-only files (not symlinked into $HOME) — skip them
     case "$rel" in README.md|.gitignore|LICENSE) continue;; esac
