@@ -24,4 +24,12 @@ link .config/karabiner
 link .config/wezterm
 link .config/qalculate
 
+# fzf shell integration (generates ~/.fzf.zsh, needed for key bindings)
+if command -v fzf &>/dev/null; then
+  "$(brew --prefix)/opt/fzf/install" --key-bindings --completion --no-update-rc --no-bash --no-fish
+  echo "fzf shell integration installed"
+else
+  echo "fzf not installed — skipping shell integration (run brew bundle first)"
+fi
+
 echo "done — open a new shell."
