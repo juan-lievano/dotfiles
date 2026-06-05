@@ -31,7 +31,7 @@ vim.pack.add({
 	"https://github.com/mluders/comfy-line-numbers.nvim",
 })
 
-vim.lsp.enable({ "lua_ls", "pyright" })
+vim.lsp.enable({ "lua_ls", "pyright", "texlab" })
 require("mini.pick").setup()
 require("mini.files").setup()
 require("comfy-line-numbers").setup()
