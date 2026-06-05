@@ -5,7 +5,8 @@ set -euo pipefail
 DOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 link() {                      # link <path relative to repo / $HOME>
-  local rel="$1" src="$HOME/$rel" dest="$DOT/$rel"
+  local rel="$1"
+  local src="$HOME/$rel" dest="$DOT/$rel"
   mkdir -p "$(dirname "$src")"
   if [ -e "$src" ] && [ ! -L "$src" ]; then
     mv "$src" "$src.pre-dotfiles.$(date +%s)"   # stash whatever was there
