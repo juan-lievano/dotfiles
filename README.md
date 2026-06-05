@@ -39,14 +39,15 @@ up anything already sitting at each target (as `*.pre-dotfiles.<timestamp>`)
 before linking, and is safe to re-run.
 
 ```sh
-git clone <repo-url> ~/dotfiles
+git clone <repo-url> ~/dotfiles   # or any path you like, e.g. ~/Documents/dotfiles
 ```
 
 ```sh
 #!/usr/bin/env bash
-# Recreate dotfile symlinks after cloning into ~/dotfiles. Safe to re-run.
+# Recreate dotfile symlinks after cloning the repo. Safe to re-run.
+# Self-locating: works from whatever path you cloned into.
 set -euo pipefail
-DOT="$HOME/dotfiles"
+DOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 link() {                      # link <path relative to repo / $HOME>
   local rel="$1" src="$HOME/$rel" dest="$DOT/$rel"
@@ -70,5 +71,7 @@ link .config/qalculate
 echo "done — open a new shell."
 ```
 
-To run it: paste into a file (e.g. `~/dotfiles/install.sh`) and `bash install.sh`,
-or paste the block straight into your terminal.
+To run it: save it as `install.sh` inside the cloned repo and run `bash install.sh`
+from there. Because the script locates itself (via `BASH_SOURCE`), it links against
+whatever path you cloned into — don't paste the block straight into the terminal, as
+that leaves it unable to find its own location.
