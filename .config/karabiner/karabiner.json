@@ -82,18 +82,9 @@
                         ]
                     },
                     {
-                        "description": "Control-J acts as Carriage Return everywhere except Terminal",
+                        "description": "Control-J acts as Carriage Return everywhere (incl. terminals)",
                         "manipulators": [
                             {
-                                "conditions": [
-                                    {
-                                        "bundle_identifiers": [
-                                            "^com\\.apple\\.Terminal$",
-                                            "^com\\.github\\.wez\\.wezterm$"
-                                        ],
-                                        "type": "frontmost_application_unless"
-                                    }
-                                ],
                                 "from": {
                                     "key_code": "j",
                                     "modifiers": {
