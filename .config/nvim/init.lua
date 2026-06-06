@@ -32,7 +32,23 @@ vim.pack.add({
 })
 
 vim.lsp.enable({ "lua_ls", "pyright", "texlab" })
-require("mini.pick").setup()
+local pick = require("mini.pick")
+pick.setup({
+	mappings = {
+		-- Ctrl-J behaves like Enter inside the picker (terminal sends Ctrl-J as
+		-- <NL>, not <CR>, so it doesn't match the default `choose` key on its
+		-- own). Replicates the built-in choose: pick current item, then stop.
+		choose_ctrl_j = {
+			char = "<C-j>",
+			func = function()
+				local item = pick.get_picker_matches().current
+				if item == nil then return true end
+				pick.get_picker_opts().source.choose(item)
+				return true
+			end,
+		},
+	},
+})
 require("mini.files").setup()
 require("comfy-line-numbers").setup()
 
@@ -208,7 +224,8 @@ vim.api.nvim_set_hl(0, "ModeMsg", { fg = "#ffffff", bg = "None", bold = true })
 -- dictionary and spelling stuff
 -- vim.opt.spell = true
 -- vim.opt.spelllang = "es,en" -- spanish, english
-vim.opt.dictionary:append("/juanp.lievanok./share/dict/words")
+-- system word list (used by i_CTRL-X_CTRL-K dictionary completion)
+vim.opt.dictionary:append("/usr/share/dict/words")
 
 -- Define autocmds for focus events
 vim.api.nvim_create_augroup("FocusSafety", { clear = true })
