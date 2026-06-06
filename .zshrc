@@ -84,30 +84,13 @@ function daily() {
 )
 }
 
-# script to journal
-
-function jrnl() {
-  local kind="${1:-main}"
-  local base_dir=~/nvimdocs/journal
-
-  if [[ "$kind" != "main" && "$kind" != "food" && "$kind" != "ph" ]]; then
-    echo "Usage: journal [main|food|ph]"
-    return 1
-  fi
-
-  if [[ "$kind" == "ph" ]]; then
-    ~/nvimdocs/zshscripts/edit_ph_json.sh
-  else
-    local dir="$base_dir/$kind"
-    local file="$(date +%Y-%m-%d).md"
-    mkdir -p "$dir"
-    nvim "$dir/$file"
-  fi
-}
-
 # script to cd to developing projects
 function dev() {
 		cd ~/Documents/Developing/
+}
+
+function doc() {
+		cd ~/Documents/
 }
 
 # script for todos
