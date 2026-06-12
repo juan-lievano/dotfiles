@@ -18,6 +18,7 @@ link() {                      # link <path relative to repo / $HOME>
 link .zshrc
 link .zprofile
 link .gitconfig
+link .latexmkrc
 link .config/git
 link .config/nvim
 link .config/karabiner

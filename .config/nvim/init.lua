@@ -80,7 +80,8 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
-  -- LaTeX: <leader>ll builds with latexmk (aux files in build/, PDF beside .tex) and opens the PDF
+  -- LaTeX: <leader>ll builds the current file with latexmk and opens the PDF.
+  -- Build layout is configured in ~/.latexmkrc.
   vim.api.nvim_create_autocmd("FileType", {
     pattern = { "tex", "plaintex" },
     callback = function(args)
@@ -89,13 +90,7 @@ vim.api.nvim_create_autocmd("FileType", {
         local dir  = vim.fn.expand("%:p:h")
         local name = vim.fn.expand("%:t:r")
         vim.cmd("silent! write")
-        vim.fn.mkdir(dir .. "/build", "p")
-        local cmd = {
-          "latexmk", "-pdf", "-cd",
-          "-interaction=nonstopmode",
-          "-auxdir=build",
-          file,
-        }
+        local cmd = { "latexmk", "-cd", file }
         vim.notify("latexmk: building " .. name .. ".tex ...")
         vim.fn.jobstart(cmd, {
           stdout_buffered = true,
@@ -110,7 +105,7 @@ vim.api.nvim_create_autocmd("FileType", {
             end
           end,
         })
-      end, { buffer = args.buf, desc = "latexmk -> build/ and open PDF" })
+      end, { buffer = args.buf, desc = "latexmk current file and open PDF" })
     end,
   })
 

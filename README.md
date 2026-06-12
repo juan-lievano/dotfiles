@@ -11,6 +11,7 @@ the machine works — editing `~/.zshrc` and `~/dotfiles/.zshrc` is the same fil
 | `.zshrc`                   | `~/.zshrc`              | zsh shell config               |
 | `.zprofile`                | `~/.zprofile`           | login-shell Homebrew bootstrap |
 | `.gitconfig`               | `~/.gitconfig`          | git identity + settings        |
+| `.latexmkrc`               | `~/.latexmkrc`          | LaTeX build layout             |
 | `.config/git/`             | `~/.config/git/`        | global gitignore               |
 | `.config/nvim/`            | `~/.config/nvim/`       | Neovim config                  |
 | `.config/karabiner/`       | `~/.config/karabiner/`  | keyboard remaps (caps→ctrl)    |
