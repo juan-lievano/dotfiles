@@ -287,7 +287,7 @@
                         ]
                     },
                     {
-                        "description": "Simultaneous Space + 5 → open VS Code",
+                        "description": "Simultaneous Space + 5 → open WhatsApp",
                         "manipulators": [
                             {
                                 "from": {
@@ -295,6 +295,22 @@
                                     "simultaneous": [
                                         { "key_code": "spacebar" },
                                         { "key_code": "5" }
+                                    ]
+                                },
+                                "to": [{ "shell_command": "open -a 'WhatsApp'" }],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Simultaneous Space + 6 → open VS Code",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "modifiers": { "optional": ["any"] },
+                                    "simultaneous": [
+                                        { "key_code": "spacebar" },
+                                        { "key_code": "6" }
                                     ]
                                 },
                                 "to": [{ "shell_command": "open -a 'Visual Studio Code'" }],
