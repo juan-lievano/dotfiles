@@ -52,6 +52,29 @@ pick.setup({
 require("mini.files").setup()
 require("comfy-line-numbers").setup()
 
+-- Absolute line numbers while typing a `:` command, relative otherwise.
+-- comfy-line-numbers renders absolute numbers whenever relativenumber is off,
+-- so we just flip it off on cmdline enter (and redraw, since the buffer won't
+-- repaint on its own mid-command) and flip it back on leave.
+local cmdline_nums = vim.api.nvim_create_augroup("CmdlineAbsoluteNumbers", { clear = true })
+vim.api.nvim_create_autocmd("CmdlineEnter", {
+	group = cmdline_nums,
+	pattern = ":",
+	callback = function()
+		if vim.wo.relativenumber then
+			vim.wo.relativenumber = false
+			vim.cmd("redraw")
+		end
+	end,
+})
+vim.api.nvim_create_autocmd("CmdlineLeave", {
+	group = cmdline_nums,
+	pattern = ":",
+	callback = function()
+		vim.wo.relativenumber = true
+	end,
+})
+
 require("leetcode_config")
 
 -- -- things for :make to work (simpler than below but doesn't produce all the links)
