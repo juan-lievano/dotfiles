@@ -150,6 +150,10 @@ vim.keymap.set("n", "<C-j>", "<C-w>j")
 vim.keymap.set("n", "<C-k>", "<C-w>k")
 vim.keymap.set("n", "<C-l>", "<C-w>l")
 
+-- Ctrl-P/Ctrl-N to scroll command-line history (like readline)
+vim.keymap.set("c", "<C-p>", "<Up>", { noremap = true })
+vim.keymap.set("c", "<C-n>", "<Down>", { noremap = true })
+
 -- LSP keymaps
 -- k
 vim.api.nvim_create_autocmd("LspAttach", {
