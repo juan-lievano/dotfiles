@@ -5,50 +5,83 @@
             "complex_modifications": {
                 "rules": [
                     {
-                        "description": "Hyper+a,s,d,f → open apps (same as Space+1..4)",
+                        "description": "Hyper+1..7 → app slots (mapping lives in open-app-slot.sh)",
                         "manipulators": [
                             {
                                 "from": {
-                                    "key_code": "a",
+                                    "key_code": "1",
                                     "modifiers": {
                                         "mandatory": ["command", "control", "option", "shift"],
                                         "optional": ["any"]
                                     }
                                 },
-                                "to": [{ "shell_command": "open -a wezterm" }],
+                                "to": [{ "shell_command": "~/.config/karabiner/open-app-slot.sh 1" }],
                                 "type": "basic"
                             },
                             {
                                 "from": {
-                                    "key_code": "r",
+                                    "key_code": "2",
                                     "modifiers": {
                                         "mandatory": ["command", "control", "option", "shift"],
                                         "optional": ["any"]
                                     }
                                 },
-                                "to": [{ "shell_command": "open -a safari" }],
+                                "to": [{ "shell_command": "~/.config/karabiner/open-app-slot.sh 2" }],
                                 "type": "basic"
                             },
                             {
                                 "from": {
-                                    "key_code": "s",
+                                    "key_code": "3",
                                     "modifiers": {
                                         "mandatory": ["command", "control", "option", "shift"],
                                         "optional": ["any"]
                                     }
                                 },
-                                "to": [{ "shell_command": "open -a Preview" }],
+                                "to": [{ "shell_command": "~/.config/karabiner/open-app-slot.sh 3" }],
                                 "type": "basic"
                             },
                             {
                                 "from": {
-                                    "key_code": "t",
+                                    "key_code": "4",
                                     "modifiers": {
                                         "mandatory": ["command", "control", "option", "shift"],
                                         "optional": ["any"]
                                     }
                                 },
-                                "to": [{ "shell_command": "open -a Dictionary" }],
+                                "to": [{ "shell_command": "~/.config/karabiner/open-app-slot.sh 4" }],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "5",
+                                    "modifiers": {
+                                        "mandatory": ["command", "control", "option", "shift"],
+                                        "optional": ["any"]
+                                    }
+                                },
+                                "to": [{ "shell_command": "~/.config/karabiner/open-app-slot.sh 5" }],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "6",
+                                    "modifiers": {
+                                        "mandatory": ["command", "control", "option", "shift"],
+                                        "optional": ["any"]
+                                    }
+                                },
+                                "to": [{ "shell_command": "~/.config/karabiner/open-app-slot.sh 6" }],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "7",
+                                    "modifiers": {
+                                        "mandatory": ["command", "control", "option", "shift"],
+                                        "optional": ["any"]
+                                    }
+                                },
+                                "to": [{ "shell_command": "~/.config/karabiner/open-app-slot.sh 7" }],
                                 "type": "basic"
                             }
                         ]
@@ -268,7 +301,7 @@
                         ]
                     },
                     {
-                        "description": "Simultaneous Space + 1 → open Terminal",
+                        "description": "Simultaneous Space+1..7 → app slots (mapping lives in open-app-slot.sh)",
                         "manipulators": [
                             {
                                 "from": {
@@ -278,14 +311,9 @@
                                         { "key_code": "1" }
                                     ]
                                 },
-                                "to": [{ "shell_command": "open -a wezterm" }],
+                                "to": [{ "shell_command": "~/.config/karabiner/open-app-slot.sh 1" }],
                                 "type": "basic"
-                            }
-                        ]
-                    },
-                    {
-                        "description": "Simultaneous Space + 2 → open Safari",
-                        "manipulators": [
+                            },
                             {
                                 "from": {
                                     "modifiers": { "optional": ["any"] },
@@ -294,14 +322,9 @@
                                         { "key_code": "2" }
                                     ]
                                 },
-                                "to": [{ "shell_command": "open -a safari" }],
+                                "to": [{ "shell_command": "~/.config/karabiner/open-app-slot.sh 2" }],
                                 "type": "basic"
-                            }
-                        ]
-                    },
-                    {
-                        "description": "Simultaneous Space + 3 → open Preview",
-                        "manipulators": [
+                            },
                             {
                                 "from": {
                                     "modifiers": { "optional": ["any"] },
@@ -310,14 +333,9 @@
                                         { "key_code": "3" }
                                     ]
                                 },
-                                "to": [{ "shell_command": "open -a Preview" }],
+                                "to": [{ "shell_command": "~/.config/karabiner/open-app-slot.sh 3" }],
                                 "type": "basic"
-                            }
-                        ]
-                    },
-                    {
-                        "description": "Simultaneous Space + 4 → open Mail",
-                        "manipulators": [
+                            },
                             {
                                 "from": {
                                     "modifiers": { "optional": ["any"] },
@@ -326,14 +344,9 @@
                                         { "key_code": "4" }
                                     ]
                                 },
-                                "to": [{ "shell_command": "open -a Mail" }],
+                                "to": [{ "shell_command": "~/.config/karabiner/open-app-slot.sh 4" }],
                                 "type": "basic"
-                            }
-                        ]
-                    },
-                    {
-                        "description": "Simultaneous Space + 5 → open WhatsApp",
-                        "manipulators": [
+                            },
                             {
                                 "from": {
                                     "modifiers": { "optional": ["any"] },
@@ -342,14 +355,9 @@
                                         { "key_code": "5" }
                                     ]
                                 },
-                                "to": [{ "shell_command": "open -a 'WhatsApp'" }],
+                                "to": [{ "shell_command": "~/.config/karabiner/open-app-slot.sh 5" }],
                                 "type": "basic"
-                            }
-                        ]
-                    },
-                    {
-                        "description": "Simultaneous Space + 6 → open VS Code",
-                        "manipulators": [
+                            },
                             {
                                 "from": {
                                     "modifiers": { "optional": ["any"] },
@@ -358,7 +366,18 @@
                                         { "key_code": "6" }
                                     ]
                                 },
-                                "to": [{ "shell_command": "open -a 'Visual Studio Code'" }],
+                                "to": [{ "shell_command": "~/.config/karabiner/open-app-slot.sh 6" }],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "modifiers": { "optional": ["any"] },
+                                    "simultaneous": [
+                                        { "key_code": "spacebar" },
+                                        { "key_code": "7" }
+                                    ]
+                                },
+                                "to": [{ "shell_command": "~/.config/karabiner/open-app-slot.sh 7" }],
                                 "type": "basic"
                             }
                         ]
