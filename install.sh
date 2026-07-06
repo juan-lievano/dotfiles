@@ -24,7 +24,8 @@ link .config/nvim
 link .config/karabiner
 link .config/wezterm
 link .config/qalculate
-link .config/aerc/aerc.conf   # file, not dir: accounts.conf (secrets) lives beside it
+link .config/aerc/aerc.conf   # files, not the dir: accounts.conf (secrets) lives beside them
+link .config/aerc/binds.conf
 
 # fzf shell integration (generates ~/.fzf.zsh, needed for key bindings)
 if command -v fzf &>/dev/null; then
