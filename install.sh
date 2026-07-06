@@ -24,6 +24,14 @@ link .config/nvim
 link .config/karabiner
 link .config/wezterm
 link .config/qalculate
+link .config/aerc/aerc.conf   # file, not dir: accounts.conf (secrets) lives beside it
+
+# aerc on macOS reads ~/Library/Preferences/aerc unless XDG_CONFIG_HOME is set
+if [ "$(uname)" = "Darwin" ]; then
+  mkdir -p "$HOME/Library/Preferences/aerc"
+  ln -sfn "$DOT/.config/aerc/aerc.conf" "$HOME/Library/Preferences/aerc/aerc.conf"
+  echo "linked ~/Library/Preferences/aerc/aerc.conf"
+fi
 
 # fzf shell integration (generates ~/.fzf.zsh, needed for key bindings)
 if command -v fzf &>/dev/null; then

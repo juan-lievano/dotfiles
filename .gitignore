@@ -8,3 +8,6 @@
 
 # Karabiner rewrites these on every change — regenerated, not config
 .config/karabiner/automatic_backups/
+
+# aerc credentials must never land in this repo
+**/aerc/accounts.conf
