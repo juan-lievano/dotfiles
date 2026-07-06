@@ -135,16 +135,10 @@ bindkey '^G' fzf-cd-widget
 # Locates the repo by following ~/.zshrc's own symlink, so it works no matter
 # where the repo was cloned. Override with: export DOTFILES_DIR=/path/to/repo
 dotcheck() {
-  local link="$HOME/.zshrc" repo rel bad=0
+  local link="$HOME/.zshrc" repo
   repo="${DOTFILES_DIR:-${link:A:h}}"   # :A resolve symlink, :h strip filename
-  [[ -d "$repo/.git" ]] || { echo "no dotfiles repo found (looked in $repo)"; return 1; }
-  while IFS= read -r rel; do
-    # repo-only files (not symlinked into $HOME) — skip them
-    case "$rel" in README.md|.gitignore|LICENSE|install.sh|Brewfile) continue;; esac
-    [[ "$HOME/$rel" -ef "$repo/$rel" ]] || { print -r -- "DETACHED: ~/$rel"; bad=1; }
-  done < <(git -C "$repo" ls-files)
-  (( bad )) && return 1
-  echo "all tracked dotfiles linked ✔"
+  [[ -x "$repo/hooks/pre-push" ]] || { echo "no dotfiles repo found (looked in $repo)"; return 1; }
+  "$repo/hooks/pre-push" && echo "all tracked dotfiles linked ✔"
 }
 
 # >>> conda initialize >>>

@@ -27,6 +27,9 @@ link .config/qalculate
 link .config/aerc/aerc.conf   # files, not the dir: accounts.conf (secrets) lives beside them
 link .config/aerc/binds.conf
 
+# git hooks live in tracked hooks/ (pre-push runs the dotcheck symlink audit)
+git -C "$DOT" config core.hooksPath hooks
+
 # fzf shell integration (generates ~/.fzf.zsh, needed for key bindings)
 if command -v fzf &>/dev/null; then
   "$(brew --prefix)/opt/fzf/install" --key-bindings --completion --no-update-rc --no-bash --no-fish

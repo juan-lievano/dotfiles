@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# pre-push: refuse to push if any tracked dotfile is no longer symlinked into
+# the repo. A "detached" config (symlink replaced by a real copy) means edits
+# land outside the repo and the backup goes silently stale — catch it before
+# it gets pushed as if it were current.
+#
+# Also the implementation behind the `dotcheck` zsh function.
+# Bypass a failing push with: git push --no-verify
+set -u
+repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+bad=0
+while IFS= read -r rel; do
+  # repo-only files (not symlinked into $HOME) — skip them
+  case "$rel" in README.md|.gitignore|LICENSE|install.sh|Brewfile|hooks/*) continue;; esac
+  [ "$HOME/$rel" -ef "$repo/$rel" ] || { echo "DETACHED: ~/$rel" >&2; bad=1; }
+done < <(git -C "$repo" ls-files)
+if [ "$bad" -ne 0 ]; then
+  echo "pre-push: relink with ./install.sh, or bypass once with --no-verify" >&2
+  exit 1
+fi

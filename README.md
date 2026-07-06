@@ -40,7 +40,10 @@ git push              # back up to GitHub
 ```
 
 `dotcheck` (a zsh function in `.zshrc`) verifies every tracked file is still a
-live symlink — run it if a config ever seems to have "detached".
+live symlink — run it if a config ever seems to have "detached". The same
+check runs automatically as a git `pre-push` hook (`hooks/pre-push`, wired up
+by `install.sh` via `core.hooksPath`), so a push fails if any config has
+detached; bypass once with `git push --no-verify`.
 
 ## Restoring on a new machine
 
