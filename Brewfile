@@ -9,6 +9,8 @@ brew "fzf"
 brew "pyright"
 brew "lua-language-server"
 brew "texlab"                       # LaTeX language server (completion/diagnostics)
+brew "aerc"                         # terminal email client (config tracked in this repo)
+brew "pandoc"                       # aerc's HTML filter depends on it (aerc.conf [filters])
 
 cask "wezterm"
 cask "karabiner-elements"
@@ -16,7 +18,7 @@ cask "codex"
 cask "mactex-no-gui"
 
 # --- Reinstall-on-demand (intentionally omitted; zero usage in shell history) ---
-# ffmpeg, imagemagick, glow, qalculate-qt, mouseless, rbenv, opencode, pandoc,
+# ffmpeg, imagemagick, glow, qalculate-qt, mouseless, rbenv, opencode,
 # font-atkinson-hyperlegible
 #
 # --- Not via brew ---

@@ -17,6 +17,15 @@ the machine works — editing `~/.zshrc` and `~/dotfiles/.zshrc` is the same fil
 | `.config/karabiner/`       | `~/.config/karabiner/`  | keyboard remaps (caps→ctrl)    |
 | `.config/wezterm/`         | `~/.config/wezterm/`    | terminal config                |
 | `.config/qalculate/`       | `~/.config/qalculate/`  | calculator prefs               |
+| `.config/aerc/aerc.conf`   | `~/.config/aerc/aerc.conf`  | aerc (email) main config   |
+| `.config/aerc/binds.conf`  | `~/.config/aerc/binds.conf` | aerc keybindings           |
+
+aerc is linked **per file**, not per directory: its credentials file
+(`accounts.conf`) lives beside these in `~/.config/aerc/` and must stay out of
+the repo (it's gitignored as a second line of defense; the password itself is
+in the macOS Keychain). aerc only looks in `~/.config` because `.zprofile`
+exports `XDG_CONFIG_HOME` — without it, aerc on macOS uses
+`~/Library/Preferences`.
 
 Secrets (`~/.ssh`, API tokens, etc.) are deliberately **not** here.
 
