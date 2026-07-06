@@ -19,6 +19,7 @@ the machine works — editing `~/.zshrc` and `~/dotfiles/.zshrc` is the same fil
 | `.config/qalculate/`       | `~/.config/qalculate/`  | calculator prefs               |
 | `.config/aerc/aerc.conf`   | `~/.config/aerc/aerc.conf`  | aerc (email) main config   |
 | `.config/aerc/binds.conf`  | `~/.config/aerc/binds.conf` | aerc keybindings           |
+| `.w3m/keymap`              | `~/.w3m/keymap`         | w3m keys (aerc HTML viewing)   |
 
 aerc is linked **per file**, not per directory: its credentials file
 (`accounts.conf`) lives beside these in `~/.config/aerc/` and must stay out of

@@ -26,6 +26,7 @@ link .config/wezterm
 link .config/qalculate
 link .config/aerc/aerc.conf   # files, not the dir: accounts.conf (secrets) lives beside them
 link .config/aerc/binds.conf
+link .w3m/keymap              # file, not dir: ~/.w3m also holds cookies/history
 
 # git hooks live in tracked hooks/ (pre-push runs the dotcheck symlink audit)
 git -C "$DOT" config core.hooksPath hooks

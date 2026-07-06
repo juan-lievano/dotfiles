@@ -1,0 +1,6 @@
+# vim-style half-page scroll (j/k/g/G/SPC are w3m defaults already)
+keymap C-d NEXT_HALF_PAGE
+keymap C-u PREV_HALF_PAGE
+# Enter on a link opens it in the default macOS browser (in-w3m browsing is
+# network-blocked by aerc's html filter anyway)
+keymap C-m EXTERN_LINK
