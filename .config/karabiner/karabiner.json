@@ -115,11 +115,11 @@
                         ]
                     },
                     {
-                        "description": "Control-J acts as Carriage Return everywhere (incl. terminals)",
+                        "description": "Control-M acts as Carriage Return everywhere (incl. terminals)",
                         "manipulators": [
                             {
                                 "from": {
-                                    "key_code": "j",
+                                    "key_code": "m",
                                     "modifiers": {
                                         "mandatory": ["control"],
                                         "optional": ["any"]
