@@ -54,14 +54,25 @@
   ;; Chordal hold ("opposite hand rule"): pressing one of these while the
   ;; same-hand mod is held settles the mod as a TAP, so same-hand rolls
   ;; (e.g. "as", "de", "jk") type letters instead of firing modifiers.
+  ;; Mirrors QMK's chordal_hold_layout, which Oryx guesses from geometry.
+  ;;
+  ;; The home row mod keys themselves (a s d f / j k l ;) are deliberately
+  ;; ABSENT from their own hand's list, so that same-hand mods can be CHAINED:
+  ;; s+f+h is Ctrl-Cmd-H (delete to line start). With `f` in the left list,
+  ;; pressing it early-tapped `s` into a literal "s" and left Cmd-H = Hide
+  ;; Window. QMK does the same thing -- "as an exception to the opposite hands
+  ;; rule, Chordal Hold supports combining multiple same-side modifiers within
+  ;; the tapping term" -- so this is closer to the Voyager, not further.
+  ;; Cost: a genuinely slow same-hand roll (holding `a` past 200ms while
+  ;; hitting `s`) can fire Shift. The Voyager has that same exposure.
   left-hand-keys (
     q w e r t
-    a s d f g
+    g
     z x c v b
   )
   right-hand-keys (
     y u i o p
-    h j k l ;
+    h
     n m , . /
   )
 )
@@ -93,14 +104,35 @@
   ;; ctlp (fork p (unmod (lctl rctl) up)   (lctl rctl))
 
   ;; ---- Home row mods, index finger inward: Cmd Opt Ctrl Shift ----
-  hma (tap-hold-release-keys $tap-time $hold-time a     lsft $left-hand-keys)
-  hms (tap-hold-release-keys $tap-time $hold-time s     lctl $left-hand-keys)
-  hmd (tap-hold-release-keys $tap-time $hold-time d     lalt $left-hand-keys)
-  hmf (tap-hold-release-keys $tap-time $hold-time f     lmet $left-hand-keys)
-  hmj (tap-hold-release-keys $tap-time $hold-time j     rmet $right-hand-keys)
-  hmk (tap-hold-release-keys $tap-time $hold-time k     ralt $right-hand-keys)
-  hml (tap-hold-release-keys $tap-time $hold-time l     rctl $right-hand-keys)
-  hmsc (tap-hold-release-keys $tap-time $hold-time ;     rsft $right-hand-keys)
+  ;; `tap-hold-tap-keys`, NOT `tap-hold-release-keys`, so that both keyboards
+  ;; feel the same. The Voyager runs QMK Chordal Hold with Permissive Hold and
+  ;; Hold-On-Other-Key-Press both OFF (Oryx defaults), and QMK's docs are
+  ;; explicit that with those off, "if the keys are on opposite hands, Chordal
+  ;; Hold introduces no new behavior" -- a cross-hand roll finished inside the
+  ;; tapping term is a TAP, and the mod only fires past the full timeout.
+  ;; `tap-hold-release-keys` is Permissive Hold ("activate hold early if
+  ;; another key is pressed and released"), so it fired modifiers on fast
+  ;; cross-hand rolls that the Voyager types straight through.
+  ;; `tap-hold-tap-keys` has the identical signature but waits out the full
+  ;; $hold-time, which is the QMK-default behaviour.
+  ;;
+  ;; Cost of parity: deliberate mods are slower. Ctrl-W is hold `l` for the
+  ;; full 200ms, THEN w -- you can't roll into it. Same as on the Voyager.
+  ;;
+  ;; Do NOT add `tap-hold-require-prior-idle` (ZMK's require-prior-idle-ms /
+  ;; QMK's Flow Tap). It would cut misfires further, but FLOW_TAP_TERM is off
+  ;; on the Voyager, so it would make the two keyboards diverge again. If it's
+  ;; ever wanted, turn it on in Oryx first.
+  ;; $tap-time here is the tap-repress timeout = QMK's QUICK_TAP_TERM (200),
+  ;; and $hold-time = TAPPING_TERM (200). Both already match Oryx.
+  hma (tap-hold-tap-keys $tap-time $hold-time a     lsft $left-hand-keys)
+  hms (tap-hold-tap-keys $tap-time $hold-time s     lctl $left-hand-keys)
+  hmd (tap-hold-tap-keys $tap-time $hold-time d     lalt $left-hand-keys)
+  hmf (tap-hold-tap-keys $tap-time $hold-time f     lmet $left-hand-keys)
+  hmj (tap-hold-tap-keys $tap-time $hold-time j     rmet $right-hand-keys)
+  hmk (tap-hold-tap-keys $tap-time $hold-time k     ralt $right-hand-keys)
+  hml (tap-hold-tap-keys $tap-time $hold-time l     rctl $right-hand-keys)
+  hmsc (tap-hold-tap-keys $tap-time $hold-time ;     rsft $right-hand-keys)
 
   ;; ---- App launcher: hold Space, tap 1-7 ----
   ;; Replaces Karabiner's simultaneous Space+N. Tapping Space still types

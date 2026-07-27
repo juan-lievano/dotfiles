@@ -41,11 +41,22 @@ Secrets (`~/.ssh`, API tokens, etc.) are deliberately **not** here.
 Karabiner-Elements was replaced by [kanata](https://github.com/jtroo/kanata),
 which has a real tap-hold state machine and therefore usable **home row mods**:
 `asdf` / `jkl;` become Shift/Ctrl/Opt/Cmd when held, mirrored across both hands.
-*Chordal hold* (`tap-hold-release-keys` with a per-hand key list) settles a
+*Chordal hold* (`tap-hold-tap-keys` with a per-hand key list) settles a
 same-hand roll as a tap, so `as` types "as" instead of firing a modifier — which
 is what makes home row mods tolerable. Consequence worth remembering: reach for
 the Ctrl on the **opposite hand** from the letter (`l`+w for Ctrl-W, `s`+h for
 Ctrl-H). Caps Lock is still Ctrl and works regardless of hand.
+
+The variant is chosen to **match the Voyager**, which runs QMK Chordal Hold with
+Permissive Hold and Hold-On-Other-Key-Press both off. Under those settings QMK
+gives a cross-hand roll finished inside the tapping term as a *tap*; the mod
+only fires past the full timeout. kanata's `tap-hold-release-keys` is Permissive
+Hold and fired modifiers on rolls the Voyager types straight through, so
+`tap-hold-tap-keys` is used instead — same signature, waits out `$hold-time`.
+Timings match Oryx too (`$hold-time` = `TAPPING_TERM`, `$tap-time` =
+`QUICK_TAP_TERM`, both 200). The price is that deliberate mods are slower: hold
+for the full 200ms before the other key, on both keyboards. Anything tuned here
+should be changed in Oryx as well, or the two stop feeling alike.
 
 ### The function row has to be rebuilt by hand
 
