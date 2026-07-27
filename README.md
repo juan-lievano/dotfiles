@@ -16,12 +16,16 @@ the machine works — editing `~/.zshrc` and `~/dotfiles/.zshrc` is the same fil
 | `.config/nvim/`            | `~/.config/nvim/`       | Neovim config                  |
 | `.config/kanata/`          | `~/.config/kanata/`     | keyboard remaps (home row mods) |
 | `.config/skhd/`            | `~/.config/skhd/`       | Hyper+N app launcher hotkeys   |
-| `.config/karabiner/`       | `~/.config/karabiner/`  | superseded by kanata; kept as rollback |
+| `.config/karabiner/`       | `~/.config/karabiner/`  | `open-app-slot.sh` (live) + Karabiner rollback |
 | `.config/wezterm/`         | `~/.config/wezterm/`    | terminal config                |
 | `.config/qalculate/`       | `~/.config/qalculate/`  | calculator prefs               |
 | `.config/aerc/aerc.conf`   | `~/.config/aerc/aerc.conf`  | aerc (email) main config   |
 | `.config/aerc/binds.conf`  | `~/.config/aerc/binds.conf` | aerc keybindings           |
 | `.w3m/keymap`              | `~/.w3m/keymap`         | w3m keys (aerc HTML viewing)   |
+
+`.config/karabiner/` is **not** dead weight: `open-app-slot.sh` there is still
+the live app-launcher script (skhd calls it on every hotkey), and
+`karabiner.json` is kept as the rollback path if kanata is ever removed.
 
 aerc is linked **per file**, not per directory: its credentials file
 (`accounts.conf`) lives beside these in `~/.config/aerc/` and must stay out of
@@ -108,19 +112,34 @@ detached; bypass once with `git push --no-verify`.
 
 ## Restoring on a new machine
 
-Clone the repo into your **home folder** and run `install.sh`:
+Clone the repo into your **home folder**, install the software, then link:
 
 ```sh
 git clone <repo-url> ~/dotfiles
 cd ~/dotfiles
-./install.sh
+
+brew bundle --file=Brewfile        # 1. install the software the configs configure
+./install.sh                       # 2. recreate every symlink
+sudo ~/.config/kanata/install-services.sh   # 3. keyboard remapping services
 ```
 
-`install.sh` recreates every symlink. It backs up anything already sitting at
-each target (as `*.pre-dotfiles.<timestamp>`) before linking, and is safe to
-re-run. It's self-locating (finds its own directory via `BASH_SOURCE`), so it
-works from whatever path you cloned into — but see the note below on *where* to
-clone.
+Then **grant permissions by hand** — kanata needs Input Monitoring *and*
+Accessibility, skhd needs Accessibility. See the kanata section above for why
+none of this can be scripted.
+
+Order matters: `install.sh` only creates symlinks, so running it first leaves
+configs pointing at software that isn't installed yet. Skipping step 3 leaves
+you with no keyboard remapping and no obvious error explaining why.
+
+`install.sh` backs up anything already sitting at each target (as
+`*.pre-dotfiles.<timestamp>`) before linking, and is safe to re-run. It's
+self-locating (finds its own directory via `BASH_SOURCE`), so it works from
+whatever path you cloned into — but see the note below on *where* to clone.
+
+The `Brewfile` is a deliberately minimal list of essentials, with a comment
+block at the bottom recording what was *intentionally* left out and why. On the
+same Mac a second account doesn't need it (Homebrew is shared at
+`/opt/homebrew`); it's insurance for a clean wipe or a different machine.
 
 ### Why `~/dotfiles` and not `~/Documents` (or any iCloud folder)
 

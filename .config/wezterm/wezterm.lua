@@ -35,9 +35,18 @@ config.colors = {
 }
 config.hide_tab_bar_if_only_one_tab = true
 
--- unbind minimize with command-M cause i only ever do it by accident
 config.keys = {
+  -- unbind minimize with command-M cause i only ever do it by accident
   { key = "m", mods = "CMD", action = wezterm.action.Nop },
+
+  -- Make delete-word / delete-line behave the same inside nvim as everywhere
+  -- else. kanata rewrites Ctrl-Opt-H -> Opt-Backspace and Ctrl-Cmd-H ->
+  -- Cmd-Backspace before WezTerm sees them, but a terminal can't encode
+  -- those: Opt-Backspace reaches nvim as <M-BS> (unmapped, does nothing) and
+  -- Cmd can't be transmitted at all. Translating them into the control codes
+  -- zsh and nvim actually bind means one muscle memory in every app.
+  { key = "Backspace", mods = "ALT", action = wezterm.action.SendKey { key = "w", mods = "CTRL" } },
+  { key = "Backspace", mods = "CMD", action = wezterm.action.SendKey { key = "u", mods = "CTRL" } },
 }
 
 -- show clear difference between focused and unfocused window
