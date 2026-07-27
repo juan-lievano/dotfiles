@@ -21,6 +21,8 @@
 ;;   * The app launcher lives in skhd (.config/skhd/skhdrc). kanata only
 ;;     converts Space+N into Hyper+N; the Voyager already sends Hyper+N in
 ;;     firmware. Both keyboards converge on one catcher.
+;;   * The function row is remapped BACK to its macOS media functions. This is
+;;     not a preference, it's a repair -- see the deflayer comment below.
 
 (defcfg
   process-unmapped-keys yes   ;; keys absent from defsrc pass through untouched
@@ -35,6 +37,7 @@
 )
 
 (defsrc
+  esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
   caps a    s    d    f    g    h    j    k    l    ;    '    ret
@@ -124,7 +127,24 @@
   (rctl ;) (lsft grv)
 )
 
+;; Function row: restore the macOS media keys.
+;;
+;; Karabiner's driver seizes the keyboard BEFORE macOS translates the F-row into
+;; brightness/volume/etc. That translation is done by macOS's Apple-keyboard HID
+;; driver and only applies to real Apple keyboards, so kanata receives a plain
+;; F1..F12 and re-emits it on the Karabiner *virtual* keyboard, which macOS does
+;; not treat as an Apple keyboard. Result: every media key silently becomes a
+;; dead F-key. Karabiner-Elements did this translation itself, which is why the
+;; keys worked before the switch. kanata won't, so do it here.
+;; (upstream: jtroo/kanata#1141, #975 -- macOS is unmaintained there)
+;;
+;; F3/F4 have no HID usage kanata can emit, so they send the equivalent macOS
+;; shortcut instead; they break if those shortcuts are ever rebound.
+;; F5 (dictation) and F6 (Focus) have neither a usage nor a default shortcut,
+;; so they stay dead -- same as they are right now.
+;; Real F1..F12 live on the `launch` layer: hold Space and press the key.
 (deflayer base
+  esc  brdn brup C-up M-spc f5  f6   prev pp   next mute vold volu
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab  q    w    e    r    t    y    u    i    o    p    @ctlb ]   \
   lctl @hma @hms @hmd @hmf g    @ctlh @hmj @hmk @hml @hmsc '   ret
@@ -132,7 +152,9 @@
   lctl lalt lmet @spc rmet ralt
 )
 
+;; Space-hold: app slots on the number row, real F-keys on the function row.
 (deflayer launch
+  _    f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
   _    @app1 @app2 @app3 @app4 @app5 @app6 @app7 _  _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _

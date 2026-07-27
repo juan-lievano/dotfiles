@@ -47,6 +47,28 @@ is what makes home row mods tolerable. Consequence worth remembering: reach for
 the Ctrl on the **opposite hand** from the letter (`l`+w for Ctrl-W, `s`+h for
 Ctrl-H). Caps Lock is still Ctrl and works regardless of hand.
 
+### The function row has to be rebuilt by hand
+
+Brightness/volume/media are **not** in the keyboard hardware — the F-row sends
+plain F1–F12, and macOS's Apple-keyboard HID driver translates it, but only for
+keyboards it recognizes as Apple. Karabiner's driver seizes the internal
+keyboard upstream of that translation, so kanata sees a bare `F12` and re-emits
+it on the Karabiner *virtual* keyboard, which macOS doesn't consider an Apple
+keyboard. Every media key silently becomes a dead F-key.
+
+Karabiner-Elements did this translation itself; kanata doesn't
+([#1141](https://github.com/jtroo/kanata/issues/1141),
+[#975](https://github.com/jtroo/kanata/issues/975) — upstream doesn't maintain
+macOS), so `kanata.kbd` does it in the `base` layer. F1/F2 and F7–F12 emit real
+HID usages. F3/F4 have no usage kanata can send, so they fire the equivalent
+macOS shortcut (`Ctrl-Up`, `Cmd-Space`) and **break if those are ever rebound** —
+relevant if Raycast ever takes Cmd-Space. F5 (dictation) and F6 (Focus) have
+neither a usage nor a default shortcut, so they stay dead.
+
+Real F1–F12 are on the `launch` layer: **hold Space, press the key**. `fn` is
+deliberately left unmapped — grabbing it as the F-key modifier would consume it
+and kill fn+arrows, fn+Delete, and the globe/emoji picker.
+
 Three processes, none of which start themselves:
 
 | layer | what it is | started by |
