@@ -1,0 +1,141 @@
+;; kanata config — port of .config/karabiner/karabiner.json plus home row mods.
+;;
+;; Design notes:
+;;   * Home row mods are the reason for switching; everything else is carried
+;;     over from Karabiner as faithfully as kanata allows.
+;;   * kanata has NO frontmost-application awareness. The Karabiner rules that
+;;     used `frontmost_application_unless` (Ctrl-W, Ctrl-U) are deliberately
+;;     NOT ported. In the terminal, Ctrl-W and Ctrl-U already do delete-word /
+;;     delete-line natively in both zsh and nvim insert mode, which is exactly
+;;     what those exclusions were protecting. Outside the terminal, use
+;;     Ctrl-Opt-H (delete word) and Ctrl-Cmd-H (delete line).
+;;   * `unmod` below drops Ctrl but leaves Opt/Cmd held, reproducing Karabiner's
+;;     `optional: ["any"]` modifier passthrough.
+;;   * Chordal hold means SAME-HAND combos never fire the modifier, so reach
+;;     for the Ctrl on the OPPOSITE hand from the letter:
+;;         Ctrl-W  -> `l`+w   (w is left-hand, so use right Ctrl)
+;;         Ctrl-H  -> `s`+h   (h is right-hand, so use left Ctrl)
+;;         Ctrl-U  -> `s`+u     Ctrl-M -> `s`+m     Ctrl-N/P -> `s`+n / `s`+p
+;;     Caps Lock stays mapped to Ctrl as the escape hatch that always works
+;;     regardless of which hand the letter is on.
+;;   * The app launcher lives in skhd (.config/skhd/skhdrc). kanata only
+;;     converts Space+N into Hyper+N; the Voyager already sends Hyper+N in
+;;     firmware. Both keyboards converge on one catcher.
+
+(defcfg
+  process-unmapped-keys yes   ;; keys absent from defsrc pass through untouched
+  concurrent-tap-hold yes     ;; required to chord two home row mods at once
+
+  ;; Built-in keyboard ONLY. The Voyager has its own firmware mods and layers;
+  ;; letting kanata also apply home row mods to it would double-process every
+  ;; keystroke. Names come from `kanata --list`.
+  macos-dev-names-include (
+    "Apple Internal Keyboard / Trackpad"
+  )
+)
+
+(defsrc
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  caps a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lalt lmet spc  rmet ralt
+)
+
+(defvar
+  ;; tap-time: how long after release a re-press still counts as a tap
+  ;; hold-time: how long to hold before the modifier engages
+  tap-time  200
+  hold-time 200
+
+  ;; Chordal hold ("opposite hand rule"): pressing one of these while the
+  ;; same-hand mod is held settles the mod as a TAP, so same-hand rolls
+  ;; (e.g. "as", "de", "jk") type letters instead of firing modifiers.
+  left-hand-keys (
+    q w e r t
+    a s d f g
+    z x c v b
+  )
+  right-hand-keys (
+    y u i o p
+    h j k l ;
+    n m , . /
+  )
+)
+
+(defalias
+  ;; ---- Ctrl-<key> rewrites (global; no app conditions) ----
+  ;; (fork <normal> <alternate> <trigger-keys>)
+  ;; Ctrl held -> alternate. `unmod` releases only Ctrl, so Opt and Cmd
+  ;; still reach the output:
+  ;;   Ctrl-H      -> Delete
+  ;;   Ctrl-Opt-H  -> Opt-Delete   (delete word)
+  ;;   Ctrl-Cmd-H  -> Cmd-Delete   (delete to line start)
+  ctlh (fork h (unmod (lctl rctl) bspc) (lctl rctl))
+  ctlm (fork m (unmod (lctl rctl) ret)  (lctl rctl))
+  ctlb (fork [ (unmod (lctl rctl) esc)  (lctl rctl))
+  ;; Ctrl-; -> ~ lives in defoverrides at the bottom: `unmod` only accepts
+  ;; plain key names, not shifted forms like S-grv.
+
+  ;; ---- Ctrl-N / Ctrl-P -> Down / Up  (PENDING DECISION, not wired up) ----
+  ;; Was Spotlight list navigation in Karabiner, excluded in terminals.
+  ;; Going global costs exactly one thing: nvim insert-mode keyword
+  ;; completion (verified — <C-n> completes, <Down> does not). Recover it
+  ;; with a line in init.lua:
+  ;;     vim.keymap.set("i", "<C-Space>", "<C-n>")
+  ;; Skip all of this if you switch to Raycast, which navigates with
+  ;; Ctrl-N/P natively. To enable: uncomment these two, then put @ctln and
+  ;; @ctlp in place of `n` and `p` in the base layer.
+  ;; ctln (fork n (unmod (lctl rctl) down) (lctl rctl))
+  ;; ctlp (fork p (unmod (lctl rctl) up)   (lctl rctl))
+
+  ;; ---- Home row mods, index finger inward: Cmd Opt Ctrl Shift ----
+  hma (tap-hold-release-keys $tap-time $hold-time a     lsft $left-hand-keys)
+  hms (tap-hold-release-keys $tap-time $hold-time s     lctl $left-hand-keys)
+  hmd (tap-hold-release-keys $tap-time $hold-time d     lalt $left-hand-keys)
+  hmf (tap-hold-release-keys $tap-time $hold-time f     lmet $left-hand-keys)
+  hmj (tap-hold-release-keys $tap-time $hold-time j     rmet $right-hand-keys)
+  hmk (tap-hold-release-keys $tap-time $hold-time k     ralt $right-hand-keys)
+  hml (tap-hold-release-keys $tap-time $hold-time l     rctl $right-hand-keys)
+  hmsc (tap-hold-release-keys $tap-time $hold-time ;     rsft $right-hand-keys)
+
+  ;; ---- App launcher: hold Space, tap 1-7 ----
+  ;; Replaces Karabiner's simultaneous Space+N. Tapping Space still types
+  ;; a space.
+  ;;
+  ;; Homebrew's kanata is built WITHOUT the `cmd` feature ("kanata was
+  ;; compiled to never allow cmd"), so it cannot run open-app-slot.sh
+  ;; itself. Instead it emits Hyper+N and a userspace hotkey daemon (skhd,
+  ;; Raycast, ...) runs the script. Hyper is also reachable directly from
+  ;; the home row by holding a+s+d+f together.
+  spc  (tap-hold $tap-time $hold-time spc (layer-while-held launch))
+  app1 M-A-C-S-1
+  app2 M-A-C-S-2
+  app3 M-A-C-S-3
+  app4 M-A-C-S-4
+  app5 M-A-C-S-5
+  app6 M-A-C-S-6
+  app7 M-A-C-S-7
+)
+
+;; Ctrl-; -> ~  (exact input-combo -> output-combo rewrite)
+(defoverrides
+  (lctl ;) (lsft grv)
+  (rctl ;) (lsft grv)
+)
+
+(deflayer base
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    @ctlb ]   \
+  lctl @hma @hms @hmd @hmf g    @ctlh @hmj @hmk @hml @hmsc '   ret
+  lsft z    x    c    v    b    n    @ctlm ,   .    /    rsft
+  lctl lalt lmet @spc rmet ralt
+)
+
+(deflayer launch
+  _    @app1 @app2 @app3 @app4 @app5 @app6 @app7 _  _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _
+)

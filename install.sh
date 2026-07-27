@@ -22,6 +22,8 @@ link .latexmkrc
 link .config/git
 link .config/nvim
 link .config/karabiner
+link .config/kanata
+link .config/skhd
 link .config/wezterm
 link .config/qalculate
 link .config/aerc/aerc.conf   # files, not the dir: accounts.conf (secrets) lives beside them

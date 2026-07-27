@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Karabiner VirtualHIDDevice daemon, started at boot independently of
+  Karabiner-Elements.
+
+  kanata needs three layers on macOS:
+    1. the dext (kernel driver)   - installed by the karabiner-elements cask,
+                                    stays loaded even when Karabiner is quit
+    2. THIS daemon (userspace)    - normally started by Karabiner-Elements, so
+                                    quitting Karabiner breaks kanata with
+                                    `connect_failed asio.system:61` (ECONNREFUSED)
+    3. kanata itself              - `sudo brew services start kanata`
+
+  Install (needs root; the file must be owned by root to load):
+    sudo cp ~/.config/kanata/org.pqrs.karabiner-vhid-daemon.plist \
+            /Library/LaunchDaemons/
+    sudo chown root:wheel /Library/LaunchDaemons/org.pqrs.karabiner-vhid-daemon.plist
+    sudo launchctl bootstrap system /Library/LaunchDaemons/org.pqrs.karabiner-vhid-daemon.plist
+
+  Remove:
+    sudo launchctl bootout system/org.pqrs.karabiner-vhid-daemon
+    sudo rm /Library/LaunchDaemons/org.pqrs.karabiner-vhid-daemon.plist
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>org.pqrs.karabiner-vhid-daemon</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Library/Application Support/org.pqrs/Karabiner-DriverKit-VirtualHIDDevice/Applications/Karabiner-VirtualHIDDevice-Daemon.app/Contents/MacOS/Karabiner-VirtualHIDDevice-Daemon</string>
+    </array>
+
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>/var/log/karabiner-vhid-daemon.log</string>
+    <key>StandardErrorPath</key>
+    <string>/var/log/karabiner-vhid-daemon.log</string>
+</dict>
+</plist>

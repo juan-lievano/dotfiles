@@ -12,8 +12,17 @@ brew "texlab"                       # LaTeX language server (completion/diagnost
 brew "aerc"                         # terminal email client (config tracked in this repo)
 brew "w3m"                          # aerc's HTML filter depends on it (aerc.conf [filters])
 
+# Keyboard remapping. kanata does home row mods + Ctrl rewrites on the built-in
+# keyboard; skhd catches Hyper+N (from the Voyager's firmware or kanata's
+# Space-hold layer) and runs .config/karabiner/open-app-slot.sh.
+# Needs the Karabiner DriverKit driver, which the karabiner-elements cask below
+# installs — keep that cask even after kanata takes over.
+brew "kanata"
+tap "koekeishiya/formulae"
+brew "koekeishiya/formulae/skhd"
+
 cask "wezterm"
-cask "karabiner-elements"
+cask "karabiner-elements"           # driver provider + rollback path for kanata
 cask "codex"
 cask "mactex-no-gui"
 

@@ -14,7 +14,9 @@ the machine works — editing `~/.zshrc` and `~/dotfiles/.zshrc` is the same fil
 | `.latexmkrc`               | `~/.latexmkrc`          | LaTeX build layout             |
 | `.config/git/`             | `~/.config/git/`        | global gitignore               |
 | `.config/nvim/`            | `~/.config/nvim/`       | Neovim config                  |
-| `.config/karabiner/`       | `~/.config/karabiner/`  | keyboard remaps (caps→ctrl)    |
+| `.config/kanata/`          | `~/.config/kanata/`     | keyboard remaps (home row mods) |
+| `.config/skhd/`            | `~/.config/skhd/`       | Hyper+N app launcher hotkeys   |
+| `.config/karabiner/`       | `~/.config/karabiner/`  | superseded by kanata; kept as rollback |
 | `.config/wezterm/`         | `~/.config/wezterm/`    | terminal config                |
 | `.config/qalculate/`       | `~/.config/qalculate/`  | calculator prefs               |
 | `.config/aerc/aerc.conf`   | `~/.config/aerc/aerc.conf`  | aerc (email) main config   |
@@ -29,6 +31,64 @@ exports `XDG_CONFIG_HOME` — without it, aerc on macOS uses
 `~/Library/Preferences`.
 
 Secrets (`~/.ssh`, API tokens, etc.) are deliberately **not** here.
+
+## Keyboard remapping (kanata)
+
+Karabiner-Elements was replaced by [kanata](https://github.com/jtroo/kanata),
+which has a real tap-hold state machine and therefore usable **home row mods**:
+`asdf` / `jkl;` become Shift/Ctrl/Opt/Cmd when held, mirrored across both hands.
+*Chordal hold* (`tap-hold-release-keys` with a per-hand key list) settles a
+same-hand roll as a tap, so `as` types "as" instead of firing a modifier — which
+is what makes home row mods tolerable. Consequence worth remembering: reach for
+the Ctrl on the **opposite hand** from the letter (`l`+w for Ctrl-W, `s`+h for
+Ctrl-H). Caps Lock is still Ctrl and works regardless of hand.
+
+Three processes, none of which start themselves:
+
+| layer | what it is | started by |
+|-------|------------|------------|
+| dext (kernel driver) | Karabiner's VirtualHIDDevice | the `karabiner-elements` cask |
+| VirtualHIDDevice daemon | userspace half of the driver | `org.pqrs.karabiner-vhid-daemon.plist` |
+| kanata | the remapper itself | `brew services` (runs as root) |
+| skhd | catches Hyper+N, launches apps | `skhd --start-service` (runs as user) |
+
+`sudo ~/.config/kanata/install-services.sh` installs the daemon plist and starts
+kanata; it's idempotent, and `--uninstall` reverses it. **Keep the
+`karabiner-elements` cask installed** — kanata has no driver of its own, and
+quitting Karabiner also kills the daemon (kanata then fails with
+`connect_failed asio.system:61`), which is exactly why that plist exists.
+
+The app launcher is split in two on purpose: kanata turns `Space`-hold + N into
+Hyper+N, the Voyager already sends Hyper+N from firmware, and **skhd** catches
+it and runs `.config/karabiner/open-app-slot.sh` (still the single source of
+truth for app names). Homebrew builds kanata without the `cmd` feature, so it
+can't run the script itself — and skhd running as a normal user agent means
+`open -a` works without any root workaround.
+
+### Permissions, and why they're so awkward
+
+kanata needs **both** Input Monitoring *and* Accessibility; skhd needs
+Accessibility. Neither can be granted in advance: they're bare Mach-O binaries
+with ad-hoc signatures and no Team ID, so macOS identifies them by path +
+content hash and only lists them *after* the process asks. Run from a terminal,
+the request is attributed to the terminal instead — so grant them via
+**System Settings → Privacy & Security → … → `+` → Cmd+Shift+G** and paste the
+real Cellar path. kanata may need a reboot for a root-daemon grant to take.
+
+### ⚠️ Homebrew upgrades silently break this
+
+Because TCC keys on **path + content hash**, `brew upgrade kanata` (or `skhd`)
+moves the binary to a new versioned Cellar path with a new hash and **silently
+revokes every permission granted above**. There is no error and no prompt — the
+keyboard just quietly stops being remapped after the next restart.
+
+Both formulae are therefore **pinned** (`brew pin kanata skhd`), so a blanket
+`brew upgrade` can't touch them. Upgrade deliberately, and expect to re-grant
+both permissions afterwards. Check with `brew list --pinned`.
+
+Rolling back to Karabiner-Elements: `sudo ~/.config/kanata/install-services.sh
+--uninstall`, relaunch Karabiner-Elements, and re-enable `karabiner_grabber`
+under Input Monitoring. `.config/karabiner/karabiner.json` is unchanged.
 
 ## Daily use
 

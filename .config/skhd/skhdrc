@@ -1,0 +1,21 @@
+# skhd — app launcher hotkeys.
+#
+# Single catcher for both keyboards:
+#   * Voyager      sends Hyper+N directly from its firmware
+#   * Laptop       kanata turns Space-hold + N into Hyper+N
+#
+# App names still live in one place: .config/karabiner/open-app-slot.sh
+# (left in the karabiner directory on purpose, so rolling back to
+# Karabiner-Elements needs no file moves).
+#
+# skhd runs as a normal user agent, so `open -a` works without any
+# root/launchctl workaround — which is why kanata does not need the
+# `cmd` feature that Homebrew's build omits.
+
+cmd + ctrl + alt + shift - 1 : ~/.config/karabiner/open-app-slot.sh 1
+cmd + ctrl + alt + shift - 2 : ~/.config/karabiner/open-app-slot.sh 2
+cmd + ctrl + alt + shift - 3 : ~/.config/karabiner/open-app-slot.sh 3
+cmd + ctrl + alt + shift - 4 : ~/.config/karabiner/open-app-slot.sh 4
+cmd + ctrl + alt + shift - 5 : ~/.config/karabiner/open-app-slot.sh 5
+cmd + ctrl + alt + shift - 6 : ~/.config/karabiner/open-app-slot.sh 6
+cmd + ctrl + alt + shift - 7 : ~/.config/karabiner/open-app-slot.sh 7
