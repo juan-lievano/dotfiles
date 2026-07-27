@@ -1,18 +1,12 @@
 # Vi keybindings
 bindkey -v
 
-# ...but not vi's delete-word / delete-line, which are near-useless here.
-# `bindkey -v` puts ^W on vi-backward-kill-word and ^U on vi-kill-line, and
-# zsh documents both as stopping at "wherever insert mode was last entered".
-# So after any Esc + i excursion they delete nothing, and in NORMAL mode they
-# are undefined-key outright. Bind the emacs widgets in both keymaps so
-# Ctrl-W / Ctrl-U mean the same thing here as in every other macOS text field
-# (and as WezTerm's Alt-Backspace / Cmd-Backspace, which send exactly these).
-for _km in viins vicmd; do
-  bindkey -M $_km '^W' backward-kill-word
-  bindkey -M $_km '^U' backward-kill-line
-done
-unset _km
+# ...but not vi's delete-word / delete-line. `bindkey -v` puts ^W on
+# vi-backward-kill-word and ^U on vi-kill-line, which zsh documents as stopping
+# at "wherever insert mode was last entered" -- so they work on a fresh prompt
+# and then silently do nothing after any Esc-then-i excursion.
+bindkey -M viins '^W' backward-kill-word
+bindkey -M viins '^U' backward-kill-line
 
 # Make cursor fat and skinny
 
