@@ -58,6 +58,22 @@ Timings match Oryx too (`$hold-time` = `TAPPING_TERM`, `$tap-time` =
 for the full 200ms before the other key, on both keyboards. Anything tuned here
 should be changed in Oryx as well, or the two stop feeling alike.
 
+### Symbol layer (hold Right Cmd)
+
+The shifted number row, moved onto the left home block so it's reachable
+without stretching:
+
+| hold Right Cmd + | gives |
+|------------------|-------|
+| `q w e r t`      | `! @ # $ %` |
+| `a s d f g`      | `^ & * ( )` |
+| `z`              | Tab |
+
+Right Cmd is spent entirely on this — it no longer sends Cmd. Cmd is already on
+`f`/`j` and Left Cmd, so it was the redundant third copy; a tap-hold there would
+force a 200ms wait before every symbol. The `asdf` home row mods are shadowed
+while the layer is held.
+
 ### The function row has to be rebuilt by hand
 
 Brightness/volume/media are **not** in the keyboard hardware — the F-row sends

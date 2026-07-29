@@ -144,6 +144,14 @@
   ;; Raycast, ...) runs the script. Hyper is also reachable directly from
   ;; the home row by holding a+s+d+f together.
   spc  (tap-hold $tap-time $hold-time spc (layer-while-held launch))
+
+  ;; ---- Symbol layer: hold Right Cmd ----
+  ;; Right Cmd is spent entirely on this -- no tap-hold, so it no longer sends
+  ;; Cmd at all. That's affordable because Cmd is already on `f` and `j` (home
+  ;; row) and on Left Cmd; Right Cmd was the redundant third copy. Making it a
+  ;; tap-hold instead would mean waiting out $hold-time before every symbol,
+  ;; which defeats the point of the layer.
+  sym  (layer-while-held symbols)
   app1 M-A-C-S-1
   app2 M-A-C-S-2
   app3 M-A-C-S-3
@@ -181,7 +189,25 @@
   tab  q    w    e    r    t    y    u    i    o    p    @ctlb ]   \
   lctl @hma @hms @hmd @hmf g    @ctlh @hmj @hmk @hml @hmsc '   ret
   lsft z    x    c    v    b    n    @ctlm ,   .    /    rsft
-  lctl lalt lmet @spc rmet ralt
+  lctl lalt lmet @spc @sym ralt
+)
+
+;; Right-Cmd-hold: the shifted number row, moved onto the left home block.
+;;   q w e r t  ->  ! @ # $ %      (shift-1 .. shift-5)
+;;   a s d f g  ->  ^ & * ( )      (shift-6 .. shift-0)
+;;   z          ->  tab
+;; Left hand types the symbol, right thumb holds the layer, so nothing here is
+;; a same-hand stretch. The home row mods on `asdf` are shadowed while the
+;; layer is held -- deliberate: this layer is for typing, not for chording.
+;; S-<n> is used rather than the bare `!`/`@` glyphs so the mapping to the
+;; number row stays legible at a glance.
+(deflayer symbols
+  _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    S-1  S-2  S-3  S-4  S-5  _    _    _    _    _    _    _    _
+  _    S-6  S-7  S-8  S-9  S-0  _    _    _    _    _    _    _
+  _    tab  _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _
 )
 
 ;; Space-hold: app slots on the number row, real F-keys on the function row.
