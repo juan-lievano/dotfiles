@@ -106,7 +106,7 @@ Real F1–F12 are on the `launch` layer: **hold Space, press the key**. `fn` is
 deliberately left unmapped — grabbing it as the F-key modifier would consume it
 and kill fn+arrows, fn+Delete, and the globe/emoji picker.
 
-Three processes, none of which start themselves:
+Four pieces, none of which start themselves:
 
 | layer | what it is | started by |
 |-------|------------|------------|
@@ -116,10 +116,21 @@ Three processes, none of which start themselves:
 | skhd | catches Hyper+N, launches apps | `skhd --start-service` (runs as user) |
 
 `sudo ~/.config/kanata/install-services.sh` installs the daemon plist and starts
-kanata; it's idempotent, and `--uninstall` reverses it. **Keep the
-`karabiner-elements` cask installed** — kanata has no driver of its own, and
-quitting Karabiner also kills the daemon (kanata then fails with
-`connect_failed asio.system:61`), which is exactly why that plist exists.
+kanata; it's idempotent, and `--uninstall` reverses it.
+
+**Keep the `karabiner-elements` cask installed**, even though nothing here uses
+Karabiner-Elements itself. kanata has no virtual keyboard of its own — macOS
+exposes no public API for synthesizing HID input at that level — so it emits
+through pqrs's DriverKit VirtualHIDDevice, and the cask is just the delivery
+vehicle for that driver. `karabiner.json` is inert; the remapping logic all
+lives in `kanata.kbd`.
+
+Karabiner-Elements.app can stay closed. It normally starts the VirtualHIDDevice
+daemon and takes it down on quit, which would leave kanata failing with
+`connect_failed asio.system:61` — installing the daemon as its own LaunchDaemon
+(`org.pqrs.karabiner-vhid-daemon.plist`) is what decouples the two, and is
+exactly why that plist exists. The dependency that remains is on the driver, not
+the app: if the dext or its daemon goes down, kanata goes down with it.
 
 The app launcher is split in two on purpose: kanata turns `Space`-hold + N into
 Hyper+N, the Voyager already sends Hyper+N from firmware, and **skhd** catches
