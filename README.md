@@ -58,21 +58,31 @@ Timings match Oryx too (`$hold-time` = `TAPPING_TERM`, `$tap-time` =
 for the full 200ms before the other key, on both keyboards. Anything tuned here
 should be changed in Oryx as well, or the two stop feeling alike.
 
-### Symbol layer (hold Right Cmd)
+### Symbol and navigation layers (hold `m` / hold `n`)
 
-The shifted number row, moved onto the left home block so it's reachable
-without stretching:
+Both layer keys sit on the right index finger and both layers put their payload
+on the **left** hand — the same opposite-hand rule the home row mods follow.
 
-| hold Right Cmd + | gives |
-|------------------|-------|
-| `q w e r t`      | `! @ # $ %` |
-| `a s d f g`      | `^ & * ( )` |
-| `z`              | Tab |
+| hold `m` + | gives | | hold `n` + | gives |
+|------------|-------|---|------------|-------|
+| `q w e r t` | `! @ # $ %` | | `a s d f` | ← ↓ ↑ → |
+| `a s d f g` | `^ & * ( )` | | | |
+| `z`         | Tab | | | |
 
-Right Cmd is spent entirely on this — it no longer sends Cmd. Cmd is already on
-`f`/`j` and Left Cmd, so it was the redundant third copy; a tap-hold there would
-force a 200ms wait before every symbol. The `asdf` home row mods are shadowed
-while the layer is held.
+The symbols are the shifted number row in order, which is why the config writes
+them `S-1`..`S-0` rather than as literal glyphs. Arrows are `hjkl` order moved
+one hand over.
+
+Both are `tap-hold-tap-keys` with `$right-hand-keys`, so a fast right-hand roll
+(`mn`, `m,`) settles as a tap, while the left-hand payload keys wait out the
+full `$hold-time` — you hold, *then* press; you can't roll into a symbol. `m`
+keeps `@ctlm` as its tap action, so Ctrl-M → Return survives. The cost is that
+`m` and `n` lose key repeat, and hesitating on either past 200ms opens a layer.
+
+In the nav layer the left hand's own mods are shadowed (they *are* the arrows),
+but `k`/`l`/`;` stay transparent, so Opt-Left, Ctrl-Left and Shift-Left still
+chord normally. `j` is the exception — same finger as `n` — so Cmd-Left/Right
+for line ends needs physical Left Cmd.
 
 ### The function row has to be rebuilt by hand
 
