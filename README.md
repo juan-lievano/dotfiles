@@ -75,9 +75,18 @@ one hand over.
 
 Both are `tap-hold-tap-keys` with `$right-hand-keys`, so a fast right-hand roll
 (`mn`, `m,`) settles as a tap, while the left-hand payload keys wait out the
-full `$hold-time` — you hold, *then* press; you can't roll into a symbol. `m`
-keeps `@ctlm` as its tap action, so Ctrl-M → Return survives. The cost is that
-`m` and `n` lose key repeat, and hesitating on either past 200ms opens a layer.
+full `$hold-time` — you hold, *then* press; you can't roll into a symbol. The
+cost is that `m` and `n` lose key repeat, and hesitating on either past 200ms
+opens a layer.
+
+Ctrl-M → Return survives via a `fork` wrapping `m`'s tap-hold rather than
+sitting in its tap action, so it resolves on press instead of release. As a tap
+action it fired only when `m` came back up and the `fork` read Ctrl at that
+instant, so releasing `s` a hair early typed a literal `m`. Forking outside
+also drops the tap-hold wait, and Return lands while you're still holding the
+chord. The trade: with Ctrl already down, `m`-hold repeats Return instead of
+opening symbols. Pressing Ctrl *after* `m` is unaffected — the fork is already
+past.
 
 In the nav layer the left hand's own mods are shadowed (they *are* the arrows),
 but `k`/`l`/`;` stay transparent, so Opt-Left, Ctrl-Left and Shift-Left still

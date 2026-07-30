@@ -86,8 +86,9 @@
   ;;   Ctrl-Opt-H  -> Opt-Delete   (delete word)
   ;;   Ctrl-Cmd-H  -> Cmd-Delete   (delete to line start)
   ctlh (fork h (unmod (lctl rctl) bspc) (lctl rctl))
-  ctlm (fork m (unmod (lctl rctl) ret)  (lctl rctl))
   ctlb (fork [ (unmod (lctl rctl) esc)  (lctl rctl))
+  ;; Ctrl-M lives on @symm below, not here: `m` is a tap-hold, so the fork has
+  ;; to wrap it rather than sit inside it. See the note there.
   ;; Ctrl-; -> ~ lives in defoverrides at the bottom: `unmod` only accepts
   ;; plain key names, not shifted forms like S-grv.
 
@@ -159,8 +160,19 @@
   ;;
   ;; Cost: `m` and `n` lose key repeat, and any mid-word hesitation on them
   ;; past 200ms opens a layer. Same exposure a/s/d/f/j/k/l/; already carry.
-  ;; @symm keeps @ctlm as its tap action, so Ctrl-M -> Return survives.
-  symm (tap-hold-tap-keys $tap-time $hold-time @ctlm (layer-while-held symbols) $right-hand-keys)
+  ;;
+  ;; Ctrl-M -> Return forks OUTSIDE the tap-hold, not in its tap action, so it
+  ;; resolves when `m` goes down rather than when it comes back up. As a tap
+  ;; action it fired on release and the fork read Ctrl at that instant, so
+  ;; releasing `s` a hair early typed a literal "m"; on press there is also no
+  ;; tap-hold wait, and Return lands while you are still holding the chord.
+  ;; @ctlh and @ctlb don't need this -- `h` and `[` are plain keys.
+  ;; Cost: with Ctrl already down, `m`-hold repeats Return instead of opening
+  ;; symbols. Pressing Ctrl AFTER `m` is unaffected; the fork is already past.
+  symm (fork
+         (tap-hold-tap-keys $tap-time $hold-time m (layer-while-held symbols) $right-hand-keys)
+         (unmod (lctl rctl) ret)
+         (lctl rctl))
   navn (tap-hold-tap-keys $tap-time $hold-time n     (layer-while-held nav)     $right-hand-keys)
   app1 M-A-C-S-1
   app2 M-A-C-S-2
