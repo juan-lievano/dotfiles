@@ -9,6 +9,11 @@ vim.o.swapfile = false
 vim.o.winborder = "rounded"
 vim.opt.clipboard = "unnamedplus"
 
+-- searching: case insensitive until the pattern has an uppercase letter
+-- (smartcase only does anything with ignorecase on)
+vim.o.ignorecase = true
+vim.o.smartcase = true
+
 -- one global statusline at the bottom instead of one per window
 -- (avoids duplicate bars between stacked splits, e.g. in leetcode.nvim)
 vim.opt.laststatus = 3
