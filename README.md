@@ -52,6 +52,11 @@ and the edit is tracked. (Repo-scope settings get the opposite treatment — it
 refuses to write through a symlink at all, which is also why
 `permissions.defaultMode: "auto"` is only honoured from user settings.)
 
+Paths in `settings.json` use `~`, not `/Users/<name>`, so the file survives a
+move to a machine with a different username. Tilde is expanded in permission
+rules and in `additionalDirectories` (verified against a no-rule control that
+denies), and in the `statusLine` command, which runs through a shell.
+
 Secrets (`~/.ssh`, API tokens, etc.) are deliberately **not** here.
 
 ## Keyboard remapping (kanata)

@@ -2,16 +2,16 @@
   "permissions": {
     "defaultMode": "auto",
     "allow": [
-      "Edit(/Users/jplk/.config/**)"
+      "Edit(~/.config/**)"
     ],
     "additionalDirectories": [
-      "/Users/jplk/.config/"
+      "~/.config/"
     ]
   },
   "model": "opus",
   "statusLine": {
     "type": "command",
-    "command": "sh /Users/jplk/.claude/statusline-command.sh",
+    "command": "sh ~/.claude/statusline-command.sh",
     "refreshInterval": 60
   },
   "enabledPlugins": {
