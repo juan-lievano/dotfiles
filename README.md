@@ -86,15 +86,36 @@ should be changed in Oryx as well, or the two stop feeling alike.
 Both layer keys sit on the right index finger and both layers put their payload
 on the **left** hand — the same opposite-hand rule the home row mods follow.
 
-| hold `m` + | gives | | hold `n` + | gives |
-|------------|-------|---|------------|-------|
-| `q w e r t` | `! @ # $ %` | | `a s d f` | ← ↓ ↑ → |
-| `a s d f g` | `^ & * ( )` | | | |
-| `z`         | Tab | | | |
+| hold `m` + | gives | + Shift | | hold `n` + | gives |
+|------------|-------|---------|---|------------|-------|
+| `q w e r t` | `! @ # $ %` | `1 2 3 4 5` | | `a s d f` | ← ↓ ↑ → |
+| `a s d f g` | `^ & * ( )` | `6 7 8 9 0` | | | |
+| `z`         | Tab | Shift-Tab | | | |
+| `x c v`     | `` [ ] ` `` | `` { } ~ `` | | | |
 
 The symbols are the shifted number row in order, which is why the config writes
 them `S-1`..`S-0` rather than as literal glyphs. Arrows are `hjkl` order moved
 one hand over.
+
+Adding Shift gives the other half of each standard pair, so `1`/`!`, `[`/`{` and
+`` ` ``/`~` all hold — just entered inverted, glyph first and digit behind Shift.
+Two different things make that work. `z x c v` need no config at all: their
+payloads are unshifted keys, so the Shift already being held produces `S-tab { }
+~` on its own. The digits do need it, because the layer has *pre-applied* Shift —
+`S-1` plus more Shift is still `!` — so `@sy1`..`@sy0` fork on Shift and use
+`unmod` to peel it back off, the same trick `@ctlh` uses for Ctrl.
+
+Shift here has to come from a physical Shift key or from `;` on the right home
+row. Left-hand home-row Shift is unavailable while the layer is up, since `a` is
+busy being `^`/`6`.
+
+Open question: the digits are the one part of this that fights existing muscle
+memory — a straight row and a numpad are both familiar, two rows of five is a
+third pattern. It can't be fixed in place (the payload has to fit the left hand's
+five columns, because the right hand is holding `m`), and a numpad grid would
+land on `x c v` and cost the `{ } ~` pairing. Left in for now because it removes
+nothing that already worked; the number row is still there and still the faster
+path.
 
 Both are `tap-hold-tap-keys` with `$right-hand-keys`, so a fast right-hand roll
 (`mn`, `m,`) settles as a tap, while the left-hand payload keys wait out the

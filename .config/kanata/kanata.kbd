@@ -174,6 +174,31 @@
          (unmod (lctl rctl) ret)
          (lctl rctl))
   navn (tap-hold-tap-keys $tap-time $hold-time n     (layer-while-held nav)     $right-hand-keys)
+
+  ;; ---- Symbol layer, Shift held -> the digit instead of the glyph ----
+  ;; The layer's default output is S-1..S-0, so holding Shift on top of it
+  ;; changes nothing -- shift-shift is still shift, and `!` stays `!`. To reach
+  ;; the digit, Shift has to be taken back OUT, which is what `unmod` does.
+  ;; The pairing is therefore the standard one, merely inverted: unshifted
+  ;; `m` gives the shifted glyph, `m`+Shift gives the unshifted digit.
+  ;;
+  ;; z/x/c/v need none of this. Their payloads (tab [ ] `) are unshifted keys,
+  ;; so the Shift the user is already holding produces S-tab { } ~ on its own.
+  ;;
+  ;; Shift itself must come from a physical shift key or from the right-hand
+  ;; home row (`;`, still transparent here) -- `a` is occupied by this layer,
+  ;; so left-hand home row Shift is not available while `m` is held.
+  sy1 (fork S-1 (unmod (lsft rsft) 1) (lsft rsft))
+  sy2 (fork S-2 (unmod (lsft rsft) 2) (lsft rsft))
+  sy3 (fork S-3 (unmod (lsft rsft) 3) (lsft rsft))
+  sy4 (fork S-4 (unmod (lsft rsft) 4) (lsft rsft))
+  sy5 (fork S-5 (unmod (lsft rsft) 5) (lsft rsft))
+  sy6 (fork S-6 (unmod (lsft rsft) 6) (lsft rsft))
+  sy7 (fork S-7 (unmod (lsft rsft) 7) (lsft rsft))
+  sy8 (fork S-8 (unmod (lsft rsft) 8) (lsft rsft))
+  sy9 (fork S-9 (unmod (lsft rsft) 9) (lsft rsft))
+  sy0 (fork S-0 (unmod (lsft rsft) 0) (lsft rsft))
+
   app1 M-A-C-S-1
   app2 M-A-C-S-2
   app3 M-A-C-S-3
@@ -215,20 +240,30 @@
 )
 
 ;; `m`-hold: the shifted number row, moved onto the left home block.
-;;   q w e r t  ->  ! @ # $ %      (shift-1 .. shift-5)
-;;   a s d f g  ->  ^ & * ( )      (shift-6 .. shift-0)
-;;   z          ->  tab
+;; Adding Shift gives the OTHER half of each standard pair, so every key here
+;; keeps its real 1/! ,  [/{ ,  `/~ relationship -- just entered inverted,
+;; glyph first and digit behind Shift.
+;;
+;;              m          m + Shift
+;;   q w e r t  ! @ # $ %  1 2 3 4 5
+;;   a s d f g  ^ & * ( )  6 7 8 9 0
+;;   z          tab        S-tab
+;;   x          [          {
+;;   c          ]          }
+;;   v          `          ~
+;;
 ;; Left hand types the symbol, right index holds the layer, so nothing here is
 ;; a same-hand stretch. The home row mods on `asdf` are shadowed while the
 ;; layer is held -- deliberate: this layer is for typing, not for chording.
 ;; S-<n> is used rather than the bare `!`/`@` glyphs so the mapping to the
-;; number row stays legible at a glance.
+;; number row stays legible at a glance; see @sy1..@sy0 for how Shift peels
+;; that back off.
 (deflayer symbols
   _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    S-1  S-2  S-3  S-4  S-5  _    _    _    _    _    _    _    _
-  _    S-6  S-7  S-8  S-9  S-0  _    _    _    _    _    _    _
-  _    tab  _    _    _    _    _    _    _    _    _    _
+  _    @sy1 @sy2 @sy3 @sy4 @sy5 _    _    _    _    _    _    _    _
+  _    @sy6 @sy7 @sy8 @sy9 @sy0 _    _    _    _    _    _    _
+  _    tab  [    ]    grv  _    _    _    _    _    _    _
   _    _    _    _    _    _
 )
 
