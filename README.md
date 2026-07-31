@@ -22,6 +22,10 @@ the machine works — editing `~/.zshrc` and `~/dotfiles/.zshrc` is the same fil
 | `.config/aerc/aerc.conf`   | `~/.config/aerc/aerc.conf`  | aerc (email) main config   |
 | `.config/aerc/binds.conf`  | `~/.config/aerc/binds.conf` | aerc keybindings           |
 | `.w3m/keymap`              | `~/.w3m/keymap`         | w3m keys (aerc HTML viewing)   |
+| `.claude/settings.json`    | `~/.claude/settings.json` | Claude Code settings         |
+| `.claude/keybindings.json` | `~/.claude/keybindings.json` | Claude Code key bindings  |
+| `.claude/CLAUDE.md`        | `~/.claude/CLAUDE.md`   | global instructions for Claude |
+| `.claude/statusline-command.sh` | `~/.claude/statusline-command.sh` | statusline renderer |
 
 `.config/karabiner/` is **not** dead weight: `open-app-slot.sh` there is still
 the live app-launcher script (skhd calls it on every hotkey), and
@@ -33,6 +37,20 @@ the repo (it's gitignored as a second line of defense; the password itself is
 in the macOS Keychain). aerc only looks in `~/.config` because `.zprofile`
 exports `XDG_CONFIG_HOME` — without it, aerc on macOS uses
 `~/Library/Preferences`.
+
+Claude Code is linked **per file** for the same reason: `~/.claude` is mostly
+runtime state — `sessions/`, `history.jsonl` (full prompt transcripts),
+`projects/`, caches and daemon logs — none of which belongs in git. Nor does
+`~/.claude.json`, which despite the name is machine state (OAuth account,
+`machineID`, per-project history), not config. Project-level
+`.claude/settings.local.json` is gitignored as machine-specific.
+
+Claude rewrites `settings.json` itself when you change something via `/config`,
+and that is safe here: for **user**-scope settings it resolves the symlink and
+renames its temp file onto the real target in this repo, so the link survives
+and the edit is tracked. (Repo-scope settings get the opposite treatment — it
+refuses to write through a symlink at all, which is also why
+`permissions.defaultMode: "auto"` is only honoured from user settings.)
 
 Secrets (`~/.ssh`, API tokens, etc.) are deliberately **not** here.
 

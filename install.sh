@@ -30,6 +30,13 @@ link .config/aerc/aerc.conf   # files, not the dir: accounts.conf (secrets) live
 link .config/aerc/binds.conf
 link .w3m/keymap              # file, not dir: ~/.w3m also holds cookies/history
 
+# Claude Code: files, not the dir — ~/.claude is mostly runtime state
+# (sessions/, history.jsonl, caches, logs) that must not be tracked.
+link .claude/settings.json
+link .claude/keybindings.json
+link .claude/CLAUDE.md
+link .claude/statusline-command.sh
+
 # git hooks live in tracked hooks/ (pre-push runs the dotcheck symlink audit)
 git -C "$DOT" config core.hooksPath hooks
 

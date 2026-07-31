@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "defaultMode": "auto",
+    "allow": [
+      "Edit(/Users/jplk/.config/**)"
+    ],
+    "additionalDirectories": [
+      "/Users/jplk/.config/"
+    ]
+  },
+  "model": "opus",
+  "statusLine": {
+    "type": "command",
+    "command": "sh /Users/jplk/.claude/statusline-command.sh",
+    "refreshInterval": 60
+  },
+  "enabledPlugins": {
+    "lua-lsp@claude-plugins-official": false,
+    "pyright-lsp@claude-plugins-official": true
+  },
+  "theme": "auto",
+  "editorMode": "vim"
+}
