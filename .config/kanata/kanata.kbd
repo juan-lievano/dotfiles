@@ -23,6 +23,10 @@
 ;;     firmware. Both keyboards converge on one catcher.
 ;;   * The function row is remapped BACK to its macOS media functions. This is
 ;;     not a preference, it's a repair -- see the deflayer comment below.
+;;   * Left Shift is a plain Left Shift. There was an experiment making it a
+;;     literal `b` (bottom row reading b z x c v b, left-hand Shift coming from
+;;     holding `a`); it is commented out in the base deflayer and in
+;;     `left-hand-keys`, and both halves have to be re-enabled together.
 
 (defcfg
   process-unmapped-keys yes   ;; keys absent from defsrc pass through untouched
@@ -65,7 +69,18 @@
   ;; the tapping term" -- so this is closer to the Voyager, not further.
   ;; Cost: a genuinely slow same-hand roll (holding `a` past 200ms while
   ;; hitting `s`) can fire Shift. The Voyager has that same exposure.
+  ;; The commented-out `lsft` below belongs to the disabled "Left Shift is a
+  ;; literal `b`" experiment (see the deflayer). It is listed only while that is
+  ;; on: with Left Shift emitting `b` it stops being a modifier and becomes an
+  ;; ordinary left-hand letter key, so the opposite-hand rule has to cover it
+  ;; like any other. (These lists name PHYSICAL defsrc keys, not what they emit,
+  ;; which is why it reads `lsft` rather than a second `b`.) Without it, holding
+  ;; `a` past 200ms and then hitting it fired Shift and produced `B`, where the
+  ;; real `b` one row over would have early-tapped `a` and typed "ab".
+  ;; While Left Shift is a real Shift it stays commented out: a modifier belongs
+  ;; in neither list, same as `a s d f` are absent from their own hand's.
   left-hand-keys (
+    ;; lsft
     q w e r t
     g
     z x c v b
@@ -235,6 +250,9 @@
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab  q    w    e    r    t    y    u    i    o    p    @ctlb ]   \
   lctl @hma @hms @hmd @hmf g    @ctlh @hmj @hmk @hml @hmsc '   ret
+  ;; Left Shift as a literal `b` -- disabled, kept for reference. To re-enable,
+  ;; swap the two rows below and re-enable the `lsft` entry in `left-hand-keys`.
+  ;; b    z    x    c    v    b    @navn @symm ,  .    /    rsft
   lsft z    x    c    v    b    @navn @symm ,  .    /    rsft
   lctl lalt lmet @spc rmet ralt
 )
