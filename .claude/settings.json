@@ -1,9 +1,9 @@
 {
   "permissions": {
-    "defaultMode": "auto",
     "allow": [
       "Edit(~/.config/**)"
     ],
+    "defaultMode": "auto",
     "additionalDirectories": [
       "~/.config/"
     ]
