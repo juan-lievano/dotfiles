@@ -12,6 +12,61 @@
 # root/launchctl workaround — which is why kanata does not need the
 # `cmd` feature that Homebrew's build omits.
 
+# ---- Ctrl-<key> rewrites, for every keyboard kanata does NOT see ----
+#
+# kanata is scoped to the built-in keyboard (macos-dev-names-include in
+# .config/kanata/kanata.kbd), so its @ctlh / @ctlb / Ctrl-M forks and the
+# Ctrl-; defoverride exist ONLY on the laptop. On the Voyager the same chord
+# is resolved in QMK firmware and leaves as a literal Ctrl-Opt-H, which macOS
+# does not understand -- see below. These lines restore parity by rewriting at
+# the event-tap level, which is above the keyboard and therefore keyboard-blind.
+#
+# Why the chord has to be rewritten at all, rather than composing on its own:
+# macOS resolves text commands by ONE exact-chord lookup in AppKit's
+# StandardKeyBinding.dict. That table has separate rows for "^h" and for "^?"
+# (Delete), both landing on deleteBackward:, and a row for "~^?" (Opt-Delete)
+# landing on deleteWordBackward:. There is NO row for "~^h". Ctrl-H is not
+# "the Delete key"; it is its own entry, so Option has nothing to modify.
+#
+# No double-processing on the laptop: kanata rewrites at the HID level, below
+# this event tap, so skhd only ever sees the already-converted Opt-Backspace.
+#
+# skhd matches modifiers EXACTLY, so each combination needs its own line --
+# kanata's `unmod` drops Ctrl generically and keeps whatever else is held,
+# which is not expressible here. The cross-product is not enumerated; these
+# are the combinations that were actually in use.
+#
+# `backspace` is skhd's name for the Backspace key. `delete` is FORWARD
+# delete -- using it here would eat the word AHEAD of the cursor.
+#
+# Cost: each press forks a short-lived `skhd -k` to synthesize the event.
+# Ctrl-H is a high-frequency key, so if it ever feels laggy, that fork is why.
+#
+# Scope: GUI (Cocoa) apps only, and that is not a bug worth chasing.
+#   * Ctrl-Cmd-H cannot work in a terminal -- verified. The legacy key encoding
+#     has no bit for Cmd, so the modifier is dropped downstream of skhd. Same
+#     reason it fails from the laptop; see .config/wezterm/wezterm.lua.
+#   * Ctrl-Opt-H reaches the terminal as ESC DEL, and .zshrc runs `bindkey -v`
+#     with KEYTIMEOUT=1, so `^[` is eaten instantly as vi-cmd-mode.
+#   Delete-word / delete-line in the terminal are `^W` and `^U`, bound directly
+#   in .zshrc. That split is deliberate -- the terminal is its own world.
+#
+# One asymmetry worth knowing if a chord ever stops working: skhd posts to
+# kCGHIDEventTap, which re-merges the modifiers you are PHYSICALLY holding into
+# the synthetic event. So the Ctrl you are still holding rides along. Ctrl-Opt-H
+# survives because StandardKeyBinding.dict also has a "~^^?" row (Ctrl-Opt-
+# Delete) landing on deleteWordBackward:. A chord whose target has only one row
+# would break; fixing that needs an in-place event rewrite (Hammerspoon), not
+# synthesis.
+ctrl - h             : skhd -k "backspace"
+ctrl + alt - h       : skhd -k "alt - backspace"
+ctrl + cmd - h       : skhd -k "cmd - backspace"
+ctrl + shift - h     : skhd -k "shift - backspace"
+ctrl - 0x21          : skhd -k "escape"           # Ctrl-[  -> Esc
+ctrl - m             : skhd -k "return"           # Ctrl-M  -> Return
+ctrl - 0x29          : skhd -k "shift - 0x32"     # Ctrl-;  -> ~
+
+# ---- App launcher ----
 cmd + ctrl + alt + shift - 1 : ~/.config/karabiner/open-app-slot.sh 1
 cmd + ctrl + alt + shift - 2 : ~/.config/karabiner/open-app-slot.sh 2
 cmd + ctrl + alt + shift - 3 : ~/.config/karabiner/open-app-slot.sh 3

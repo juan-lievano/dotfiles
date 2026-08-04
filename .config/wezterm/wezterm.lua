@@ -46,10 +46,13 @@ config.keys = {
   -- leaky rule everywhere.
   --
   -- The two halves fail for different reasons, which is worth keeping straight:
-  --   Opt-Backspace DOES work in zsh and in most TUIs -- Alt has a wire
-  --   encoding (the ESC prefix), so it arrives as ESC DEL and readline reads
-  --   it as backward-kill-word. nvim is the one that ignores it, and nvim is
-  --   why translating it here never actually unified anything.
+  --   Opt-Backspace does NOT work in this shell, contrary to what the
+  --   emacs-mode readline default would suggest. Alt has a wire encoding (the
+  --   ESC prefix), so it arrives as ESC DEL -- but .zshrc sets `bindkey -v`
+  --   with KEYTIMEOUT=1, and in viins `^[` is vi-cmd-mode, resolved instantly.
+  --   So the ESC half is eaten as a mode switch and `^[^?` is never bound at
+  --   all. `^W` (bound explicitly in .zshrc) is the only backward-kill-word
+  --   in here. nvim ignores Opt-Backspace too, for its own reasons.
   --   Cmd-Backspace can NEVER work in any terminal. The legacy key encoding
   --   has bits for Shift/Alt/Ctrl and nothing for Cmd, so WezTerm drops the
   --   modifier and sends a bare DEL -- kanata's Ctrl-Cmd-H deletes one
