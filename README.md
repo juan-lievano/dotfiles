@@ -15,7 +15,7 @@ the machine works — editing `~/.zshrc` and `~/dotfiles/.zshrc` is the same fil
 | `.config/git/`             | `~/.config/git/`        | global gitignore               |
 | `.config/nvim/`            | `~/.config/nvim/`       | Neovim config                  |
 | `.config/kanata/`          | `~/.config/kanata/`     | keyboard remaps (home row mods) |
-| `.config/skhd/`            | `~/.config/skhd/`       | Hyper+N app launcher hotkeys   |
+| `.config/skhd/`            | `~/.config/skhd/`       | app launcher + Ctrl-`<key>` rewrites |
 | `.config/karabiner/`       | `~/.config/karabiner/`  | `open-app-slot.sh` (live) + Karabiner rollback |
 | `.config/wezterm/`         | `~/.config/wezterm/`    | terminal config                |
 | `.config/qalculate/`       | `~/.config/qalculate/`  | calculator prefs               |
@@ -191,6 +191,62 @@ it and runs `.config/karabiner/open-app-slot.sh` (still the single source of
 truth for app names). Homebrew builds kanata without the `cmd` feature, so it
 can't run the script itself — and skhd running as a normal user agent means
 `open -a` works without any root workaround.
+
+### skhd also carries the Ctrl-`<key>` rewrites, for the Voyager
+
+kanata is scoped to the **built-in keyboard only** (`macos-dev-names-include`),
+because the Voyager runs its own QMK home row mods and letting kanata re-process
+them would double up. The consequence is easy to forget: every rewrite defined
+in `kanata.kbd` — `@ctlh` (Ctrl-H → Delete, Ctrl-Opt-H → delete word,
+Ctrl-Cmd-H → delete line), `@ctlb` (Ctrl-[ → Esc), the Ctrl-M fork, the Ctrl-;
+override — **exists only on the laptop**. On the Voyager the chord resolves in
+firmware and leaves as a literal Ctrl-Opt-H, which macOS does not understand.
+
+It doesn't compose on its own, which is the counter-intuitive part. macOS
+resolves text commands by **one exact-chord lookup** in AppKit's
+`StandardKeyBinding.dict`. `^h` and `^?` are separate rows both landing on
+`deleteBackward:`, and `~^?` lands on `deleteWordBackward:` — but there is no
+`~^h` row at all. Ctrl-H is not "the Delete key with Option applied on top"; it
+is its own entry, so Option has nothing to modify.
+
+`skhdrc` closes the gap by rewriting at the event-tap level, which sits above
+the keyboard driver and is therefore keyboard-blind. It can't double-fire on the
+laptop: kanata rewrites *below* that tap, so skhd only ever sees the already
+converted keystroke.
+
+#### ⚠️ This works partly by luck — read this before extending it
+
+skhd's `-k` **synthesizes** a new event and posts it to `kCGHIDEventTap`, which
+re-merges the modifiers you are still **physically holding**. So the Ctrl you're
+holding rides along into the replacement event. Ctrl-Opt-H survives only because
+the dict happens to carry a *second* row — `~^^?` (Ctrl-Opt-Delete) — that also
+lands on `deleteWordBackward:`. Nothing about the design guarantees that.
+
+Adding a rewrite whose target has only **one** row will therefore fail, and this
+is not hypothetical: Ctrl-Cmd-H is exactly that case. `@^?` is the only row for
+`deleteToBeginningOfLine:`, so the leaked Ctrl makes it unbound. It works in GUI
+apps because Cmd-Backspace is reached some other way, but the pattern is real.
+
+Before blaming this, check the two things that are **expected** and unfixable:
+
+| Symptom | Why | Verdict |
+|---------|-----|---------|
+| Ctrl-Cmd-H doesn't delete a line in the terminal | legacy key encoding has no bit for Cmd; dropped downstream of skhd | can never work, also fails from the laptop |
+| Ctrl-Opt-H doesn't delete a word in the terminal | arrives as `ESC DEL`, and `.zshrc` runs `bindkey -v` with `KEYTIMEOUT=1`, so `^[` is eaten instantly as vi-cmd-mode | by design — use `^W` / `^U` in here |
+
+**Verified:** Safari (native Cocoa text fields), macOS 15.
+**Not verified — check here first if something misbehaves:**
+- **Electron/Java apps** (VS Code, Slack, Discord, JetBrains) implement their own
+  key handling and may not honor `~^^?`. The leaked Ctrl is the likely culprit.
+- **Key repeat.** Holding Ctrl-H to backspace continuously may not repeat, since
+  each press forks a short-lived `skhd -k`.
+
+The real fix, if any of this turns into a recurring annoyance, is to stop
+synthesizing and **rewrite the in-flight event instead** — take the keydown,
+change its keycode and clear Ctrl from its flags, pass it through. That's what
+kanata's `unmod` does and why the laptop has none of these problems.
+Hammerspoon can do it in a few lines and would replace all seven `skhdrc` lines
+with one generic rule. It was not done now because nothing was actually broken.
 
 ### Permissions, and why they're so awkward
 

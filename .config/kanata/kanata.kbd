@@ -93,7 +93,13 @@
 )
 
 (defalias
-  ;; ---- Ctrl-<key> rewrites (global; no app conditions) ----
+  ;; ---- Ctrl-<key> rewrites (BUILT-IN KEYBOARD ONLY; no app conditions) ----
+  ;; "global" here means every app, NOT every keyboard. macos-dev-names-include
+  ;; scopes this whole config to the laptop, so on the Voyager these forks do
+  ;; not exist -- .config/skhd/skhdrc rewrites the same chords at the event-tap
+  ;; level to cover it. Change one, change the other. That copy is the fragile
+  ;; half (it synthesizes events and the held Ctrl leaks into them); see the
+  ;; warning in README.md before adding a chord to either file.
   ;; (fork <normal> <alternate> <trigger-keys>)
   ;; Ctrl held -> alternate. `unmod` releases only Ctrl, so Opt and Cmd
   ;; still reach the output:
