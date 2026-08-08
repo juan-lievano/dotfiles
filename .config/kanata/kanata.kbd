@@ -23,10 +23,16 @@
 ;;     firmware. Both keyboards converge on one catcher.
 ;;   * The function row is remapped BACK to its macOS media functions. This is
 ;;     not a preference, it's a repair -- see the deflayer comment below.
-;;   * Left Shift is a plain Left Shift. There was an experiment making it a
-;;     literal `b` (bottom row reading b z x c v b, left-hand Shift coming from
-;;     holding `a`); it is commented out in the base deflayer and in
+;;   * In QWERTY, Left Shift is a plain Left Shift. There was an experiment
+;;     making it a literal `b` (bottom row reading b z x c v b, left-hand Shift
+;;     coming from holding `a`); it is commented out in the base deflayer and in
 ;;     `left-hand-keys`, and both halves have to be re-enabled together.
+;;   * There are TWO alpha layouts: `base` (QWERTY) and `colemak` (Colemak-DH
+;;     with the left-hand angle mod). Hold Space and tap `\` to flip. kanata
+;;     boots into QWERTY, because `base` is the first deflayer. Everything
+;;     positional is identical in both -- home row mod placement, the layer
+;;     keys, the function row, the launcher, Caps-as-Ctrl -- so only the letters
+;;     and the two Ctrl rewrites that follow them actually move.
 
 (defcfg
   process-unmapped-keys yes   ;; keys absent from defsrc pass through untouched
@@ -89,6 +95,22 @@
     y u i o p
     h
     n m , . /
+  )
+
+  ;; Colemak's angle mod turns Left Shift into a literal `z`, so there it stops
+  ;; being a modifier and becomes an ordinary left-hand letter key -- the
+  ;; opposite-hand rule has to cover it like any other. This is the same reasoning
+  ;; the disabled `b` experiment above needed, now permanently live but scoped to
+  ;; one layout instead of both. QWERTY's mods keep `$left-hand-keys`, where Left
+  ;; Shift is a real modifier and so belongs in neither list.
+  ;; @cmz itself also uses `$left-hand-keys`, NOT this one: a key is always absent
+  ;; from its own hand's list, so Shift can still chain with the other left-side
+  ;; mods (lsft + hold `t` = Shift-Cmd).
+  left-hand-keys-cmk (
+    lsft
+    q w e r t
+    g
+    z x c v b
   )
 )
 
@@ -156,6 +178,66 @@
   hmk (tap-hold-tap-keys $tap-time $hold-time k     ralt $right-hand-keys)
   hml (tap-hold-tap-keys $tap-time $hold-time l     rctl $right-hand-keys)
   hmsc (tap-hold-tap-keys $tap-time $hold-time ;     rsft $right-hand-keys)
+
+  ;; ---- The same eight mods, with Colemak-DH letters under them ----
+  ;; Physical a s d f / j k l ; carry Shift Ctrl Opt Cmd inward exactly as above;
+  ;; only the tap letters change (a r s t / n e i o). Timings, chordal behaviour
+  ;; and every argument in the block above are unchanged -- if you retune one set
+  ;; of eight, retune the other, or the two layouts stop feeling alike.
+  cma (tap-hold-tap-keys $tap-time $hold-time a lsft $left-hand-keys-cmk)
+  cmr (tap-hold-tap-keys $tap-time $hold-time r lctl $left-hand-keys-cmk)
+  cms (tap-hold-tap-keys $tap-time $hold-time s lalt $left-hand-keys-cmk)
+  cmt (tap-hold-tap-keys $tap-time $hold-time t lmet $left-hand-keys-cmk)
+  cmn (tap-hold-tap-keys $tap-time $hold-time n rmet $right-hand-keys)
+  cme (tap-hold-tap-keys $tap-time $hold-time e ralt $right-hand-keys)
+  cmi (tap-hold-tap-keys $tap-time $hold-time i rctl $right-hand-keys)
+  cmo (tap-hold-tap-keys $tap-time $hold-time o rsft $right-hand-keys)
+
+  ;; Angle mod: the left bottom row slides one key left onto Left Shift, so that
+  ;; key becomes `z`. Tap-hold rather than a plain `z` because the alternative is
+  ;; strictly worse -- with a plain `z` the ONLY left Shift left is hold-`a`,
+  ;; which is already a 200ms tap-hold, so nothing is gained and the pinky Shift
+  ;; is lost. Cost: `z` loses key repeat, and dawdling on it past $hold-time
+  ;; fires Shift. Shifting a LEFT-hand letter early-taps to `z` by design -- use
+  ;; the opposite hand for capitals, same rule as everywhere else here.
+  ;; This does NOT interfere with `<hold m>z` -> Tab: a held layer's entry
+  ;; replaces the base action outright, so the tap-hold underneath is never
+  ;; consulted. See the `symbols-cmk` layer for where Tab actually sits.
+  cmz (tap-hold-tap-keys $tap-time $hold-time z lsft $left-hand-keys)
+
+  ;; Colemak swaps the letters h and m, and the Ctrl rewrites follow the LETTER,
+  ;; not the physical key, so the two forks trade places:
+  ;;   physical h = letter m -> Ctrl gives Return  (@ctlm, here)
+  ;;   physical m = letter h -> Ctrl gives Delete  (@symh, below)
+  ;; @ctlm is the easy half. Physical h is a plain key in Colemak, so a bare fork
+  ;; works -- identical shape to @ctlh in QWERTY.
+  ctlm (fork m (unmod (lctl rctl) ret) (lctl rctl))
+
+  ;; @symh is the hard half, and it inherits @symm's problem wholesale: the
+  ;; letter now lives on the layer key, so the fork has to sit OUTSIDE the
+  ;; tap-hold and resolve on press. Every word of the @symm comment applies,
+  ;; including the cost -- with Ctrl already down, holding this key repeats
+  ;; Delete instead of opening symbols.
+  ;; No Colemak twin is needed for the other two rewrites: `[` doesn't move, and
+  ;; Ctrl-; -> ~ follows `;` to physical p by itself, because defoverrides match
+  ;; on OUTPUT keys rather than physical ones.
+  symh (fork
+         (tap-hold-tap-keys $tap-time $hold-time h (layer-while-held symbols-cmk) $right-hand-keys)
+         (unmod (lctl rctl) bspc)
+         (lctl rctl))
+  navk (tap-hold-tap-keys $tap-time $hold-time k (layer-while-held nav) $right-hand-keys)
+
+  ;; ---- Layout toggle: hold Space, tap `\` ----
+  ;; `layer-switch` on its own is absolute, not a toggle, so `switch` reads the
+  ;; current base layer and picks the other one. That is what buys a single key
+  ;; instead of a separate force-QWERTY and force-Colemak pair.
+  ;; Cost of one key: nothing signals which layout is live -- the tell is that
+  ;; you start typing garbage, and the fix is to press it again. kanata boots
+  ;; into `base` because it is the first deflayer, so a restart (or the Homebrew
+  ;; upgrade that kills the service; see README) is always a known state.
+  tog (switch
+        ((base-layer base)) (layer-switch colemak) break
+        ()                  (layer-switch base)    break)
 
   ;; ---- App launcher: hold Space, tap 1-7 ----
   ;; Replaces Karabiner's simultaneous Space+N. Tapping Space still types
@@ -263,6 +345,38 @@
   lctl lalt lmet @spc rmet ralt
 )
 
+;; Colemak-DH with the left-hand angle mod. Space+`\` toggles here and back.
+;;
+;;   tab   q w f p b   j l u y ;   [ ] \
+;;   ctrl  a r s t g   m n e i o   ' ret
+;;   z     x c d v _   k h , . /   shift
+;;
+;; The angle mod slides the left bottom row one key LEFT, onto Left Shift, so it
+;; is reached at an angle instead of a claw. Physical `lsft z x c v` type
+;; `z x c d v`, and physical `b` falls off the end with nothing to fill it --
+;; Colemak-DH puts `b` on physical `t`, and the index-inward stretch has no other
+;; claimant. Left dead (XX) on purpose: during the transition a mis-reach there
+;; should be silent rather than quietly typing a letter. Swap the XX to `v` if
+;; that turns out to be more annoying than a doubled letter.
+;;
+;; The right hand is NOT angled -- the angle mod is a left-hand fix -- so the
+;; layer keys stay under the right index exactly where they already are, and the
+;; nav layer is shared verbatim with QWERTY. They just tap `k` and `h` now.
+;; The symbols layer does move with the alphas, because its payload sits on the
+;; bottom row that shifted; see `symbols-cmk`.
+;;
+;; Untouched from `base`: the function row, the number row, Caps-as-Ctrl, the
+;; Space launcher, and Ctrl-[ -> Esc. The other Ctrl rewrites follow their
+;; letters -- @ctlm on physical h, @symh on physical m.
+(deflayer colemak
+  esc  brdn brup C-up M-spc f5  f6   prev pp   next mute vold volu
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    f    p    b    j    l    u    y    ;    @ctlb ]   \
+  lctl @cma @cmr @cms @cmt g    @ctlm @cmn @cme @cmi @cmo '   ret
+  @cmz x    c    d    v    XX   @navk @symh ,  .    /    rsft
+  lctl lalt lmet @spc rmet ralt
+)
+
 ;; `m`-hold: the shifted number row, moved onto the left home block.
 ;; Adding Shift gives the OTHER half of each standard pair, so every key here
 ;; keeps its real 1/! ,  [/{ ,  `/~ relationship -- just entered inverted,
@@ -291,28 +405,65 @@
   _    _    _    _    _    _
 )
 
+;; The same layer with its bottom row angled, so the symbols stay under the same
+;; fingers once the alphas shift. `base` points @symm at `symbols`, `colemak`
+;; points @symh here; the base layer picks, so there is nothing extra to switch.
+;; Only the bottom row differs -- only the bottom row is angled.
+;;
+;;                m          m + Shift
+;;   q w e r t    ! @ # $ %  1 2 3 4 5
+;;   a r s t g    ^ & * ( )  6 7 8 9 0
+;;   lsft         tab        S-tab
+;;   z            [          {
+;;   x            ]          }
+;;   c            `          ~
+;;
+;; Shift for the digits has to come from physical Right Shift or from `;`
+;; (physical `;` is @cmo, still transparent here). Left Shift is unavailable for
+;; two reasons now: that key is `tab` on this layer, and `a` is busy being `^`.
+(deflayer symbols-cmk
+  _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    @sy1 @sy2 @sy3 @sy4 @sy5 _    _    _    _    _    _    _    _
+  _    @sy6 @sy7 @sy8 @sy9 @sy0 _    _    _    _    _    _    _
+  tab  [    ]    grv  _    _    _    _    _    _    _    _
+  _    _    _    _    _    _
+)
+
 ;; `n`-hold: arrows on the left home row, in hjkl order shifted one hand over.
 ;;   a s d f  ->  left down up right
-;; The left hand's own mods are shadowed (they ARE the arrows), but the right
-;; hand's are not: `k`/`l`/`;` stay transparent, so Opt-Left (word), Ctrl-Left
-;; and Shift-Left (select) are all still chordable while navigating. `j` is the
-;; exception -- it's the same finger as `n` -- so Cmd-Left/Right for line ends
-;; needs physical Left Cmd. One more reason the physical modifiers earn their
-;; keep.
+;; Shared by both alpha layouts -- the arrows are positional, and `k`/`l`/`;`
+;; below are plain modifiers, so nothing here depends on which letters are live.
+;;
+;; The left hand's own mods are shadowed (they ARE the arrows). The right hand's
+;; are REPLACED, not left transparent: `k`/`l`/`;` are plain Opt/Ctrl/Shift here
+;; rather than the @hmk/@hml/@hmsc tap-holds underneath, so Opt-Left (word),
+;; Ctrl-Left and Shift-Left (select) fire instantly instead of waiting out
+;; $hold-time. This is what the Voyager does -- its nav layer puts literal
+;; KC_RIGHT_ALT / KC_RIGHT_CTRL / KC_RIGHT_SHIFT on the same three keys, not
+;; mod-taps. Transparency looked equivalent and wasn't: it kept the 200ms wait
+;; on a layer where every chord is a deliberate two-key reach anyway.
+;; Cost: those three keys can no longer be TAPPED for their letters while
+;; navigating. The Voyager gave that up too.
+;; `j` stays transparent because it is unreachable, not because it is wanted --
+;; same finger as `n` -- so Cmd-Left/Right for line ends still needs physical
+;; Left Cmd. One more reason the physical modifiers earn their keep.
 (deflayer nav
   _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    left down up   rght _    _    _    _    _    _    _    _
+  _    left down up   rght _    _    _    ralt rctl rsft _    _
   _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _
 )
 
-;; Space-hold: app slots on the number row, real F-keys on the function row.
+;; Space-hold: app slots on the number row, real F-keys on the function row,
+;; and the QWERTY/Colemak toggle on `\` -- far from everything else, because a
+;; stray press means typing garbage until you notice.
 (deflayer launch
   _    f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
   _    @app1 @app2 @app3 @app4 @app5 @app6 @app7 _  _    _    _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    @tog
   _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _

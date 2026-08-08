@@ -81,6 +81,54 @@ Timings match Oryx too (`$hold-time` = `TAPPING_TERM`, `$tap-time` =
 for the full 200ms before the other key, on both keyboards. Anything tuned here
 should be changed in Oryx as well, or the two stop feeling alike.
 
+### Two alpha layouts: QWERTY and Colemak-DH (hold Space, tap `\`)
+
+```
+tab   q w f p b   j l u y ;   [ ] \
+ctrl  a r s t g   m n e i o   ' ret
+z     x c d v _   k h , . /   shift
+```
+
+Colemak-DH with the **left-hand angle mod**: the left bottom row slides one key
+left onto Left Shift, so it's reached at an angle instead of a claw. Physical
+`lsft z x c v` type `z x c d v`, and physical `b` falls off the end with nothing
+to fill it — `b` lives on physical `t` in Colemak-DH, and the index-inward
+stretch has no other claimant. It's left dead on purpose, so a mis-reach during
+the transition is silent rather than quietly typing a letter.
+
+Left Shift becoming `z` is `tap z / hold Shift`, not a plain `z`. That looks
+like the fussier option and is actually the cheaper one: with a plain `z` the
+only left Shift left is hold-`a`, which is *already* a 200ms tap-hold, so
+nothing is gained and the pinky Shift is lost for free. The price is that `z`
+loses key repeat and dawdling past 200ms fires Shift. It does **not** interfere
+with `<hold m>z` → Tab — a held layer replaces the base action outright, so the
+tap-hold underneath is never consulted.
+
+Almost nothing else moves. Home row mods keep their positions and their
+Shift/Ctrl/Opt/Cmd order, and only change which letter they tap (`a r s t` /
+`n e i o`). The function row, number row, Caps-as-Ctrl, the Space launcher and
+the nav layer are all shared verbatim. Two things do move:
+
+- **The symbols layer angles too**, since its payload sits on the bottom row
+  that shifted — `tab [ ] ` `` land on `lsft z x c`. That's a second deflayer
+  (`symbols-cmk`), but no second switch: the active base layer picks which one
+  its `m` opens.
+- **The Ctrl rewrites follow the letter, not the key.** Colemak swaps `h` and
+  `m`, so Ctrl-Delete moves to physical `m` and Ctrl-Return to physical `h` —
+  the two forks trade places, and the awkward fork-outside-the-tap-hold trick
+  moves with them onto whichever one is the layer key. Ctrl-`[` → Esc needs no
+  twin (`[` doesn't move) and neither does Ctrl-`;` → `~`, which follows `;` to
+  physical `p` by itself because `defoverrides` matches on *output* keys.
+
+The toggle is one key rather than a force-QWERTY / force-Colemak pair, which
+costs exactly one thing: nothing tells you which layout is live. The tell is
+that you start typing garbage; the fix is to press it again. kanata boots into
+QWERTY because `base` is the first deflayer, so a restart — including the one
+after a Homebrew upgrade breaks the service — is always a known state.
+
+This is scoped to the built-in keyboard along with everything else here. The
+Voyager's layout lives in its own firmware and is unaffected.
+
 ### Symbol and navigation layers (hold `m` / hold `n`)
 
 Both layer keys sit on the right index finger and both layers put their payload
@@ -107,15 +155,23 @@ payloads are unshifted keys, so the Shift already being held produces `S-tab { }
 
 Shift here has to come from a physical Shift key or from `;` on the right home
 row. Left-hand home-row Shift is unavailable while the layer is up, since `a` is
-busy being `^`/`6`.
+busy being `^`/`6`. In the Colemak variant of this layer only Right Shift and
+`;` are left, because Left Shift is where Tab moved to.
+
+The table above is the QWERTY layer. Colemak gets `symbols-cmk`, identical
+except that the bottom four slide one key left with the angle mod: `tab [ ] ` ``
+on `lsft z x c`. The digits and arrows don't move — only the bottom row is
+angled.
 
 Open question: the digits are the one part of this that fights existing muscle
 memory — a straight row and a numpad are both familiar, two rows of five is a
-third pattern. It can't be fixed in place (the payload has to fit the left hand's
-five columns, because the right hand is holding `m`), and a numpad grid would
-land on `x c v` and cost the `{ } ~` pairing. Left in for now because it removes
-nothing that already worked; the number row is still there and still the faster
-path.
+third pattern. The Voyager is where that friction comes from: its Sym+Num layer
+puts a real numpad on the *right* hand (`7 8 9` / `4 5 6` / `1 2 3`, `0` on the
+thumb), because there the layer is held by a thumb key and both hands stay free.
+That can't be copied here — the payload has to fit the left hand's five columns,
+since the right hand is holding `m` — and a numpad grid would land on `x c v`
+and cost the `{ } ~` pairing. Left in for now because it removes nothing that
+already worked; the number row is still there and still the faster path.
 
 Both are `tap-hold-tap-keys` with `$right-hand-keys`, so a fast right-hand roll
 (`mn`, `m,`) settles as a tap, while the left-hand payload keys wait out the
@@ -133,9 +189,15 @@ opening symbols. Pressing Ctrl *after* `m` is unaffected — the fork is already
 past.
 
 In the nav layer the left hand's own mods are shadowed (they *are* the arrows),
-but `k`/`l`/`;` stay transparent, so Opt-Left, Ctrl-Left and Shift-Left still
-chord normally. `j` is the exception — same finger as `n` — so Cmd-Left/Right
-for line ends needs physical Left Cmd.
+and `k`/`l`/`;` are **replaced** by plain Opt/Ctrl/Shift rather than left
+transparent — so Opt-Left, Ctrl-Left and Shift-Left fire instantly instead of
+waiting out the 200ms hold the mod-taps underneath would impose. That's what the
+Voyager does: its nav layer carries literal `KC_RIGHT_ALT` / `KC_RIGHT_CTRL` /
+`KC_RIGHT_SHIFT` on those three keys, not mod-taps. Transparency looked
+equivalent and wasn't. The cost is that the three keys can't be tapped for their
+letters while navigating, which the Voyager also gave up. `j` is the exception —
+same finger as `n`, so it can't be pressed at all — and Cmd-Left/Right for line
+ends still needs physical Left Cmd.
 
 ### The function row has to be rebuilt by hand
 
