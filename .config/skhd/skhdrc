@@ -1,8 +1,13 @@
 # skhd — app launcher hotkeys.
 #
 # Single catcher for both keyboards:
-#   * Voyager      sends Hyper+N directly from its firmware
-#   * Laptop       kanata turns Space-hold + N into Hyper+N
+#   * Voyager      sends Hyper+N directly from its firmware (thumb key)
+#   * Laptop       Hyper is all four home row mods held at once -- a+s+d+f in
+#                  QWERTY, a+r+s+t in Colemak -- then a digit on the number
+#                  row. kanata is not involved; the chord below is matched
+#                  raw. (kanata used to synthesize it from a Space-hold layer;
+#                  that layer became the symbol layer and the duplicate path
+#                  was removed.)
 #
 # App names still live in one place: .config/karabiner/open-app-slot.sh
 # (left in the karabiner directory on purpose, so rolling back to

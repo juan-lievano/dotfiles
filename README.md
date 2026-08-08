@@ -81,7 +81,7 @@ Timings match Oryx too (`$hold-time` = `TAPPING_TERM`, `$tap-time` =
 for the full 200ms before the other key, on both keyboards. Anything tuned here
 should be changed in Oryx as well, or the two stop feeling alike.
 
-### Two alpha layouts: QWERTY and Colemak-DH (hold Space, tap `\`)
+### Two alpha layouts: QWERTY and Colemak-DH (hold Right Option, tap `\`)
 
 ```
 tab   q w f p b   j l u y ;   [ ] \
@@ -106,19 +106,20 @@ tap-hold underneath is never consulted.
 
 Almost nothing else moves. Home row mods keep their positions and their
 Shift/Ctrl/Opt/Cmd order, and only change which letter they tap (`a r s t` /
-`n e i o`). The function row, number row, Caps-as-Ctrl, the Space launcher and
-the nav layer are all shared verbatim. Two things do move:
+`n e i o`). The function row, number row, Caps-as-Ctrl, the three thumb layer
+keys, the nav layer and the *entire right half* of the symbol layer are all
+shared verbatim. Two things do move:
 
-- **The symbols layer angles too**, since its payload sits on the bottom row
+- **The symbols layer's left half angles too**, since it sits on the bottom row
   that shifted — `tab [ ] ` `` land on `lsft z x c`. That's a second deflayer
   (`symbols-cmk`), but no second switch: the active base layer picks which one
-  its `m` opens.
+  Space opens. Its right half is a byte-for-byte copy, because the numpad there
+  is positional.
 - **The Ctrl rewrites follow the letter, not the key.** Colemak swaps `h` and
   `m`, so Ctrl-Delete moves to physical `m` and Ctrl-Return to physical `h` —
-  the two forks trade places, and the awkward fork-outside-the-tap-hold trick
-  moves with them onto whichever one is the layer key. Ctrl-`[` → Esc needs no
-  twin (`[` doesn't move) and neither does Ctrl-`;` → `~`, which follows `;` to
-  physical `p` by itself because `defoverrides` matches on *output* keys.
+  the two forks simply trade physical keys. Ctrl-`[` → Esc needs no twin (`[`
+  doesn't move) and neither does Ctrl-`;` → `~`, which follows `;` to physical
+  `p` by itself because `defoverrides` matches on *output* keys.
 
 The toggle is one key rather than a force-QWERTY / force-Colemak pair, which
 costs exactly one thing: nothing tells you which layout is live. The tell is
@@ -129,75 +130,103 @@ after a Homebrew upgrade breaks the service — is always a known state.
 This is scoped to the built-in keyboard along with everything else here. The
 Voyager's layout lives in its own firmware and is unaffected.
 
-### Symbol and navigation layers (hold `m` / hold `n`)
+### The layers live on the thumbs
 
-Both layer keys sit on the right index finger and both layers put their payload
-on the **left** hand — the same opposite-hand rule the home row mods follow.
+The Voyager holds both of its layers with a thumb. This now matches it 1:1:
 
-| hold `m` + | gives | + Shift | | hold `n` + | gives |
-|------------|-------|---------|---|------------|-------|
-| `q w e r t` | `! @ # $ %` | `1 2 3 4 5` | | `a s d f` | ← ↓ ↑ → |
-| `a s d f g` | `^ & * ( )` | `6 7 8 9 0` | | | |
-| `z`         | Tab | Shift-Tab | | | |
-| `x c v`     | `` [ ] ` `` | `` { } ~ `` | | | |
+| key | tap | hold | Voyager |
+|-----|-----|------|---------|
+| Space | Space | symbol + number layer | `LT(1, KC_SPACE)` |
+| Right Cmd | Return | nav layer | `LT(2, KC_ENTER)` |
+| Right Option | — | real F1–F12, layout toggle | (its Hyper thumb key) |
 
-The symbols are the shifted number row in order, which is why the config writes
-them `S-1`..`S-0` rather than as literal glyphs. Arrows are `hjkl` order moved
-one hand over.
+They used to sit on the right index — hold `m` for symbols, hold `n` for nav —
+which is precisely what forced every payload onto the left hand, since the right
+one was busy holding the layer open. On a thumb both hands are free, and that's
+the whole unlock: the symbol layer can carry the Voyager's numpad.
 
-Adding Shift gives the other half of each standard pair, so `1`/`!`, `[`/`{` and
-`` ` ``/`~` all hold — just entered inverted, glyph first and digit behind Shift.
-Two different things make that work. `z x c v` need no config at all: their
-payloads are unshifted keys, so the Shift already being held produces `S-tab { }
-~` on its own. The digits do need it, because the layer has *pre-applied* Shift —
-`S-1` plus more Shift is still `!` — so `@sy1`..`@sy0` fork on Shift and use
-`unmod` to peel it back off, the same trick `@ctlh` uses for Ctrl.
+Physical Right Cmd and Right Option are consumed. Both modifiers survive
+elsewhere — Cmd on physical Left Cmd and on the home row mods of either hand,
+Opt on physical Left Option and likewise.
 
-Shift here has to come from a physical Shift key or from `;` on the right home
-row. Left-hand home-row Shift is unavailable while the layer is up, since `a` is
-busy being `^`/`6`. In the Colemak variant of this layer only Right Shift and
-`;` are left, because Left Shift is where Tab moved to.
+> ⚠️ **This puts a layer on the most-pressed key on the board.** Any Space press
+> held past 200ms now opens the symbol layer. The Voyager has run exactly this
+> arrangement without trouble, which is the argument for trying it, but it's the
+> one part of this design that could prove to be a mistake in daily use. The
+> cheap knob if it misfires is a longer hold time on **Space alone** — write a
+> literal `250` in place of `$hold-time` in `@spc`/`@spck` and leave every other
+> timing at 200, since Space is the only key whose hold fights ordinary prose.
+> The expensive fix is moving symbols back off the thumb, which costs the
+> numpad. Space also loses key repeat, though it already had under the old
+> launcher.
 
-The table above is the QWERTY layer. Colemak gets `symbols-cmk`, identical
-except that the bottom four slide one key left with the angle mod: `tab [ ] ` ``
-on `lsft z x c`. The digits and arrows don't move — only the bottom row is
-angled.
+#### The symbol layer (hold Space)
 
-Open question: the digits are the one part of this that fights existing muscle
-memory — a straight row and a numpad are both familiar, two rows of five is a
-third pattern. The Voyager is where that friction comes from: its Sym+Num layer
-puts a real numpad on the *right* hand (`7 8 9` / `4 5 6` / `1 2 3`, `0` on the
-thumb), because there the layer is held by a thumb key and both hands stay free.
-That can't be copied here — the payload has to fit the left hand's five columns,
-since the right hand is holding `m` — and a numpad grid would land on `x c v`
-and cost the `{ } ~` pairing. Left in for now because it removes nothing that
-already worked; the number row is still there and still the faster path.
+```
+  ! @ # $ %        -  7 8 9 =         q w e r t  |  y u i o p
+  ^ & * ( )        +  4 5 6 *         a s d f g  |  h j k l ;
+tab [ ] `          .  1 2 3 /         z x c v    |  n m , . /
+                         0                       |  right thumb
+```
 
-Both are `tap-hold-tap-keys` with `$right-hand-keys`, so a fast right-hand roll
-(`mn`, `m,`) settles as a tap, while the left-hand payload keys wait out the
-full `$hold-time` — you hold, *then* press; you can't roll into a symbol. The
-cost is that `m` and `n` lose key repeat, and hesitating on either past 200ms
-opens a layer.
+Left hand types symbols, right hand types a real numpad — the Voyager's Sym+Num
+layer, both halves. The left half is the shifted number row in order, which is
+why the config writes it `S-1`..`S-0` rather than as literal glyphs.
 
-Ctrl-M → Return survives via a `fork` wrapping `m`'s tap-hold rather than
-sitting in its tap action, so it resolves on press instead of release. As a tap
-action it fired only when `m` came back up and the `fork` read Ctrl at that
-instant, so releasing `s` a hair early typed a literal `m`. Forking outside
-also drops the tap-hold wait, and Return lands while you're still holding the
-chord. The trade: with Ctrl already down, `m`-hold repeats Return instead of
-opening symbols. Pressing Ctrl *after* `m` is unaffected — the fork is already
-past.
+The right half is **positional**: physical `u i o` / `j k l` / `m , .` spell
+`789` / `456` / `123` in either alpha layout, so it's duplicated verbatim
+between `symbols` and `symbols-cmk` and the two must be edited together. In
+Colemak letters it reads `l u y` / `n e i` / `h , .` for the digits, with
+`k m j` giving `.` `+` `-` and `/ o ;` giving `/` `*` `=`.
 
-In the nav layer the left hand's own mods are shadowed (they *are* the arrows),
-and `k`/`l`/`;` are **replaced** by plain Opt/Ctrl/Shift rather than left
-transparent — so Opt-Left, Ctrl-Left and Shift-Left fire instantly instead of
-waiting out the 200ms hold the mod-taps underneath would impose. That's what the
-Voyager does: its nav layer carries literal `KC_RIGHT_ALT` / `KC_RIGHT_CTRL` /
-`KC_RIGHT_SHIFT` on those three keys, not mod-taps. Transparency looked
-equivalent and wasn't. The cost is that the three keys can't be tapped for their
-letters while navigating, which the Voyager also gave up. `j` is the exception —
-same finger as `n`, so it can't be pressed at all — and Cmd-Left/Right for line
-ends still needs physical Left Cmd.
+`0` sits on Right Cmd — the right thumb, where the Voyager puts it, and where a
+real numpad puts it. That doesn't conflict with Right Cmd being the nav key: a
+held layer's entry replaces the base action outright, so the tap-hold underneath
+is never consulted while Space is down.
+
+Digits used to be reachable **only as Shift + a left-hand glyph**, through ten
+`@sy1`..`@sy0` forks that peeled the pre-applied Shift back off with `unmod`.
+All ten are gone, and with them the awkward rule that Shift then had to come
+from `;` or a physical Shift key. `x c v` still give `` { } ~ `` for free, since
+`` [ ] ` `` are unshifted and a held Shift produces the other half on its own.
+
+The right hand keeps its home row mods on the numpad (`@np4`..`@npx` — Cmd, Opt,
+Ctrl under `4 5 6`, Shift under `*`), mirroring `MT(MOD_RGUI, KC_4)` and friends
+in the firmware, so modifiers stay chordable without leaving the layer. Chordal
+hold settles a roll like `456` as taps, so digits are no slower than letters;
+the cost is that holding one no longer repeats it. The left hand's mods are
+shadowed on purpose — that half is for typing, not chording.
+
+#### The nav layer (hold Right Cmd)
+
+Arrows on `a s d f` (← ↓ ↑ →), `hjkl` order moved one hand over. Shared verbatim
+by both alpha layouts, since the arrows are positional.
+
+Moving the layer key to the thumb bought this layer a key back. `j` used to sit
+under the very finger holding the layer open and was physically unpressable; it
+now carries Right Cmd — which is what the Voyager has there (`KC_RIGHT_GUI`) —
+so Cmd-Left/Right for line ends works from inside the layer instead of needing
+physical Left Cmd. `j`/`k`/`l`/`;` are **replaced** by plain Cmd/Opt/Ctrl/Shift
+rather than left transparent, so Opt-Left, Ctrl-Left and Shift-Left fire
+instantly instead of waiting out the mod-taps underneath. The Voyager does the
+same. The cost is that those four can't be tapped for their letters while
+navigating.
+
+#### What the thumb move deleted
+
+Two aliases and a genuinely nasty workaround disappeared, which is the best
+evidence that thumbs are the right shape for this:
+
+- **`@symm` and `@symh` are gone.** Whichever physical key was *also* the layer
+  key had to wrap its tap-hold inside the Ctrl `fork` and resolve on press,
+  because as a tap action the fork fired on release and read Ctrl at the wrong
+  instant — releasing `s` a hair early typed a literal `m`. That cost the key
+  its repeat and made a held Ctrl repeat Return/Delete instead of opening the
+  layer. Both now collapse into the plain `@ctlh` / `@ctlm` forks that already
+  existed; they just trade physical keys between the two layouts.
+- **`@navn` / `@navk` are gone**, so physical `n` is an ordinary letter again —
+  key repeat back, no 200ms tap-hold, no mid-word hesitation opening nav.
+- **`@app1`..`@app7` are gone** — see the launcher section below.
 
 ### The function row has to be rebuilt by hand
 
@@ -217,7 +246,7 @@ macOS shortcut (`Ctrl-Up`, `Cmd-Space`) and **break if those are ever rebound** 
 relevant if Raycast ever takes Cmd-Space. F5 (dictation) and F6 (Focus) have
 neither a usage nor a default shortcut, so they stay dead.
 
-Real F1–F12 are on the `launch` layer: **hold Space, press the key**. `fn` is
+Real F1–F12 are on the `launch` layer: **hold Right Option, press the key**. `fn` is
 deliberately left unmapped — grabbing it as the F-key modifier would consume it
 and kill fn+arrows, fn+Delete, and the globe/emoji picker.
 
@@ -228,7 +257,7 @@ Four pieces, none of which start themselves:
 | dext (kernel driver) | Karabiner's VirtualHIDDevice | the `karabiner-elements` cask |
 | VirtualHIDDevice daemon | userspace half of the driver | `org.pqrs.karabiner-vhid-daemon.plist` |
 | kanata | the remapper itself | `brew services` (runs as root) |
-| skhd | catches Hyper+N, launches apps | `skhd --start-service` (runs as user) |
+| skhd | catches Hyper+N (from either keyboard), launches apps | `skhd --start-service` (runs as user) |
 
 `sudo ~/.config/kanata/install-services.sh` installs the daemon plist and starts
 kanata; it's idempotent, and `--uninstall` reverses it.
@@ -247,12 +276,24 @@ daemon and takes it down on quit, which would leave kanata failing with
 exactly why that plist exists. The dependency that remains is on the driver, not
 the app: if the dext or its daemon goes down, kanata goes down with it.
 
-The app launcher is split in two on purpose: kanata turns `Space`-hold + N into
-Hyper+N, the Voyager already sends Hyper+N from firmware, and **skhd** catches
-it and runs `.config/karabiner/open-app-slot.sh` (still the single source of
-truth for app names). Homebrew builds kanata without the `cmd` feature, so it
-can't run the script itself — and skhd running as a normal user agent means
+The app launcher needs **no kanata support at all**. skhd binds the raw chord
+(`cmd + ctrl + alt + shift - 1`) and runs `.config/karabiner/open-app-slot.sh`
+(still the single source of truth for app names). Hyper is simply all four home
+row mods held together — `a s d f` in QWERTY, `a r s t` in Colemak — then a
+digit on the number row. The Voyager sends the same chord from a thumb key in
+firmware, so one skhd binding serves both keyboards with nothing in between.
+
+kanata used to convert `Space`-hold + N into Hyper+N via a row of `@app1`..
+`@app7` aliases emitting `M-A-C-S-<n>`. Space is the symbol layer now, and that
+row was in any case a second path to a keystroke the home row already produces,
+so it's deleted. Homebrew builds kanata without the `cmd` feature, so it could
+never have run the script itself — and skhd running as a normal user agent means
 `open -a` works without any root workaround.
+
+Note one interaction: Hyper is `a s d f`, and those four are *shadowed* while
+the symbol layer is up. If you ever want Hyper plus a **numpad** digit, press
+the home row keys first and Space second. Hyper plus the **number row** involves
+no layer at all and is the ordinary path.
 
 ### skhd also carries the Ctrl-`<key>` rewrites, for the Voyager
 
