@@ -4,6 +4,12 @@ Personal config backup. The real files live here in `~/dotfiles`; each is
 **symlinked** back to where the app expects it, so nothing changed about how
 the machine works — editing `~/.zshrc` and `~/dotfiles/.zshrc` is the same file.
 
+Two companion files: **`NOTES.md`** is the running log of what's still *open* —
+experiments awaiting a verdict, decisions deferred, questions only real use can
+answer. Settled things live here in `README.md` instead.
+**`.config/kanata/LAYOUT.md`** draws every keyboard layer, which is the one
+thing prose is bad at.
+
 ## What's tracked
 
 | Repo path                  | Symlinked to            | What it is                     |
@@ -60,6 +66,11 @@ denies), and in the `statusLine` command, which runs through a shell.
 Secrets (`~/.ssh`, API tokens, etc.) are deliberately **not** here.
 
 ## Keyboard remapping (kanata)
+
+> **Every layer is drawn in [`.config/kanata/LAYOUT.md`](.config/kanata/LAYOUT.md).**
+> Read that first if you want to know *what a key does*; read this section for
+> *why*. Open questions about the current setup are in
+> [`NOTES.md`](NOTES.md).
 
 Karabiner-Elements was replaced by [kanata](https://github.com/jtroo/kanata),
 which has a real tap-hold state machine and therefore usable **home row mods**:
