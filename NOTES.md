@@ -9,6 +9,39 @@ when it's resolved, and fold the answer into the docs.
 
 ---
 
+## 2026-08-09 — idea: wide mod (not started)
+
+Shift the right hand one physical column right, laptop only. The point: the
+right thumb then rests on Right Cmd, turning the nav/Return key into a true
+thumb key like the Voyager's Enter thumb — and the hands sit a little further
+apart on a cramped slab. Same idea as DreymaR's Wide mod.
+
+Why it wouldn't break Voyager parity: finger assignments are untouched — every
+finger keeps its letters and its layer entries; only the physical keys under
+the right hand change. Per-finger muscle memory carries over.
+
+Costs and unknowns, roughly in order of pain:
+
+- **Can a thumb actually REST on a laptop key?** The Voyager's thumb keys take
+  real force; the Air's scissor switches are shallow and light, so "resting"
+  may turn out to mean hovering, which is no rest at all. This is the make-or-
+  break unknown, and only trying it answers it.
+- **The `j` homing bump is lost** — the right index lands on an unbumped `k`.
+  Cheap fix: a tactile dot sticker on `k`.
+- **Row overflow at the right edge is uneven.** The home row gains (`'` ends up
+  beside Return) but the bottom row runs out: `/` would have to tap-hold onto
+  right Shift or move into the freed middle column.
+- **Every deflayer's right half shifts with the hand** — symbols' numpad, nav,
+  both alpha layouts. Mechanical, but all-or-nothing: shifting the alphas
+  without the layers would split muscle memory between the boards.
+- **The freed middle column** (physical `y h n`) needs a decision: symbols, or
+  dead during the transition like Colemak's `b`.
+
+Sequencing: not while two watch items are already open (Space-hold misfires,
+caps-Ctrl). One experiment at a time, or a misfire can't be attributed.
+
+---
+
 ## 2026-08-09 — kanata: nav layer fully ported, Caps Lock is Esc
 
 Two changes, independent of each other:
