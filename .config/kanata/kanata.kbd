@@ -16,8 +16,10 @@
 ;;         Ctrl-W  -> `l`+w   (w is left-hand, so use right Ctrl)
 ;;         Ctrl-H  -> `s`+h   (h is right-hand, so use left Ctrl)
 ;;         Ctrl-U  -> `s`+u     Ctrl-M -> `s`+m     Ctrl-N/P -> `s`+n / `s`+p
-;;     Caps Lock stays mapped to Ctrl as the escape hatch that always works
-;;     regardless of which hand the letter is on.
+;;     Physical bottom-left Ctrl is the escape hatch that always works
+;;     regardless of which hand the letter is on. (Caps Lock used to be that
+;;     hatch; it is a plain Esc now -- the Voyager has KC_ESCAPE in exactly
+;;     that position, and home row Ctrl made a second hatch redundant.)
 ;;   * Layer keys are THUMB keys, mirroring the Voyager's LT() thumbs 1:1:
 ;;         spc   tap Space  / hold symbols   (Voyager: LT(1, KC_SPACE))
 ;;         rmet  tap Return / hold nav       (Voyager: LT(2, KC_ENTER))
@@ -44,7 +46,7 @@
 ;;     with the left-hand angle mod). Hold Right Option and tap `\` to flip.
 ;;     kanata boots into QWERTY, because `base` is the first deflayer.
 ;;     Everything positional is identical in both -- home row mod placement, the
-;;     thumb layer keys, the function row, Caps-as-Ctrl, and the entire right
+;;     thumb layer keys, the function row, Caps-as-Esc, and the entire right
 ;;     half of the symbol layer -- so only the letters and the two Ctrl rewrites
 ;;     that follow them actually move.
 
@@ -325,12 +327,12 @@
 ;; shortcut instead; they break if those shortcuts are ever rebound.
 ;; F5 (dictation) and F6 (Focus) have neither a usage nor a default shortcut,
 ;; so they stay dead -- same as they are right now.
-;; Real F1..F12 live on the `launch` layer: hold Space and press the key.
+;; Real F1..F12 live on the `launch` layer: hold Right Option and press the key.
 (deflayer base
   esc  brdn brup C-up M-spc f5  f6   prev pp   next mute vold volu
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab  q    w    e    r    t    y    u    i    o    p    @ctlb ]   \
-  lctl @hma @hms @hmd @hmf g    @ctlh @hmj @hmk @hml @hmsc '   ret
+  esc  @hma @hms @hmd @hmf g    @ctlh @hmj @hmk @hml @hmsc '   ret
   ;; Left Shift as a literal `b` -- disabled, kept for reference. To re-enable,
   ;; swap the two rows below and re-enable the `lsft` entry in `left-hand-keys`.
   ;; b    z    x    c    v    b    n     @ctlm ,  .    /    rsft
@@ -358,7 +360,7 @@
 ;; `symbols-cmk` exists only because the symbol layer's LEFT half sits on the
 ;; bottom row the angle mod shifts; its right half is a copy.
 ;;
-;; Untouched from `base`: the function row, the number row, Caps-as-Ctrl, all
+;; Untouched from `base`: the function row, the number row, Caps-as-Esc, all
 ;; three thumb layer keys, and Ctrl-[ -> Esc. The Ctrl rewrites follow their
 ;; LETTERS, so the two forks simply swap physical keys -- @ctlm on physical h,
 ;; @ctlh on physical m.
@@ -366,7 +368,7 @@
   esc  brdn brup C-up M-spc f5  f6   prev pp   next mute vold volu
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab  q    w    f    p    b    j    l    u    y    ;    @ctlb ]   \
-  lctl @cma @cmr @cms @cmt g    @ctlm @cmn @cme @cmi @cmo '   ret
+  esc  @cma @cmr @cms @cmt g    @ctlm @cmn @cme @cmi @cmo '   ret
   @cmz x    c    d    v    XX   k     @ctlh ,  .    /    rsft
   lctl lalt lmet @spck @nav @lch
 )
@@ -454,12 +456,24 @@
 ;; on a layer where every chord is a deliberate two-key reach anyway.
 ;; Cost: those four keys can no longer be TAPPED for their letters while
 ;; navigating. The Voyager gave that up too.
+;;
+;; The rest of the Voyager's layer 2 rides along, position for position:
+;;   * Home / PgUp / PgDn / End down the inner column (physical 5 t g b).
+;;   * Ctrl-Shift-Tab / Ctrl-Tab on physical n / m -- prev/next tab, right
+;;     thumb holds the layer, right fingers switch.
+;;   * Media transport on , . / and volume on o p [. These DUPLICATE the
+;;     function row on purpose; they exist so the same finger does the same
+;;     thing on both keyboards, nothing else.
+;; The one group NOT ported is the mouse keys (movement on the Voyager's left
+;; bottom row, buttons above the volume keys): kanata's movemouse needs
+;; speed/acceleration tuning to not feel awful, and the trackpad is
+;; centimeters away. u and i stay transparent because of it.
 (deflayer nav
   _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    left down up   rght _    _    rmet ralt rctl rsft _    _
-  _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    home _    _    _    _    _    _    _    _
+  _    _    _    _    _    pgup _    _    _    vold volu mute _    _
+  _    left down up   rght pgdn _    rmet ralt rctl rsft _    _
+  _    _    _    _    _    end  C-S-tab C-tab prev next pp _
   _    _    _    _    _    _
 )
 

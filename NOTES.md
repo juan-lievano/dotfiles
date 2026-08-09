@@ -9,11 +9,35 @@ when it's resolved, and fold the answer into the docs.
 
 ---
 
+## 2026-08-09 — kanata: nav layer fully ported, Caps Lock is Esc
+
+Two changes, independent of each other:
+
+- **Nav layer carries the rest of the Voyager's layer 2** — Home/PgUp/PgDn/End
+  on the inner column, Ctrl-Shift-Tab / Ctrl-Tab on `n`/`m`, media transport
+  and volume on the right hand. Mouse keys deliberately skipped (trackpad;
+  settled, documented in the config and LAYOUT.md).
+- **Caps Lock is a plain Esc, no longer Ctrl.** Voyager parity — it has
+  `KC_ESCAPE` in that position. Ctrl now comes only from the home row mods and
+  physical bottom-left Ctrl.
+
+### ⚠️ Watch: do the fingers miss caps-Ctrl?
+
+The old escape hatch for Ctrl-chords was Caps, usable with either hand. Now a
+Ctrl-chord is either an opposite-hand home row hold (200ms) or a pinky reach to
+the corner. If corner-Ctrl keeps happening for common chords (Ctrl-W, Ctrl-H),
+that's the sign the hatch was earning its spot — the revert is swapping `esc`
+back to `lctl` at the caps position in both alpha deflayers.
+
+---
+
 ## 2026-08-08 — kanata: layers moved onto the thumbs
 
 Commit `f3d8275`. Space-hold is now the symbol layer, Right Cmd is nav, Right
 Option is the F-keys. Working on day one. **Revert target if it goes bad:
-`git revert f3d8275`** — nothing else depends on it.
+`git revert f3d8275`** — though since the nav-layer completion (2026-08-09
+entry above) builds on it, that revert now needs conflict resolution rather
+than applying clean.
 
 ### ⚠️ Watch: does Space-hold misfire?
 
@@ -51,15 +75,6 @@ the ordinary launcher path and it's fine.
 Open question: is this ever actually annoying? If it is, the fix is to keep
 left-hand mod-taps live on the symbol layer (the Voyager does — `^ & * (` are
 mod-taps there), at the cost of key repeat on those four symbols.
-
-### The Voyager's nav layer is only half ported
-
-Its layer 2 also carries mouse keys, media transport, Home/End/PgUp/PgDn and
-volume. Only the arrows and the four right-hand modifiers came across.
-
-Not obviously worth porting — the laptop has a trackpad a few centimetres away,
-and the media keys are already on the function row. Revisit only if reaching
-for them on the Voyager and finding them missing here becomes a real friction.
 
 ### Smaller loose ends
 

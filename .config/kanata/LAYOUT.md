@@ -38,7 +38,7 @@ their left-hand physical keys and on the home row mods of either hand.
  esc   br-  br+  msn  spot  --   --  │  ⏮   ⏯    ⏭   mute vol- vol+
   `     1    2    3    4    5        │  6    7    8    9    0    -    =   bspc
  tab    q    w    e    r    t        │  y    u    i    o    p    [    ]    \
- ctrl   A    S    D    F    g        │  h    J    K    L    :    '   ret
+ esc    A    S    D    F    g        │  h    J    K    L    :    '   ret
  shift  z    x    c    v    b        │  n    m    ,    .    /   shift
                 ctrl  opt  cmd  SPACE│ RET   FN
 ```
@@ -50,7 +50,10 @@ Home row mods (`A S D F` / `J K L :` above), Cmd innermost:
  shift ctrl opt  cmd                     cmd  opt ctrl shift
 ```
 
-Caps Lock is Ctrl. The function row is remapped **back** to macOS media keys —
+Caps Lock is a plain Esc — the Voyager has `KC_ESCAPE` in exactly that
+position. It used to be Ctrl; the home row mods made a second Ctrl hatch
+redundant, and the always-works hatch is now physical bottom-left Ctrl.
+The function row is remapped **back** to macOS media keys —
 that's a repair, not a preference; see the long note in `kanata.kbd`. F5 and F6
 stay dead because they have neither an HID usage kanata can emit nor a default
 shortcut.
@@ -63,7 +66,7 @@ Ctrl rewrites on this layer: `h` → Delete, `m` → Return, `[` → Esc, `;` �
  esc   br-  br+  msn  spot  --   --  │  ⏮   ⏯    ⏭   mute vol- vol+
   `     1    2    3    4    5        │  6    7    8    9    0    -    =   bspc
  tab    q    w    f    p    b        │  j    l    u    y    ;    [    ]    \
- ctrl   A    R    S    T    g        │  m    N    E    I    O    '   ret
+ esc    A    R    S    T    g        │  m    N    E    I    O    '   ret
   z     x    c    d    v   (XX)      │  k    h    ,    .    /   shift
                 ctrl  opt  cmd  SPACE│ RET   FN
 ```
@@ -151,16 +154,22 @@ more; they are literal.
 
 ```
   ·     ·    ·    ·    ·    ·    ·   │  ·    ·    ·    ·    ·    ·
-  ·     ·    ·    ·    ·    ·        │  ·    ·    ·    ·    ·    ·    ·    ·
-  ·     ·    ·    ·    ·    ·        │  ·    ·    ·    ·    ·    ·    ·    ·
-  ·     ←    ↓    ↑    →    ·        │  ·   cmd  opt  ctrl shift ·    ·
-  ·     ·    ·    ·    ·    ·        │  ·    ·    ·    ·    ·    ·
+  ·     ·    ·    ·    ·   home      │  ·    ·    ·    ·    ·    ·    ·    ·
+  ·     ·    ·    ·    ·   pgup      │  ·    ·    ·   vol- vol+ mute  ·    ·
+  ·     ←    ↓    ↑    →   pgdn      │  ·   cmd  opt  ctrl shift ·    ·
+  ·     ·    ·    ·    ·   end       │ ⇤tab ⇥tab  ⏮    ⏭    ⏯    ·
                  ·    ·    ·    ·    │ held  ·
 ```
 
 Arrows in `hjkl` order moved one hand over. Shared verbatim by both alpha
-layouts, since the arrows are positional and the four right-hand keys are plain
-modifiers.
+layouts, since everything here is positional and the four right-hand keys are
+plain modifiers.
+
+The rest of the Voyager's layer 2, position for position: Home / PgUp / PgDn /
+End down the inner column, `⇤tab`/`⇥tab` (Ctrl-Shift-Tab / Ctrl-Tab, prev/next
+tab) on physical `n`/`m`, media transport on `, . /` and volume on `o p [`.
+The transport and volume keys duplicate the function row on purpose — they
+exist so the same finger does the same thing on both keyboards.
 
 Those four are **replaced**, not left transparent, so Cmd-Left, Opt-Left,
 Ctrl-Left and Shift-Left fire instantly instead of waiting out the mod-taps
@@ -217,12 +226,15 @@ Voyager can share, since it sends the same chord from firmware.
 | Right Option → launch | its `ALL_T(KC_BSPC)` Hyper thumb |
 | `4 5 6 *` mod-taps | `MT(MOD_RGUI, KC_4)`, `MT(MOD_RALT, KC_5)`, `MT(MOD_RCTL, KC_6)` |
 | nav's `j k l ;` | `KC_RIGHT_GUI / ALT / CTRL / SHIFT`, layer 2 |
+| nav's Home/PgUp/PgDn/End, tab-switch, media | layer 2 inner column + bottom row |
+| Caps Lock as Esc | `KC_ESCAPE`, same position |
 | `tap-hold-tap-keys`, 200/200 | Chordal Hold, `TAPPING_TERM` / `QUICK_TAP_TERM` 200 |
 | angle mod, dead `b` | same |
 
-**Not ported.** The Voyager's layer 2 also carries mouse keys, media transport,
-Home/End/PgUp/PgDn and volume; only the arrows and the four right-hand modifiers
-came across. Its layer 1 puts F1–F12 on the number row, where here they live on
+**Not ported.** Only the Voyager's layer-2 mouse keys now: movement on its left
+bottom row, buttons next to the volume keys. kanata's `movemouse` needs
+speed/acceleration tuning to not feel awful, and the trackpad is centimeters
+away. Its layer 1 puts F1–F12 on the number row, where here they live on
 `launch` instead.
 
 Anything retuned here should be retuned in Oryx as well, or the two keyboards
