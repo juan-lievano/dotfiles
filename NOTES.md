@@ -94,8 +94,7 @@ a stray `!` or `7` mid-sentence, or a space that doesn't appear.
 Escalation order, cheapest first:
 
 1. **Longer hold on Space alone.** Write a literal `250` (or `300`) in place of
-   `$hold-time` in `@spck` only (`@spc` is gone — guest QWERTY has a plain
-   Space now). Leave every other timing at 200 —
+   `$hold-time` in `@spc` and `@spck` only. Leave every other timing at 200 —
    Space is the single key whose hold competes with ordinary typing, so it's
    the only one that plausibly wants a different tapping term. This diverges
    from the Voyager, so note it in Oryx if it sticks.
