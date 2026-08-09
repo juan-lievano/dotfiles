@@ -28,9 +28,12 @@ Costs and unknowns, roughly in order of pain:
   break unknown, and only trying it answers it.
 - **The `j` homing bump is lost** — the right index lands on an unbumped `k`.
   Cheap fix: a tactile dot sticker on `k`.
-- **Row overflow at the right edge is uneven.** The home row gains (`'` ends up
-  beside Return) but the bottom row runs out: `/` would have to tap-hold onto
-  right Shift or move into the freed middle column.
+- **Row overflow at the right edge — decided.** The home row gains (`'` ends
+  up beside Return). On the bottom row, `/` lands on physical right Shift as a
+  plain key and **right Shift disappears** — home row Shift (hold `;` / `o`)
+  covers it, so the physical key isn't worth preserving. If a right pinky
+  Shift is ever missed, the fallback is the angle mod's own trick mirrored:
+  tap `/` / hold Shift, same shape as @cmz, at the cost of `/` key repeat.
 - **Every deflayer's right half shifts with the hand** — symbols' numpad, nav,
   both alpha layouts. Mechanical, but all-or-nothing: shifting the alphas
   without the layers would split muscle memory between the boards.
