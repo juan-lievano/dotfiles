@@ -14,6 +14,9 @@ the last table says where each piece comes from.
 `│` marks where the right hand starts. The bottom line of each grid is the thumb
 row. `·` is transparent (falls through to the layer underneath).
 
+For a printable copy, `./layout-pdf.sh` renders this file to a PDF and opens
+it (pandoc + xelatex, both already installed).
+
 ---
 
 ## The thumb keys
@@ -107,7 +110,7 @@ The Voyager's Sym+Num layer, both halves: symbols left, a real numpad right.
 ```
 
 `symbols-cmk` is identical except that the bottom-left four slide one key left
-with the angle mod — `tab [ ] ` `` land on `lsft z x c` instead of `z x c v`.
+with the angle mod — ``tab [ ] ` `` land on `lsft z x c` instead of `z x c v`.
 **The right half is byte-identical in both** and must be edited in both places
 together.
 
