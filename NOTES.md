@@ -20,10 +20,9 @@ Why it wouldn't break Voyager parity: finger assignments are untouched — every
 finger keeps its letters and its layer entries; only the physical keys under
 the right hand change. Per-finger muscle memory carries over.
 
-**Scope: Colemak only.** QWERTY is the guest layout and stays near-stock —
-home row mods aside, key positions and physical modifiers don't move there, so
-a normal person can still type on it (see the header note in `kanata.kbd`).
-That includes keeping QWERTY's right Shift when Colemak drops its own.
+**Scope: Colemak only.** QWERTY stays exactly as it is — layers and all, it's
+already fine for a guest — so the wide shift, the right-Shift drop, and any
+future remodeling land only in the Colemak layers.
 
 Costs and unknowns, roughly in order of pain:
 

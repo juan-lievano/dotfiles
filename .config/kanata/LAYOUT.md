@@ -27,12 +27,10 @@ mirrors the Voyager's `LT()` thumbs one for one.
 | key | tap | hold |
 |-----|-----|------|
 | **Space** | Space | `symbols` / `symbols-cmk` |
-| **Right Cmd** | Return | `nav` — **Colemak only** |
+| **Right Cmd** | Return | `nav` |
 | **Right Option** | — | `launch` |
 
-In guest QWERTY, Right Cmd is a stock Cmd — `nav` is Colemak's alone. Space
-and Right Option carry their layers in both layouts. Physical Right Option is
-consumed as a modifier everywhere (and Right Cmd in Colemak); both survive on
+Physical Right Cmd and Right Option are consumed as modifiers. Both survive on
 their left-hand physical keys and on the home row mods of either hand.
 
 ---
@@ -45,16 +43,8 @@ their left-hand physical keys and on the home row mods of either hand.
  tab    q    w    e    r    t        │  y    u    i    o    p    [    ]    \
  esc    A    S    D    F    g        │  h    J    K    L    :    '   ret
  shift  z    x    c    v    b        │  n    m    ,    .    /   shift
-                ctrl  opt  cmd  SPACE│ cmd   FN
+                ctrl  opt  cmd  SPACE│ RET   FN
 ```
-
-`base` doubles as the **guest layout**: stock + home row mods + Caps-as-Esc +
-the Ctrl rewrites + Space-hold symbols (a held Space types nothing on its own,
-so a guest mostly just loses Space key repeat) + `launch` on Right Option
-(which has to stay, or the toggle back to Colemak is unreachable). Right Cmd
-IS stock, so right-handed Cmd shortcuts work normally and `nav` is
-**Colemak-only** — as is future remodeling (wide mod, …). A guest needing
-truly stock behaviour gets `brew services stop kanata`.
 
 Home row mods (`A S D F` / `J K L :` above), Cmd innermost:
 
@@ -148,13 +138,13 @@ chordable without leaving the layer:
 ```
 
 The left hand's mods are shadowed on purpose — that half is for typing, not
-chording. Consequence for the launcher: Hyper is `a s d f` (`a r s t` in
-Colemak), which is shadowed here, so if you ever want Hyper plus a *numpad*
-digit, press the home row keys first and Space second.
+chording. Consequence for the launcher: Hyper is `a s d f`, which is shadowed
+here, so if you ever want Hyper plus a *numpad* digit, press the home row keys
+first and Space second.
 
-The keys under ``[ ] ` `` still give `` { } ~ `` for free — they are unshifted
-keys, so a held Shift produces the other half on its own. The digits need no
-such trick any more; they are literal.
+`x c v` still give `` { } ~ `` for free — `` [ ] ` `` are unshifted keys, so a
+held Shift produces the other half on its own. The digits need no such trick any
+more; they are literal.
 
 > ⚠️ This puts a layer on the most-pressed key on the board. Any Space press
 > held past 200ms opens it. If that misfires in practice, the cheap knob is a
@@ -163,7 +153,7 @@ such trick any more; they are literal.
 
 ---
 
-## `nav` — hold Right Cmd (Colemak only)
+## `nav` — hold Right Cmd
 
 ```
   ·     ·    ·    ·    ·    ·    ·   │  ·    ·    ·    ·    ·    ·
@@ -174,9 +164,9 @@ such trick any more; they are literal.
                  ·    ·    ·    ·    │ held  ·
 ```
 
-Arrows in `hjkl` order moved one hand over. Everything here is positional —
-arrows on physical keys, plain modifiers on the right hand — so nothing
-depends on which letters the alpha layer paints.
+Arrows in `hjkl` order moved one hand over. Shared verbatim by both alpha
+layouts, since everything here is positional and the four right-hand keys are
+plain modifiers.
 
 The rest of the Voyager's layer 2, position for position: Home / PgUp / PgDn /
 End down the inner column, `⇤tab`/`⇥tab` (Ctrl-Shift-Tab / Ctrl-Tab, prev/next
@@ -230,9 +220,7 @@ Voyager can share, since it sends the same chord from firmware.
 
 ## Cross-reference with the Voyager
 
-`zsa_voyager_*_source/.../keymap.c`, layout `waLwq`. The table describes
-Colemak, the personal layout; guest QWERTY shares all of it except `nav` —
-its Right Cmd is a stock Cmd.
+`zsa_voyager_*_source/.../keymap.c`, layout `waLwq`.
 
 | here | Voyager |
 |------|---------|

@@ -24,9 +24,6 @@
 ;;         spc   tap Space  / hold symbols   (Voyager: LT(1, KC_SPACE))
 ;;         rmet  tap Return / hold nav       (Voyager: LT(2, KC_ENTER))
 ;;         ralt  hold launch                 (real F1-F12, layout toggle)
-;;     spc and ralt carry their layers in BOTH alpha layouts; rmet is COLEMAK
-;;     ONLY -- guest QWERTY keeps a real Right Cmd, so nav is Colemak's alone
-;;     (see the guest-layout bullet below).
 ;;     They used to sit on the right index (`m` and `n`), which is exactly why
 ;;     the symbol layer's payload had to be confined to the left hand. On a
 ;;     thumb BOTH hands are free, so the numpad half of the Voyager's Sym+Num
@@ -48,22 +45,10 @@
 ;;   * There are TWO alpha layouts: `base` (QWERTY) and `colemak` (Colemak-DH
 ;;     with the left-hand angle mod). Hold Right Option and tap `\` to flip.
 ;;     kanata boots into QWERTY, because `base` is the first deflayer.
-;;     Everything positional that exists in both is identical -- home row mod
-;;     placement, the function row, Caps-as-Esc, and the entire right half of
-;;     the symbol layer -- so only the letters, the two Ctrl rewrites that
-;;     follow them, and Right Cmd (stock in QWERTY, nav in Colemak) actually
-;;     differ.
-;;   * QWERTY doubles as the GUEST layout: Colemak is the personal layout and
-;;     is where future remodeling lands (wide mod, dropping right Shift, ...).
-;;     `base` stays close enough to stock that a normal person can sit down and
-;;     type. Concretely, guest QWERTY = stock + home row mods (taps type
-;;     normally) + Caps-as-Esc + the Ctrl rewrites (invisible unless pressed)
-;;     + Space-hold symbols (a held Space types nothing on its own, so a guest
-;;     mostly just loses Space key repeat) + launch on Right Option, which has
-;;     to stay or the toggle back to Colemak is unreachable. Right Cmd IS
-;;     stock, so right-handed Cmd shortcuts work normally and the nav layer is
-;;     Colemak-only. If a guest needs truly stock behaviour, `brew services
-;;     stop kanata` is the real answer.
+;;     Everything positional is identical in both -- home row mod placement, the
+;;     thumb layer keys, the function row, Caps-as-Esc, and the entire right
+;;     half of the symbol layer -- so only the letters and the two Ctrl rewrites
+;;     that follow them actually move.
 
 (defcfg
   process-unmapped-keys yes   ;; keys absent from defsrc pass through untouched
@@ -275,8 +260,8 @@
   ;; kanata equivalent, which is why these deliberately do not take
   ;; $left-hand-keys / $right-hand-keys the way every mod above does.
   ;;
-  ;; @spc and @spck differ only in which symbols layer they open. The base
-  ;; layer picks, exactly as it used to pick between @symm and @symh.
+  ;; @spc and @spck differ only in which symbols layer they open. The base layer
+  ;; picks, exactly as it used to pick between @symm and @symh.
   ;;
   ;; KNOWN RISK, taken deliberately: Space is the most-pressed key on the board,
   ;; and any press held past $hold-time now opens a layer instead of doing
@@ -290,13 +275,12 @@
   spc  (tap-hold $tap-time $hold-time spc (layer-while-held symbols))
   spck (tap-hold $tap-time $hold-time spc (layer-while-held symbols-cmk))
 
-  ;; Right Cmd: tap Return, hold nav -- the Voyager's LT(2, KC_ENTER). Colemak
-  ;; only: guest QWERTY keeps a real Right Cmd. The same key carries `0` on the
-  ;; symbol layer, which is NOT a conflict: a held layer's entry replaces the
-  ;; base action outright, so this tap-hold is never consulted while Space is
-  ;; down. Same mechanism as `<hold spc>z` -> Tab.
-  ;; Physical Right Cmd is consumed (in Colemak). Cmd survives on physical Left
-  ;; Cmd, on @cmt (left hand) and on @cmn (right hand).
+  ;; Right Cmd: tap Return, hold nav -- the Voyager's LT(2, KC_ENTER). The same
+  ;; key carries `0` on the symbol layer, which is NOT a conflict: a held
+  ;; layer's entry replaces the base action outright, so this tap-hold is never
+  ;; consulted while Space is down. Same mechanism as `<hold spc>z` -> Tab.
+  ;; Physical Right Cmd is consumed. Cmd survives on physical Left Cmd, on
+  ;; @hmf/@cmt (left hand) and on @hmj/@cmn (right hand).
   nav  (tap-hold $tap-time $hold-time ret (layer-while-held nav))
 
   ;; Right Option: the launch layer and nothing else. No tap action, so it is a
@@ -353,7 +337,7 @@
   ;; swap the two rows below and re-enable the `lsft` entry in `left-hand-keys`.
   ;; b    z    x    c    v    b    n     @ctlm ,  .    /    rsft
   lsft z    x    c    v    b    n     @ctlm ,  .    /    rsft
-  lctl lalt lmet @spc rmet @lch
+  lctl lalt lmet @spc @nav @lch
 )
 
 ;; Colemak-DH with the left-hand angle mod. Space+`\` toggles here and back.
@@ -371,12 +355,13 @@
 ;; that turns out to be more annoying than a doubled letter.
 ;;
 ;; The right hand is NOT angled -- the angle mod is a left-hand fix -- so the
-;; entire right half sits on the same physical keys as QWERTY's letters do.
+;; entire right half is positional and byte-identical to QWERTY's, including the
+;; numpad on the symbol layer. The nav layer is shared verbatim as well.
+;; `symbols-cmk` exists only because the symbol layer's LEFT half sits on the
+;; bottom row the angle mod shifts; its right half is a copy.
 ;;
-;; Untouched from `base`: the function row, the number row, Caps-as-Esc,
-;; Space-hold symbols (via @spck instead of @spc), launch on Right Option, and
-;; Ctrl-[ -> Esc. Only @nav is Colemak's own -- guest QWERTY keeps a real
-;; Right Cmd. The Ctrl rewrites follow their
+;; Untouched from `base`: the function row, the number row, Caps-as-Esc, all
+;; three thumb layer keys, and Ctrl-[ -> Esc. The Ctrl rewrites follow their
 ;; LETTERS, so the two forks simply swap physical keys -- @ctlm on physical h,
 ;; @ctlh on physical m.
 (deflayer colemak
@@ -430,9 +415,9 @@
 ;; Exactly one row differs from `symbols` -- the bottom one, and only its left
 ;; half, because that is all the angle mod touches:
 ;;
-;;     ! @ # $ %        -  7 8 9 =      <- q w f p b  /  j l u y ;
-;;     ^ & * ( )        +  4 5 6 *      <- a r s t g  /  m n e i o
-;;   tab [ ] `          .  1 2 3 /      <- lsft z x c /  k h , . /
+;;     ! @ # $ %        -  7 8 9 =      <- q w e r t  /  y u i o p
+;;     ^ & * ( )        +  4 5 6 *      <- a r s t g  /  h j k l ;
+;;   tab [ ] `          .  1 2 3 /      <- lsft z x c /  n m , . /
 ;;                            0         <- rmet, the right thumb
 ;;
 ;; The right half is a verbatim copy of `symbols` and has to stay that way; see
@@ -448,12 +433,11 @@
   _    _    _    _    0    _
 )
 
-;; Right-Cmd-hold (Colemak only -- guest QWERTY keeps a real Right Cmd):
-;; arrows on the left home row, in hjkl order shifted one hand over.
-;;   physical a s d f  ->  left down up right
-;; Everything here is positional -- the arrows sit on physical keys, and the
-;; four right-hand keys below are plain modifiers -- so nothing depends on
-;; which letters the alpha layer paints.
+;; Right-Cmd-hold: arrows on the left home row, in hjkl order shifted one hand
+;; over.
+;;   a s d f  ->  left down up right
+;; Shared by both alpha layouts -- the arrows are positional, and `j`/`k`/`l`/`;`
+;; below are plain modifiers, so nothing here depends on which letters are live.
 ;;
 ;; Moving the layer key from the right index to the right thumb bought this
 ;; layer one key back. `j` used to sit under the same finger that was holding
