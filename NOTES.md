@@ -20,6 +20,11 @@ Why it wouldn't break Voyager parity: finger assignments are untouched — every
 finger keeps its letters and its layer entries; only the physical keys under
 the right hand change. Per-finger muscle memory carries over.
 
+**Scope: Colemak only.** QWERTY is the guest layout and stays near-stock —
+home row mods aside, key positions and physical modifiers don't move there, so
+a normal person can still type on it (see the header note in `kanata.kbd`).
+That includes keeping QWERTY's right Shift when Colemak drops its own.
+
 Costs and unknowns, roughly in order of pain:
 
 - **Can a thumb actually REST on a laptop key?** The Voyager's thumb keys take
@@ -89,7 +94,8 @@ a stray `!` or `7` mid-sentence, or a space that doesn't appear.
 Escalation order, cheapest first:
 
 1. **Longer hold on Space alone.** Write a literal `250` (or `300`) in place of
-   `$hold-time` in `@spc` and `@spck` only. Leave every other timing at 200 —
+   `$hold-time` in `@spck` only (`@spc` is gone — guest QWERTY has a plain
+   Space now). Leave every other timing at 200 —
    Space is the single key whose hold competes with ordinary typing, so it's
    the only one that plausibly wants a different tapping term. This diverges
    from the Voyager, so note it in Oryx if it sticks.
