@@ -8,7 +8,7 @@ case "$1" in
   3) app="Preview" ;;
   4) app="Mail" ;;
   5) app="WhatsApp" ;;
-  6) app="Visual Studio Code" ;;
+  6) app="Calendar" ;;
   7) app="Dictionary" ;;
   *) exit 1 ;;
 esac
