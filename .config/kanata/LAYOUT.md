@@ -210,7 +210,7 @@ The name is now a small lie: this layer no longer launches anything.
 **Hold `a s d f` together (`a r s t` in Colemak) for Hyper, then a number-row
 digit.** All four home row mods at once *is* Hyper; skhd binds the raw
 `cmd + ctrl + alt + shift - N` chord and runs
-`.config/karabiner/open-app-slot.sh`, which is the single source of truth for
+`.config/skhd/open-app-slot.sh`, which is the single source of truth for
 app names.
 
 kanata is not in the path at all. This is also the only launcher route the

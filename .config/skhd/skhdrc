@@ -9,9 +9,7 @@
 #                  that layer became the symbol layer and the duplicate path
 #                  was removed.)
 #
-# App names still live in one place: .config/karabiner/open-app-slot.sh
-# (left in the karabiner directory on purpose, so rolling back to
-# Karabiner-Elements needs no file moves).
+# App names live in one place: open-app-slot.sh, beside this file.
 #
 # skhd runs as a normal user agent, so `open -a` works without any
 # root/launchctl workaround — which is why kanata does not need the
@@ -72,10 +70,10 @@ ctrl - m             : skhd -k "return"           # Ctrl-M  -> Return
 ctrl - 0x29          : skhd -k "shift - 0x32"     # Ctrl-;  -> ~
 
 # ---- App launcher ----
-cmd + ctrl + alt + shift - 1 : ~/.config/karabiner/open-app-slot.sh 1
-cmd + ctrl + alt + shift - 2 : ~/.config/karabiner/open-app-slot.sh 2
-cmd + ctrl + alt + shift - 3 : ~/.config/karabiner/open-app-slot.sh 3
-cmd + ctrl + alt + shift - 4 : ~/.config/karabiner/open-app-slot.sh 4
-cmd + ctrl + alt + shift - 5 : ~/.config/karabiner/open-app-slot.sh 5
-cmd + ctrl + alt + shift - 6 : ~/.config/karabiner/open-app-slot.sh 6
-cmd + ctrl + alt + shift - 7 : ~/.config/karabiner/open-app-slot.sh 7
+cmd + ctrl + alt + shift - 1 : ~/.config/skhd/open-app-slot.sh 1
+cmd + ctrl + alt + shift - 2 : ~/.config/skhd/open-app-slot.sh 2
+cmd + ctrl + alt + shift - 3 : ~/.config/skhd/open-app-slot.sh 3
+cmd + ctrl + alt + shift - 4 : ~/.config/skhd/open-app-slot.sh 4
+cmd + ctrl + alt + shift - 5 : ~/.config/skhd/open-app-slot.sh 5
+cmd + ctrl + alt + shift - 6 : ~/.config/skhd/open-app-slot.sh 6
+cmd + ctrl + alt + shift - 7 : ~/.config/skhd/open-app-slot.sh 7

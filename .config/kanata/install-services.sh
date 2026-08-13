@@ -27,7 +27,7 @@ if [ "${1:-}" = "--uninstall" ]; then
   echo "==> removing $LABEL"
   launchctl bootout "system/$LABEL" 2>/dev/null || true
   rm -f "$PLIST_DST"
-  echo "done. Relaunch Karabiner-Elements to go back to the old setup."
+  echo "done. kanata and the VirtualHIDDevice daemon are no longer boot services."
   exit 0
 fi
 

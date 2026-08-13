@@ -21,7 +21,6 @@ link .gitconfig
 link .latexmkrc
 link .config/git
 link .config/nvim
-link .config/karabiner
 link .config/kanata
 link .config/skhd
 link .config/wezterm

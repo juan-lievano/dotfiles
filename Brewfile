@@ -13,16 +13,16 @@ brew "aerc"                         # terminal email client (config tracked in t
 brew "w3m"                          # aerc's HTML filter depends on it (aerc.conf [filters])
 
 # Keyboard remapping. kanata does home row mods + Ctrl rewrites on the built-in
-# keyboard; skhd catches Hyper+N (from the Voyager's firmware or kanata's
-# Space-hold layer) and runs .config/karabiner/open-app-slot.sh.
-# Needs the Karabiner DriverKit driver, which the karabiner-elements cask below
-# installs — keep that cask even after kanata takes over.
+# keyboard; skhd catches Hyper+N (home-row chord or Voyager firmware) and runs
+# .config/skhd/open-app-slot.sh. kanata emits through the Karabiner DriverKit
+# VirtualHIDDevice driver, which the karabiner-elements cask below installs —
+# the cask stays for the driver alone; the app itself is unused.
 brew "kanata"
 tap "koekeishiya/formulae"
 brew "koekeishiya/formulae/skhd"
 
 cask "wezterm"
-cask "karabiner-elements"           # driver provider + rollback path for kanata
+cask "karabiner-elements"           # VirtualHIDDevice driver provider for kanata
 cask "codex"
 cask "mactex-no-gui"
 

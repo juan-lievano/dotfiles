@@ -1,4 +1,4 @@
-;; kanata config — port of .config/karabiner/karabiner.json plus home row mods.
+;; kanata config — port of the old Karabiner-Elements rules plus home row mods.
 ;;
 ;; Design notes:
 ;;   * Home row mods are the reason for switching; everything else is carried

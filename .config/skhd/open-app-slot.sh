@@ -1,7 +1,8 @@
 #!/bin/sh
 # Single source of truth for app-slot shortcuts.
-# Karabiner runs this for both Space+N (built-in keyboard) and Hyper+N (Voyager),
-# so editing an app name here updates both shortcuts at once.
+# skhd runs this for Hyper+N from either keyboard (home-row chord on the
+# laptop, thumb key on the Voyager), so editing an app name here updates
+# both at once.
 case "$1" in
   1) app="WezTerm" ;;
   2) app="Safari" ;;

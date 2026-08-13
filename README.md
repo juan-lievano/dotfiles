@@ -22,7 +22,6 @@ thing prose is bad at.
 | `.config/nvim/`            | `~/.config/nvim/`       | Neovim config                  |
 | `.config/kanata/`          | `~/.config/kanata/`     | keyboard remaps (home row mods) |
 | `.config/skhd/`            | `~/.config/skhd/`       | app launcher + Ctrl-`<key>` rewrites |
-| `.config/karabiner/`       | `~/.config/karabiner/`  | `open-app-slot.sh` (live) + Karabiner rollback |
 | `.config/wezterm/`         | `~/.config/wezterm/`    | terminal config                |
 | `.config/qalculate/`       | `~/.config/qalculate/`  | calculator prefs               |
 | `.config/aerc/aerc.conf`   | `~/.config/aerc/aerc.conf`  | aerc (email) main config   |
@@ -32,10 +31,6 @@ thing prose is bad at.
 | `.claude/keybindings.json` | `~/.claude/keybindings.json` | Claude Code key bindings  |
 | `.claude/CLAUDE.md`        | `~/.claude/CLAUDE.md`   | global instructions for Claude |
 | `.claude/statusline-command.sh` | `~/.claude/statusline-command.sh` | statusline renderer |
-
-`.config/karabiner/` is **not** dead weight: `open-app-slot.sh` there is still
-the live app-launcher script (skhd calls it on every hotkey), and
-`karabiner.json` is kept as the rollback path if kanata is ever removed.
 
 aerc is linked **per file**, not per directory: its credentials file
 (`accounts.conf`) lives beside these in `~/.config/aerc/` and must stay out of
@@ -277,8 +272,7 @@ kanata; it's idempotent, and `--uninstall` reverses it.
 Karabiner-Elements itself. kanata has no virtual keyboard of its own — macOS
 exposes no public API for synthesizing HID input at that level — so it emits
 through pqrs's DriverKit VirtualHIDDevice, and the cask is just the delivery
-vehicle for that driver. `karabiner.json` is inert; the remapping logic all
-lives in `kanata.kbd`.
+vehicle for that driver.
 
 Karabiner-Elements.app can stay closed. It normally starts the VirtualHIDDevice
 daemon and takes it down on quit, which would leave kanata failing with
@@ -288,8 +282,8 @@ exactly why that plist exists. The dependency that remains is on the driver, not
 the app: if the dext or its daemon goes down, kanata goes down with it.
 
 The app launcher needs **no kanata support at all**. skhd binds the raw chord
-(`cmd + ctrl + alt + shift - 1`) and runs `.config/karabiner/open-app-slot.sh`
-(still the single source of truth for app names). Hyper is simply all four home
+(`cmd + ctrl + alt + shift - 1`) and runs `.config/skhd/open-app-slot.sh`
+(the single source of truth for app names). Hyper is simply all four home
 row mods held together — `a s d f` in QWERTY, `a r s t` in Colemak — then a
 digit on the number row. The Voyager sends the same chord from a thumb key in
 firmware, so one skhd binding serves both keyboards with nothing in between.
@@ -382,10 +376,6 @@ keyboard just quietly stops being remapped after the next restart.
 Both formulae are therefore **pinned** (`brew pin kanata skhd`), so a blanket
 `brew upgrade` can't touch them. Upgrade deliberately, and expect to re-grant
 both permissions afterwards. Check with `brew list --pinned`.
-
-Rolling back to Karabiner-Elements: `sudo ~/.config/kanata/install-services.sh
---uninstall`, relaunch Karabiner-Elements, and re-enable `karabiner_grabber`
-under Input Monitoring. `.config/karabiner/karabiner.json` is unchanged.
 
 ## Daily use
 
