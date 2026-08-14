@@ -328,8 +328,12 @@
 ;; F5 (dictation) and F6 (Focus) have neither a usage nor a default shortcut,
 ;; so they stay dead -- same as they are right now.
 ;; Real F1..F12 live on the `launch` layer: hold Right Option and press the key.
+;;
+;; Top-left physical Esc is Caps Lock: the caps-position key already types Esc
+;; (matching the Voyager), so this key was a duplicate -- and losing the real
+;; Caps Lock turned out to sting once Shift moved to the home row.
 (deflayer base
-  esc  brdn brup C-up M-spc f5  f6   prev pp   next mute vold volu
+  caps brdn brup C-up M-spc f5  f6   prev pp   next mute vold volu
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab  q    w    e    r    t    y    u    i    o    p    @ctlb ]   \
   esc  @hma @hms @hmd @hmf g    @ctlh @hmj @hmk @hml @hmsc '   ret
@@ -365,7 +369,7 @@
 ;; LETTERS, so the two forks simply swap physical keys -- @ctlm on physical h,
 ;; @ctlh on physical m.
 (deflayer colemak
-  esc  brdn brup C-up M-spc f5  f6   prev pp   next mute vold volu
+  caps brdn brup C-up M-spc f5  f6   prev pp   next mute vold volu
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab  q    w    f    p    b    j    l    u    y    ;    @ctlb ]   \
   esc  @cma @cmr @cms @cmt g    @ctlm @cmn @cme @cmi @cmo '   ret
