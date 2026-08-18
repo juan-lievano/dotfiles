@@ -1,0 +1,73 @@
+# Ghostty config, ported from .config/wezterm/wezterm.lua. Trying Ghostty
+# because Apple's built-in dictation types into it and not into WezTerm.
+# Reference for every key: `ghostty +show-config --default --docs`.
+
+# font-family is deliberately unset: Ghostty ships JetBrains Mono built in
+# (same face WezTerm bundles), so unset = JetBrains Mono, no font install.
+font-size = 15
+
+# WezTerm: window_background_opacity 0.90 / macos_window_background_blur 92.
+# Both terminals feed the blur number to the same private CoreGraphics call,
+# so 92 means the same thing here. Ghostty's docs warn >20 "may cause strange
+# rendering" -- if it does, drop toward 20.
+background-opacity = 0.90
+background-blur = 92
+
+cursor-style-blink = false
+
+# WezTerm's window_decorations = "RESIZE" + hide_tab_bar_if_only_one_tab:
+# no titlebar, native rounded corners kept, tab bar only appears with 2+ tabs.
+# Drag the window with Option-click on the frame edge (no titlebar to grab).
+# Alternative: `tabs` keeps a titlebar that doubles as the tab bar.
+macos-titlebar-style = hidden
+
+# WezTerm: left Option = Alt (ESC prefix), right Option composes (∫ ø etc.).
+macos-option-as-alt = left
+
+# --- Colors -----------------------------------------------------------------
+foreground = e6c9a8
+background = #000000
+# WezTerm's own defaults, not something wezterm.lua set: its 16-color XTerm
+# palette and green block cursor. Ghostty's stock palette is a muted
+# Tomorrow-Night-ish set, so without this block ls/git/nvim look different.
+# Delete the block to try Ghostty's defaults.
+cursor-color = #52ad70
+cursor-text = #000000
+palette = 0=#000000
+palette = 1=#cc5555
+palette = 2=#55cc55
+palette = 3=#cdcd55
+palette = 4=#5455cb
+palette = 5=#cc55cc
+palette = 6=#7acaca
+palette = 7=#cccccc
+palette = 8=#555555
+palette = 9=#ff5555
+palette = 10=#55ff55
+palette = 11=#ffff55
+palette = 12=#5555ff
+palette = 13=#ff55ff
+palette = 14=#55ffff
+palette = 15=#ffffff
+
+# --- Keys -------------------------------------------------------------------
+# Fullscreen. Hyper+F is a system-wide macOS shortcut (System Settings >
+# Keyboard > App Shortcuts) aimed at menu items titled "Enter/Exit Full
+# Screen". Ghostty's item is "Toggle Full Screen", so macOS never matches it;
+# bind the chord here instead. Native fullscreen (own Space), same as before.
+# Ghostty's own defaults, Cmd-Enter and Cmd-Ctrl-F, still work too.
+keybind = super+ctrl+alt+shift+f=toggle_fullscreen
+
+# Cmd-M: swallow it. Only ever minimize by accident. (WezTerm: CMD-m -> Nop.)
+keybind = super+m=ignore
+
+# Ghostty, unlike WezTerm, ships Cmd-Backspace = Ctrl-U (kill line) out of the
+# box -- it sees the GUI key event and synthesizes ^U before the terminal
+# encoding drops Cmd. wezterm.lua deliberately does NOT translate Opt/Cmd-
+# Backspace: in the terminal delete-word/delete-line are ^W/^U and that's the
+# one rule here. Keeping that rule; delete this line to get kill-line back.
+keybind = super+backspace=unbind
+
+# Not ported: wezterm.lua's window-focus-changed hook (unfocused window drops
+# to 0.40 opacity). Ghostty has no unfocused-*window* opacity, only
+# unfocused-split-opacity, so this is the one visible thing that's gone.

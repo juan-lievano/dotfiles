@@ -24,6 +24,7 @@ link .config/nvim
 link .config/kanata
 link .config/skhd
 link .config/wezterm
+link .config/ghostty
 link .config/qalculate
 link .config/aerc/aerc.conf   # files, not the dir: accounts.conf (secrets) lives beside them
 link .config/aerc/binds.conf

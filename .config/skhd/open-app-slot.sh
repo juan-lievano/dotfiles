@@ -4,7 +4,7 @@
 # laptop, thumb key on the Voyager), so editing an app name here updates
 # both at once.
 case "$1" in
-  1) app="WezTerm" ;;
+  1) app="Ghostty" ;;
   2) app="Safari" ;;
   3) app="Preview" ;;
   4) app="Mail" ;;

@@ -22,6 +22,7 @@ tap "koekeishiya/formulae"
 brew "koekeishiya/formulae/skhd"
 
 cask "wezterm"
+cask "ghostty"                      # trial: Apple dictation types into it, not into wezterm
 cask "karabiner-elements"           # VirtualHIDDevice driver provider for kanata
 cask "codex"
 cask "mactex-no-gui"
@@ -32,4 +33,4 @@ cask "mactex-no-gui"
 #
 # --- Not via brew ---
 # Claude Code: curl -fsSL https://claude.ai/install.sh | bash   (native installer)
-# JetBrains Mono terminal font: bundled inside wezterm, no install needed
+# JetBrains Mono terminal font: bundled inside wezterm and ghostty, no install needed
