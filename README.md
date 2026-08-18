@@ -296,6 +296,18 @@ so it's deleted. Homebrew builds kanata without the `cmd` feature, so it could
 never have run the script itself — and skhd running as a normal user agent means
 `open -a` works without any root workaround.
 
+**Hyper+H starts (and stops) macOS Dictation.** That is not an skhd line: the
+chord is set as the Dictation shortcut itself in System Settings > Keyboard >
+Dictation, so macOS catches it from either keyboard and pressing it again (or
+Esc) stops listening. It needed one kanata change: `h` on the laptop is
+`@ctlh` (Ctrl-H → Delete), and Hyper contains Ctrl, so a plain fork turned
+Hyper-H into Cmd-Opt-Shift-Delete before it ever left the keyboard. `@ctlh` is
+now a `switch` that passes `h` through untouched when all four mods are held.
+Any *other* letter would need the same treatment only if it has a Ctrl fork
+(`h`, `[`, `m`); and it has to be a right-hand key, because a left-hand letter
+pressed while `a s d f` are held is a same-hand roll and chordal hold resolves
+the mods as taps.
+
 Note one interaction: Hyper is `a s d f`, and those four are *shadowed* while
 the symbol layer is up. If you ever want Hyper plus a **numpad** digit, press
 the home row keys first and Space second. Hyper plus the **number row** involves

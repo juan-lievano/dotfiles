@@ -146,7 +146,16 @@
   ;;   Ctrl-H      -> Delete
   ;;   Ctrl-Opt-H  -> Opt-Delete   (delete word)
   ;;   Ctrl-Cmd-H  -> Cmd-Delete   (delete to line start)
-  ctlh (fork h (unmod (lctl rctl) bspc) (lctl rctl))
+  ;; EXCEPT under Hyper. Hyper is all four mods, so it contains Ctrl, and a
+  ;; plain fork would turn Hyper-H into Cmd-Opt-Shift-Delete -- Hyper-H could
+  ;; never leave the laptop. Hyper-H is the macOS dictation shortcut (set in
+  ;; System Settings > Keyboard > Dictation, so no skhd line is involved and
+  ;; the Voyager gets it for free), hence the `switch`: Hyper -> plain h,
+  ;; any other Ctrl chord -> the fork's old alternate, else -> h.
+  ctlh (switch
+    ((and (or lctl rctl) (or lmet rmet) (or lalt ralt) (or lsft rsft))) h break
+    ((or lctl rctl)) (unmod (lctl rctl) bspc) break
+    () h break)
   ctlb (fork [ (unmod (lctl rctl) esc)  (lctl rctl))
   ;; Ctrl-M -> Return is @ctlm, defined further down with the Colemak block
   ;; because that is where the h/m swap is explained. It is the same plain shape

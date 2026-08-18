@@ -216,6 +216,10 @@ app names.
 kanata is not in the path at all. This is also the only launcher route the
 Voyager can share, since it sends the same chord from firmware.
 
+**Hyper+H starts/stops Dictation** — the same chord with `h`, registered as
+the macOS Dictation shortcut rather than in skhd. Here kanata *is* in the
+path: `h` is the Ctrl-H→Delete fork, which now lets Hyper through (README).
+
 ---
 
 ## Cross-reference with the Voyager
