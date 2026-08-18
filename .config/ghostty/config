@@ -15,11 +15,22 @@ background-blur = 92
 
 cursor-style-blink = false
 
-# WezTerm's window_decorations = "RESIZE" + hide_tab_bar_if_only_one_tab:
-# no titlebar, native rounded corners kept, tab bar only appears with 2+ tabs.
-# Drag the window with Option-click on the frame edge (no titlebar to grab).
-# Alternative: `tabs` keeps a titlebar that doubles as the tab bar.
-macos-titlebar-style = hidden
+# WezTerm was window_decorations = "RESIZE" + hide_tab_bar_if_only_one_tab:
+# no chrome with one tab, a flat black tab bar with two. Ghostty can't do
+# that on macOS: tabs are native and live in the titlebar, and the `hidden`
+# titlebar style sets tabbingMode = .disallowed (Cmd-T opens a window
+# instead). So: keep a titlebar, but make it the tab bar and paint it the
+# terminal's background. One tab = slim black bar with the window title;
+# two+ = that same bar is the tab strip, no extra row. Traffic lights off to
+# match RESIZE. If tabs turn out unused, `hidden` gives back the bare window.
+macos-titlebar-style = tabs
+macos-window-buttons = hidden
+# Blank the window title (shell integration would otherwise put the cwd
+# there), so with one tab the bar is an empty black strip. Cost: the title is
+# also the tab label, so tabs are blank too -- Cmd-1..9 by position. Delete
+# this line to get cwd titles and named tabs back. Must be a quoted space;
+# an empty value resets to the program name.
+title = " "
 
 # WezTerm: left Option = Alt (ESC prefix), right Option composes (∫ ø etc.).
 macos-option-as-alt = left

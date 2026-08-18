@@ -51,7 +51,9 @@ colors, Cmd-M swallowed, Cmd-Backspace left untranslated). Not portable: the
 unfocused-window dim to 0.40 — Ghostty only dims unfocused *splits*.
 
 To settle: does dictation actually work in it, does blur 92 render cleanly,
-and do tabs behave with the hidden titlebar. If it sticks, drop the wezterm
+and is the always-present title/tab bar tolerable (Ghostty's `hidden`
+titlebar style disallows tabs outright, so a WezTerm-style bare window with
+one tab and a tab bar with two isn't available). If it sticks, drop the wezterm
 cask/config; if not, `brew uninstall --cask ghostty` and delete
 `.config/ghostty/` + its `link` line in `install.sh`.
 
