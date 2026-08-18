@@ -9,6 +9,39 @@ when it's resolved, and fold the answer into the docs.
 
 ---
 
+## 2026-08-18 — dictation went deaf; fixed by restarting the speech daemons
+
+Symptom: the mic popup appears (Hyper-H works), the level bar in it doesn't
+move, no text lands — in every app, Safari included. Not permissions, not
+kanata, not the mic: `log show` showed `corespeechd` receiving audio and the
+recognizer failing every session with `kAFAssistantErrorDomain Code=1110`
+("no speech detected"). Apple's on-device speech stack was simply wedged.
+
+The fix, no sudo, no reboot, both relaunch on their own:
+
+    killall corespeechd localspeechrecognition
+
+Escalation if that ever isn't enough: toggle Dictation off/on in
+System Settings ▸ Keyboard, then a reboot.
+
+### ⚠️ Watch: does it recur?
+
+If this needs doing more than once in a while, promote it to an alias in
+`.zshrc` — `alias fixdictation="killall corespeechd localspeechrecognition"` —
+and move this entry into `README.md`. Deliberately not added yet: one
+occurrence doesn't earn a line in the shell config.
+
+Two facts learned along the way, worth not re-discovering:
+
+- **Lid closed = built-in mic is dead.** Apple Silicon hardware-disconnects
+  the internal mic in clamshell; it records pure zeros. In clamshell the C922
+  webcam is the *only* live mic, so if it's unplugged dictation has nothing.
+- **The C922 has a loud ~70 Hz hum** (louder than speech at normal distance).
+  Recognition copes today; if dictation gets flaky or misses words, suspect
+  the hum first — different USB port, or a real mic — before suspecting macOS.
+
+---
+
 ## 2026-08-18 — trial: Ghostty instead of WezTerm (verdict pending)
 
 Only reason: Apple's built-in dictation types into Ghostty and not into
