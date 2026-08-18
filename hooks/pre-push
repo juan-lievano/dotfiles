@@ -17,7 +17,7 @@ while IFS= read -r rel; do
   # in $HOME to install.sh instead.
   # (Docs nested under an already-linked directory need no entry — e.g.
   # .config/kanata/LAYOUT.md rides the .config/kanata symlink.)
-  case "$rel" in README.md|NOTES.md|.gitignore|LICENSE|install.sh|Brewfile|hooks/*) continue;; esac
+  case "$rel" in README.md|NOTES.md|todos.md|.gitignore|LICENSE|install.sh|Brewfile|hooks/*) continue;; esac
   [ "$HOME/$rel" -ef "$repo/$rel" ] || { echo "DETACHED: ~/$rel" >&2; bad=1; }
 done < <(git -C "$repo" ls-files)
 if [ "$bad" -ne 0 ]; then
