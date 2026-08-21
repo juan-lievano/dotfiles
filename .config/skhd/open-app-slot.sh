@@ -10,7 +10,8 @@ case "$1" in
   4) app="Mail" ;;
   5) app="WhatsApp" ;;
   6) app="Calendar" ;;
-  7) app="Dictionary" ;;
+  7) app="Spotify" ;;
+  8) app="Dictionary" ;;
   *) exit 1 ;;
 esac
 exec open -a "$app"

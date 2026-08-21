@@ -77,3 +77,4 @@ cmd + ctrl + alt + shift - 4 : ~/.config/skhd/open-app-slot.sh 4
 cmd + ctrl + alt + shift - 5 : ~/.config/skhd/open-app-slot.sh 5
 cmd + ctrl + alt + shift - 6 : ~/.config/skhd/open-app-slot.sh 6
 cmd + ctrl + alt + shift - 7 : ~/.config/skhd/open-app-slot.sh 7
+cmd + ctrl + alt + shift - 8 : ~/.config/skhd/open-app-slot.sh 8
