@@ -1,9 +1,5 @@
 {
   "plugins": {
-    "comfy-line-numbers.nvim": {
-      "rev": "9adedbaf1f410cdaacf4fb2ca8eb44f3d5f6d010",
-      "src": "https://github.com/mluders/comfy-line-numbers.nvim"
-    },
     "leetcode.nvim": {
       "rev": "fdd3f91800b3983e27bc9fcfb99cfa7293d7f11a",
       "src": "https://github.com/kawre/leetcode.nvim"

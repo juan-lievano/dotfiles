@@ -33,7 +33,6 @@ vim.pack.add({
 	"https://github.com/echasnovski/mini.files",
 	"https://github.com/echasnovski/mini.pick",
 	"https://github.com/neovim/nvim-lspconfig",
-	"https://github.com/mluders/comfy-line-numbers.nvim",
 })
 
 vim.lsp.enable({ "lua_ls", "pyright", "texlab" })
@@ -55,12 +54,10 @@ pick.setup({
 	},
 })
 require("mini.files").setup()
-require("comfy-line-numbers").setup()
 
 -- Absolute line numbers while typing a `:` command, relative otherwise.
--- comfy-line-numbers renders absolute numbers whenever relativenumber is off,
--- so we just flip it off on cmdline enter (and redraw, since the buffer won't
--- repaint on its own mid-command) and flip it back on leave.
+-- Flip relativenumber off on cmdline enter (and redraw, since the buffer won't
+-- repaint on its own mid-command) and back on on leave.
 local cmdline_nums = vim.api.nvim_create_augroup("CmdlineAbsoluteNumbers", { clear = true })
 vim.api.nvim_create_autocmd("CmdlineEnter", {
 	group = cmdline_nums,
