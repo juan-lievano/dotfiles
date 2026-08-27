@@ -1,5 +1,10 @@
-# Ghostty config, ported from .config/wezterm/wezterm.lua. Trying Ghostty
-# because Apple's built-in dictation types into it and not into WezTerm.
+# Ghostty config, ported from .config/wezterm/wezterm.lua. Not the daily
+# driver -- WezTerm is (Hyper+1; clickable file links, and maybe its
+# multiplexing someday). Ghostty stays installed anyway: it is the only
+# terminal Apple's built-in dictation will type into (dictation ignores
+# WezTerm entirely), so it's the terminal to open on the days dictation is
+# wanted. Was the default 2026-08-18..26; dictation didn't get used enough
+# to keep it there, and an idle cask + this file cost nothing.
 # Reference for every key: `ghostty +show-config --default --docs`.
 
 # font-family is deliberately unset: Ghostty ships JetBrains Mono built in

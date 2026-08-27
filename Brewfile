@@ -22,7 +22,7 @@ tap "koekeishiya/formulae"
 brew "koekeishiya/formulae/skhd"
 
 cask "wezterm"
-cask "ghostty"                      # dictation fallback: Apple dictation types into it, not into wezterm
+cask "ghostty"                      # kept though idle: the only terminal Apple dictation types into; why in .config/ghostty/config
 cask "karabiner-elements"           # VirtualHIDDevice driver provider for kanata
 cask "codex"
 cask "mactex-no-gui"
