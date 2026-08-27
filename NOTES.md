@@ -42,23 +42,6 @@ Two facts learned along the way, worth not re-discovering:
 
 ---
 
-## 2026-08-18 — trial: Ghostty instead of WezTerm (verdict pending)
-
-Only reason: Apple's built-in dictation types into Ghostty and not into
-WezTerm. Everything else about WezTerm was fine, so `.config/ghostty/config`
-is a straight port of `wezterm.lua` (font, opacity/blur, hidden titlebar,
-colors, Cmd-M swallowed, Cmd-Backspace left untranslated). Not portable: the
-unfocused-window dim to 0.40 — Ghostty only dims unfocused *splits*.
-
-To settle: does dictation actually work in it, does blur 92 render cleanly,
-and is the always-present title/tab bar tolerable (Ghostty's `hidden`
-titlebar style disallows tabs outright, so a WezTerm-style bare window with
-one tab and a tab bar with two isn't available). If it sticks, drop the wezterm
-cask/config; if not, `brew uninstall --cask ghostty` and delete
-`.config/ghostty/` + its `link` line in `install.sh`.
-
----
-
 ## 2026-08-09 — idea: wide mod (not started)
 
 Shift the right hand one physical column right, laptop only. The point: the

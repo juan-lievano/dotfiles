@@ -22,8 +22,8 @@ thing prose is bad at.
 | `.config/nvim/`            | `~/.config/nvim/`       | Neovim config                  |
 | `.config/kanata/`          | `~/.config/kanata/`     | keyboard remaps (home row mods) |
 | `.config/skhd/`            | `~/.config/skhd/`       | app launcher + Ctrl-`<key>` rewrites |
-| `.config/wezterm/`         | `~/.config/wezterm/`    | terminal config                |
-| `.config/ghostty/`         | `~/.config/ghostty/`    | terminal config (trial, ported from wezterm) |
+| `.config/wezterm/`         | `~/.config/wezterm/`    | terminal config (daily driver) |
+| `.config/ghostty/`         | `~/.config/ghostty/`    | terminal config (dictation fallback, ported from wezterm) |
 | `.config/qalculate/`       | `~/.config/qalculate/`  | calculator prefs               |
 | `.config/aerc/aerc.conf`   | `~/.config/aerc/aerc.conf`  | aerc (email) main config   |
 | `.config/aerc/binds.conf`  | `~/.config/aerc/binds.conf` | aerc keybindings           |
