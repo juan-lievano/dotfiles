@@ -23,10 +23,10 @@ config.native_macos_fullscreen_mode = true
 -- not just a config reload.
 local border_color = "rgba(230, 201, 168, 0.40)"  -- foreground e6c9a8, glassy
 config.window_frame = {
-  border_left_width = "3px",
-  border_right_width = "3px",
-  border_top_height = "3px",
-  border_bottom_height = "3px",
+  border_left_width = "2px",
+  border_right_width = "2px",
+  border_top_height = "2px",
+  border_bottom_height = "2px",
   border_left_color = border_color,
   border_right_color = border_color,
   border_top_color = border_color,
