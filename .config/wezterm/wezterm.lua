@@ -16,23 +16,6 @@ config.window_decorations = "RESIZE"
 -- default snap-over-the-screen fullscreen. Matches how Ghostty transitions.
 config.native_macos_fullscreen_mode = true
 
--- Glassy 1px hairline so the window edge reads against a black wallpaper.
--- Always on, even in fullscreen -- toggling it per-state caused a visible
--- flash during the transition. Raise the alpha if it's too subtle. NOTE:
--- applied at window creation, so changes here need a new window (Cmd-N),
--- not just a config reload.
-local border_color = "rgba(230, 201, 168, 0.40)"  -- foreground e6c9a8, glassy
-config.window_frame = {
-  border_left_width = "2px",
-  border_right_width = "2px",
-  border_top_height = "2px",
-  border_bottom_height = "2px",
-  border_left_color = border_color,
-  border_right_color = border_color,
-  border_top_color = border_color,
-  border_bottom_color = border_color,
-}
-
 -- make the cursor not blink
 config.cursor_blink_rate = 0
 
