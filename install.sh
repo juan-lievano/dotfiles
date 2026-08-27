@@ -33,6 +33,7 @@ link .w3m/keymap              # file, not dir: ~/.w3m also holds cookies/history
 # Claude Code: files, not the dir — ~/.claude is mostly runtime state
 # (sessions/, history.jsonl, caches, logs) that must not be tracked.
 link .claude/settings.json
+link .claude/hooks/wezterm-bell.sh
 link .claude/keybindings.json
 link .claude/CLAUDE.md
 link .claude/statusline-command.sh

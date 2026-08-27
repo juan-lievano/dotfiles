@@ -20,5 +20,19 @@
   },
   "theme": "auto",
   "editorMode": "vim",
-  "preferredNotifChannel": "iterm2"
+  "preferredNotifChannel": "terminal_bell",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/wezterm-bell.sh",
+            "async": true,
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
 }

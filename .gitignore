@@ -9,6 +9,12 @@
 # aerc credentials must never land in this repo
 **/aerc/accounts.conf
 
+# Bell-chord WAVs are regenerable output of make_chords.py in the same dir;
+# committing binaries that re-add ~1.4MB on every tweak isn't worth the
+# zero-setup. New machine: python3 make_chords.py (wezterm.lua falls back to a
+# system sound until then).
+.config/wezterm/sounds/*.wav
+
 # Oryx exports — reference material, not config. The Voyager's source of truth
 # is the layout in Oryx (configure.zsa.io/voyager/layouts/waLwq), not a snapshot
 # of it, and the source zip carries a compiled .bin besides. Nothing in this
