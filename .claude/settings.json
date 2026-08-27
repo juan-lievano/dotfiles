@@ -19,5 +19,6 @@
     "pyright-lsp@claude-plugins-official": true
   },
   "theme": "auto",
-  "editorMode": "vim"
+  "editorMode": "vim",
+  "preferredNotifChannel": "iterm2"
 }
