@@ -9,20 +9,6 @@
     ]
   },
   "model": "fable",
-  "hooks": {
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/wezterm-bell.sh",
-            "timeout": 5,
-            "async": true
-          }
-        ]
-      }
-    ]
-  },
   "statusLine": {
     "type": "command",
     "command": "sh ~/.claude/statusline-command.sh",
@@ -34,6 +20,6 @@
   },
   "theme": "auto",
   "editorMode": "vim",
-  "preferredNotifChannel": "terminal_bell",
+  "preferredNotifChannel": "notifications_disabled",
   "agentPushNotifEnabled": true
 }
