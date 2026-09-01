@@ -3,3 +3,13 @@
 	name = Juan Lievano
 [http]
 	postBuffer = 524288000
+[diff]
+	# `git difftool` opens each changed file side-by-side in nvim (`nvim -d`):
+	# unchanged regions fold away, ]c / [c jump between hunks, :qa moves on to
+	# the next file. Plain `git diff` in the pager is fine for a few dozen
+	# lines but has no navigation once a diff runs long. nvimdiff is a
+	# built-in tool name, so no difftool.<tool>.cmd is needed.
+	tool = nvimdiff
+[difftool]
+	# don't ask "Launch nvimdiff [Y/n]?" before every file
+	prompt = false

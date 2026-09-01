@@ -16,7 +16,7 @@ thing prose is bad at.
 |----------------------------|-------------------------|--------------------------------|
 | `.zshrc`                   | `~/.zshrc`              | zsh shell config               |
 | `.zprofile`                | `~/.zprofile`           | login-shell Homebrew bootstrap |
-| `.gitconfig`               | `~/.gitconfig`          | git identity + settings        |
+| `.gitconfig`               | `~/.gitconfig`          | git identity, nvim as difftool |
 | `.latexmkrc`               | `~/.latexmkrc`          | LaTeX build layout             |
 | `.config/git/`             | `~/.config/git/`        | global gitignore               |
 | `.config/nvim/`            | `~/.config/nvim/`       | Neovim config                  |
@@ -399,6 +399,13 @@ git add -u            # stage modified tracked files
 git commit -m "..."   # snapshot
 git push              # back up to GitHub
 ```
+
+**Reading diffs:** `.gitconfig` sets `diff.tool = nvimdiff`, so `git difftool`
+(all uncommitted changes), `git difftool -- <file>` or `git difftool main...`
+(everything a branch changed) opens each file side-by-side in nvim instead of
+dumping a patch into the pager. Unchanged regions fold away, `]c` / `[c` jump
+between hunks, `:qa` closes the file and moves on to the next. Untracked files
+don't appear until `git add -N <file>` marks them as intended.
 
 `dotcheck` (a zsh function in `.zshrc`) verifies every tracked file is still a
 live symlink — run it if a config ever seems to have "detached". The same
