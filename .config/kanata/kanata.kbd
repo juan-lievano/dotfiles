@@ -474,21 +474,22 @@
 ;;
 ;; The rest of the Voyager's layer 2 rides along, position for position:
 ;;   * Home / PgUp / PgDn / End down the inner column (physical 5 t g b).
-;;   * Ctrl-Shift-Tab / Ctrl-Tab on physical n / m -- prev/next tab, right
-;;     thumb holds the layer, right fingers switch.
-;;   * Media transport on , . / and volume on o p [. These DUPLICATE the
-;;     function row on purpose; they exist so the same finger does the same
-;;     thing on both keyboards, nothing else.
-;; The one group NOT ported is the mouse keys (movement on the Voyager's left
-;; bottom row, buttons above the volume keys): kanata's movemouse needs
-;; speed/acceleration tuning to not feel awful, and the trackpad is
-;; centimeters away. u and i stay transparent because of it.
+;;   * Ctrl-Shift-Tab / Ctrl-Tab on physical o / p -- prev/next tab, right
+;;     thumb holds the layer, ring and pinky switch.
+;;   * Mouse buttons (left / right click) on u / i.
+;;   * Play/pause on h; mute / vol down / vol up on n m ,; prev / next on . /.
+;;     These DUPLICATE the function row on purpose; they exist so the same
+;;     finger does the same thing on both keyboards, nothing else.
+;; The one group NOT ported is mouse MOVEMENT (the Voyager's left bottom row):
+;; kanata's movemouse needs speed/acceleration tuning to not feel awful, and
+;; the trackpad is centimeters away.
+;; Layout matches Oryx revision waLwq/x9ENX3 (Sept 2026).
 (deflayer nav
   _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    _    _    _    _    home _    _    _    _    _    _    _    _
-  _    _    _    _    _    pgup _    _    _    vold volu mute _    _
-  _    left down up   rght pgdn _    rmet ralt rctl rsft _    _
-  _    _    _    _    _    end  C-S-tab C-tab prev next pp _
+  _    _    _    _    _    home _    mlft mrgt C-S-tab C-tab _    _    _
+  _    _    _    _    _    pgup _    _    _    _    _    _    _    _
+  _    left down up   rght pgdn pp   rmet ralt rctl rsft _    _
+  _    _    _    _    _    end  mute vold volu prev next _
   _    _    _    _    _    _
 )
 
