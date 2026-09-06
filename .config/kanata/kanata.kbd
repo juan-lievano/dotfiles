@@ -128,6 +128,25 @@
     g
     z x c v b
   )
+
+  ;; The symbol layer's left mods (@sy6..@sy9) are `tap-hold-keys`, whose key
+  ;; lists are option forms, so these two hold the whole form (a variable can
+  ;; stand in for a list but cannot be spliced into one). The tap list is
+  ;; `left-hand-keys` verbatim. The hold list is EVERY right-hand key, home row
+  ;; included: pressing any of them settles the mod as a hold at once, no 200ms
+  ;; wait. The other lists leave the home row out so same-hand mods can chain;
+  ;; this one is for the opposite hand, where `a`-hold + `j` must be `$` and
+  ;; `a`-hold + `h` must be `+`.
+  sy-tap-on-press (tap-on-press
+    q w e r t
+    g
+    z x c v b
+  )
+  sy-hold-on-press (hold-on-press
+    y u i o p [ ]
+    h j k l ; '
+    n m , . /
+  )
 )
 
 (defalias
@@ -313,6 +332,30 @@
   np5 (tap-hold-tap-keys $tap-time $hold-time 5   ralt $right-hand-keys)
   np6 (tap-hold-tap-keys $tap-time $hold-time 6   rctl $right-hand-keys)
   npd (tap-hold-tap-keys $tap-time $hold-time .   rsft $right-hand-keys)
+  ;; Left hand, same idea: the Voyager's layer 1 has MT(MOD_LSFT, KC_CIRC),
+  ;; MT(MOD_LCTL, KC_AMPR), MT(MOD_LALT, KC_ASTR), MT(MOD_LGUI, KC_LPRN) on
+  ;; a s d f. Without these the only Shift on the layer was `;`, which is
+  ;; same-hand with `=`/`-`/`/` and so settled as a tap -- there was no way to
+  ;; type `+` from `=` or `_` from `-` without a physical Shift key. Both
+  ;; symbols layers share these (same physical keys, same mod order as the
+  ;; alphas), with the QWERTY chordal list; physical Left Shift is a real
+  ;; Shift in `symbols` and `tab` in `symbols-cmk`, and Shift-Tab via `a`-hold
+  ;; is worth more than guarding a same-hand roll onto Tab.
+  ;;
+  ;; These are `tap-hold-keys`, not `tap-hold-tap-keys` like every other mod:
+  ;; a right-hand press settles the hold IMMEDIATELY (hold-on-press), the way
+  ;; QMK's chordal hold does. tap-hold-tap-keys always waits the full 200ms,
+  ;; which is fine for letters but here meant a fast `a`-hold + `h` roll came
+  ;; out as `^=` while the far-away physical `=` key got `+` only because
+  ;; reaching it takes longer than the timer (verified with
+  ;; kanata_simulated_input, Sept 2026). Same-hand keys still force a tap; the
+  ;; remaining keys (s d f, the other mods) get permissive hold so chords still
+  ;; chain. The numpad mods on the right keep the full wait on purpose: digit
+  ;; rolls like "456" have nested releases and would misfire as Cmd-5.
+  sy6 (tap-hold-keys $tap-time $hold-time S-6 lsft $sy-tap-on-press $sy-hold-on-press)
+  sy7 (tap-hold-keys $tap-time $hold-time S-7 lctl $sy-tap-on-press $sy-hold-on-press)
+  sy8 (tap-hold-keys $tap-time $hold-time S-8 lalt $sy-tap-on-press $sy-hold-on-press)
+  sy9 (tap-hold-keys $tap-time $hold-time S-9 lmet $sy-tap-on-press $sy-hold-on-press)
 )
 
 ;; Ctrl-; -> ~  (exact input-combo -> output-combo rewrite)
@@ -409,17 +452,16 @@
 ;; the LEFT hand only because it keeps the mapping to the number row legible at
 ;; a glance -- there is no Shift trick left to read into it.
 ;;
-;; The left hand's home row mods are shadowed, deliberately: that half is for
-;; typing, not chording. The right hand's are kept (@np4..@npd), matching the
-;; Voyager. One consequence for the launcher, since Hyper is a+s+d+f and those
-;; four are shadowed here: press the home row keys FIRST and Space after if you
-;; ever want Hyper plus a numpad digit. Hyper plus the NUMBER ROW involves no
-;; layer at all and is the ordinary path.
+;; Home row mods stay live on BOTH hands (@sy6..@sy9 left, @np4..@npd right),
+;; matching the Voyager's layer 1. The left ones exist so Shift is reachable
+;; for the right hand's operators: `a`-hold + `h` is `+`, `a`-hold + `n` is
+;; `_`. They used to be shadowed as plain `^ & * (`, and the note about pressing
+;; Hyper before Space no longer applies -- a+s+d+f is Hyper here too.
 (deflayer symbols
   _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
   _    S-1  S-2  S-3  S-4  S-5  S-=  7    8    9    S-8  _    _    _
-  _    S-6  S-7  S-8  S-9  S-0  =    @np4 @np5 @np6 @npd _   _
+  _    @sy6 @sy7 @sy8 @sy9 S-0  =    @np4 @np5 @np6 @npd _   _
   _    tab  [    ]    grv  _    -    1    2    3    /    _
   _    _    _    _    0    _
 )
@@ -443,7 +485,7 @@
   _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
   _    S-1  S-2  S-3  S-4  S-5  S-=  7    8    9    S-8  _    _    _
-  _    S-6  S-7  S-8  S-9  S-0  =    @np4 @np5 @np6 @npd _   _
+  _    @sy6 @sy7 @sy8 @sy9 S-0  =    @np4 @np5 @np6 @npd _   _
   tab  [    ]    grv  _    _    -    1    2    3    /    _
   _    _    _    _    0    _
 )
