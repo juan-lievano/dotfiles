@@ -301,18 +301,18 @@
 
   ;; ---- Numpad home row mods ----
   ;; The Voyager keeps mod-taps live on its numpad -- MT(MOD_RGUI, KC_4),
-  ;; MT(MOD_RALT, KC_5), MT(MOD_RCTL, KC_6), and Shift under `*` -- so
+  ;; MT(MOD_RALT, KC_5), MT(MOD_RCTL, KC_6), and Shift under `*` (here `.`) -- so
   ;; Cmd/Opt/Ctrl/Shift stay chordable without leaving the layer. Mirrored here
   ;; on the same physical keys that carry them in the alphas (j k l ;), in the
   ;; same index-inward Cmd-Opt-Ctrl-Shift order, with the same $right-hand-keys
   ;; chordal list -- so a roll like "456" settles as taps and typing digits is
   ;; no slower than typing letters.
-  ;; Cost: holding 4/5/6/* no longer key-repeats. Physical j is deliberately
+  ;; Cost: holding 4/5/6/. no longer key-repeats. Physical j is deliberately
   ;; skipped in the Voyager's own numpad too (`+` there is a plain key).
   np4 (tap-hold-tap-keys $tap-time $hold-time 4   rmet $right-hand-keys)
   np5 (tap-hold-tap-keys $tap-time $hold-time 5   ralt $right-hand-keys)
   np6 (tap-hold-tap-keys $tap-time $hold-time 6   rctl $right-hand-keys)
-  npx (tap-hold-tap-keys $tap-time $hold-time S-8 rsft $right-hand-keys)
+  npd (tap-hold-tap-keys $tap-time $hold-time .   rsft $right-hand-keys)
 )
 
 ;; Ctrl-; -> ~  (exact input-combo -> output-combo rewrite)
@@ -387,11 +387,13 @@
 )
 
 ;; Space-hold: the Voyager's Sym+Num layer, BOTH halves. Symbols on the left
-;; hand, a real numpad on the right, laid out exactly as QMK layer 1 has it:
+;; hand, a real numpad on the right, as QMK layer 1 has it except the five
+;; operators around the digits, which were rearranged in Sept 2026 (Voyager
+;; still has - = / + * / . in those slots):
 ;;
-;;     ! @ # $ %        -  7 8 9 =      <- q w e r t  /  y u i o p
-;;     ^ & * ( )        +  4 5 6 *      <- a s d f g  /  h j k l ;
-;;     tab [ ] `        .  1 2 3 /      <- z x c v    /  n m , . /
+;;     ! @ # $ %        +  7 8 9 *      <- q w e r t  /  y u i o p
+;;     ^ & * ( )        =  4 5 6 .      <- a s d f g  /  h j k l ;
+;;     tab [ ] `        -  1 2 3 /      <- z x c v    /  n m , . /
 ;;                            0         <- rmet, the right thumb
 ;;
 ;; The right half is why the layer key had to leave the right index and move to
@@ -408,7 +410,7 @@
 ;; a glance -- there is no Shift trick left to read into it.
 ;;
 ;; The left hand's home row mods are shadowed, deliberately: that half is for
-;; typing, not chording. The right hand's are kept (@np4..@npx), matching the
+;; typing, not chording. The right hand's are kept (@np4..@npd), matching the
 ;; Voyager. One consequence for the launcher, since Hyper is a+s+d+f and those
 ;; four are shadowed here: press the home row keys FIRST and Space after if you
 ;; ever want Hyper plus a numpad digit. Hyper plus the NUMBER ROW involves no
@@ -416,9 +418,9 @@
 (deflayer symbols
   _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    S-1  S-2  S-3  S-4  S-5  -    7    8    9    =    _    _    _
-  _    S-6  S-7  S-8  S-9  S-0  S-=  @np4 @np5 @np6 @npx _   _
-  _    tab  [    ]    grv  _    .    1    2    3    /    _
+  _    S-1  S-2  S-3  S-4  S-5  S-=  7    8    9    S-8  _    _    _
+  _    S-6  S-7  S-8  S-9  S-0  =    @np4 @np5 @np6 @npd _   _
+  _    tab  [    ]    grv  _    -    1    2    3    /    _
   _    _    _    _    0    _
 )
 
@@ -428,9 +430,9 @@
 ;; Exactly one row differs from `symbols` -- the bottom one, and only its left
 ;; half, because that is all the angle mod touches:
 ;;
-;;     ! @ # $ %        -  7 8 9 =      <- q w e r t  /  y u i o p
-;;     ^ & * ( )        +  4 5 6 *      <- a r s t g  /  h j k l ;
-;;   tab [ ] `          .  1 2 3 /      <- lsft z x c /  n m , . /
+;;     ! @ # $ %        +  7 8 9 *      <- q w e r t  /  y u i o p
+;;     ^ & * ( )        =  4 5 6 .      <- a r s t g  /  h j k l ;
+;;   tab [ ] `          -  1 2 3 /      <- lsft z x c /  n m , . /
 ;;                            0         <- rmet, the right thumb
 ;;
 ;; The right half is a verbatim copy of `symbols` and has to stay that way; see
@@ -440,9 +442,9 @@
 (deflayer symbols-cmk
   _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    S-1  S-2  S-3  S-4  S-5  -    7    8    9    =    _    _    _
-  _    S-6  S-7  S-8  S-9  S-0  S-=  @np4 @np5 @np6 @npx _   _
-  tab  [    ]    grv  _    _    .    1    2    3    /    _
+  _    S-1  S-2  S-3  S-4  S-5  S-=  7    8    9    S-8  _    _    _
+  _    S-6  S-7  S-8  S-9  S-0  =    @np4 @np5 @np6 @npd _   _
+  tab  [    ]    grv  _    _    -    1    2    3    /    _
   _    _    _    _    0    _
 )
 

@@ -65,6 +65,17 @@ config.keys = {
   --   can express Super, but both ends have to opt in, and TUIs here don't.)
 }
 
+-- Left Option composes dead keys (Opt-e then a vowel -> á) instead of acting
+-- as Meta. WezTerm's macOS default is Meta for Left Option and compose for
+-- Right Option, so Opt-e reached nvim as ESC e (leave insert mode, jump a
+-- word). Right Option is consumed by kanata's launch layer, and the home row
+-- Option under `d` is Left, so Left is the one that has to compose. Nothing in
+-- the terminal used Left Option as Meta: zsh is in vi mode and delete-word is
+-- Ctrl-W (see the config.keys note above). Opt-e works on the Voyager without
+-- this, which only fits if its Option mod-taps send MOD_RALT (unverified --
+-- check the Oryx layout); WezTerm composes Right Option by default.
+config.send_composed_key_when_left_alt_is_pressed = true
+
 -- No bell: no beep, no banner, nothing. (Notification setup tried and removed.)
 config.audible_bell = "Disabled"
 
