@@ -41,7 +41,6 @@ what it already provides.
   plug *into*. Check `git show origin/main:<path>` when my checkout is behind.
   Flag anything the plan got wrong or left out.
 
-**Build:** my `~/.latexmkrc` redirects aux files, so scripted builds need
-absolute paths: `latexmk -pdf -auxdir=<abs> -outdir=<abs> file.tex`. Check the
-log for overfull boxes >12pt and render pages to PNG to eyeball diagrams before
-calling it done.
+**Build:** `latexmk -pdf file.tex` from anywhere; `~/.latexmkrc` puts aux files
+in `build/` beside the source and the PDF next to it. Check the log for overfull
+boxes >12pt and render pages to PNG to eyeball diagrams before calling it done.
