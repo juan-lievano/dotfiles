@@ -18,6 +18,7 @@
     "lua-lsp@claude-plugins-official": false,
     "pyright-lsp@claude-plugins-official": true
   },
+  "feedbackDrafts": "off",
   "theme": "auto",
   "editorMode": "vim",
   "preferredNotifChannel": "notifications_disabled",
