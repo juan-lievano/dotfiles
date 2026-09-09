@@ -2,6 +2,13 @@
 
 - Never add a `Co-Authored-By: Claude ...` trailer (or any Claude/Anthropic co-author attribution) to git commit messages or PR bodies.
 
+## Writing for me (chat, PR text, summaries)
+
+Cut to about a fifth of your first draft. One sentence per moving part, no
+numbered walkthroughs, no sections I didn't ask for, no explaining design
+choices. Open in everyday words; jargon only after the plain picture is set.
+A file gets one line: what it does, mechanism in a parenthetical at most.
+
 ## Reference documents (PDFs I read myself)
 
 When I ask for a document, guide, report, or explainer as a PDF, build it with LaTeX using my house style:
