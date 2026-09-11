@@ -8,6 +8,13 @@ bindkey -v
 bindkey -M viins '^W' backward-kill-word
 bindkey -M viins '^U' backward-kill-line
 
+# Edit the current command line in $EDITOR (nvim): Esc then v, or ^X^E in
+# insert mode. On :wq the buffer comes back to the prompt, not yet executed.
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey -M vicmd v edit-command-line
+bindkey -M viins '^X^E' edit-command-line
+
 # Make cursor fat and skinny
 
 function zle-keymap-select {
