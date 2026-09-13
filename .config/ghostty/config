@@ -19,6 +19,10 @@ background-blur = 92
 
 cursor-style-blink = false
 
+# Bell off: the 🔔 tab glyph is hard-coded, the border is invisible from
+# another tab, and most rings are completion noise. Never missed it in WezTerm.
+bell-features = no-attention,no-title,no-border
+
 # WezTerm was window_decorations = "RESIZE" + hide_tab_bar_if_only_one_tab:
 # no chrome with one tab, a flat black tab bar with two. Ghostty can't do
 # that on macOS: tabs are native and live in the titlebar, and the `hidden`
