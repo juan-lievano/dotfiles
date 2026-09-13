@@ -9,7 +9,7 @@
 # there because a synthetic `skhd -k` press would re-merge the still-held
 # hyper modifiers (see skhdrc) and fire an app slot instead.
 case "$1" in
-  1) app="WezTerm" ;;
+  1) app="Ghostty" ;;
   2) app="Safari" ;;
   3) app="Preview" ;;
   4) app="Mail" ;;

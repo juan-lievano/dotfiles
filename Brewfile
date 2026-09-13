@@ -22,7 +22,7 @@ tap "koekeishiya/formulae"
 brew "koekeishiya/formulae/skhd"
 
 cask "wezterm"
-cask "ghostty"                      # kept though idle: the only terminal Apple dictation types into; why in .config/ghostty/config
+cask "ghostty"                      # daily driver on trial (Hyper+1); also the only terminal Apple dictation types into
 cask "karabiner-elements"           # VirtualHIDDevice driver provider for kanata
 cask "codex"
 cask "mactex-no-gui"

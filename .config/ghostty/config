@@ -1,10 +1,9 @@
-# Ghostty config, ported from .config/wezterm/wezterm.lua. Not the daily
-# driver -- WezTerm is (Hyper+1; clickable file links, and maybe its
-# multiplexing someday). Ghostty stays installed anyway: it is the only
-# terminal Apple's built-in dictation will type into (dictation ignores
-# WezTerm entirely), so it's the terminal to open on the days dictation is
-# wanted. Was the default 2026-08-18..26; dictation didn't get used enough
-# to keep it there, and an idle cask + this file cost nothing.
+# Ghostty config, ported from .config/wezterm/wezterm.lua. Daily driver again
+# on trial since 2026-09-13 (Hyper+1 in .config/skhd/open-app-slot.sh);
+# WezTerm stays installed (clickable file links, maybe multiplexing someday).
+# Ghostty is also the only terminal Apple's built-in dictation will type into
+# (dictation ignores WezTerm entirely). Earlier trial 2026-08-18..26 ended
+# because dictation didn't get used enough to justify it.
 # Reference for every key: `ghostty +show-config --default --docs`.
 
 # font-family is deliberately unset: Ghostty ships JetBrains Mono built in
