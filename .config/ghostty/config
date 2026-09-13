@@ -41,30 +41,14 @@ title = " "
 macos-option-as-alt = left
 
 # --- Colors -----------------------------------------------------------------
-foreground = e6c9a8
-background = #000000
-# WezTerm's own defaults, not something wezterm.lua set: its 16-color XTerm
-# palette and green block cursor. Ghostty's stock palette is a muted
-# Tomorrow-Night-ish set, so without this block ls/git/nvim look different.
-# Delete the block to try Ghostty's defaults.
-cursor-color = #52ad70
-cursor-text = #000000
-palette = 0=#000000
-palette = 1=#cc5555
-palette = 2=#55cc55
-palette = 3=#cdcd55
-palette = 4=#5455cb
-palette = 5=#cc55cc
-palette = 6=#7acaca
-palette = 7=#cccccc
-palette = 8=#555555
-palette = 9=#ff5555
-palette = 10=#55ff55
-palette = 11=#ffff55
-palette = 12=#5555ff
-palette = 13=#ff55ff
-palette = 14=#55ffff
-palette = 15=#ffffff
+# Catppuccin, Ghostty-only: WezTerm keeps its own colors, zsh only names
+# palette slots, and nvim uses slate's 24-bit hexes (only its transparent
+# background shows the terminal's). Ghostty follows the macOS appearance
+# (System Settings > Appearance = Auto flips at sunset): Frappe by day,
+# Mocha at night. Known Ghostty bug: the titlebar-tabs bar doesn't repaint
+# on switch. Any explicit background/palette line here would override the
+# theme, so keep this block to just `theme`.
+theme = light:Catppuccin Frappe,dark:Catppuccin Mocha
 
 # --- Keys -------------------------------------------------------------------
 # Fullscreen. Hyper+F is a system-wide macOS shortcut (System Settings >
