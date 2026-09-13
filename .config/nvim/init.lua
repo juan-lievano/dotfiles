@@ -14,6 +14,13 @@ vim.opt.clipboard = "unnamedplus"
 vim.o.ignorecase = true
 vim.o.smartcase = true
 
+-- :grep uses ripgrep: recursive from the cwd, skips .gitignore'd files and
+-- hidden dirs, works with or without a git repo. --follow descends into
+-- symlinked dirs (e.g. ~/.config/nvim -> ~/dotfiles). --smart-case mirrors the
+-- ignorecase/smartcase settings above. Results land in the quickfix list.
+vim.o.grepprg = "rg --vimgrep --smart-case --follow"
+vim.o.grepformat = "%f:%l:%c:%m"
+
 -- one global statusline at the bottom instead of one per window
 -- (avoids duplicate bars between stacked splits, e.g. in leetcode.nvim)
 vim.opt.laststatus = 3
