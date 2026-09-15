@@ -21,8 +21,8 @@ Pictures live in `pictures/` in this repo, gitignored (big, in copyright);
 
 | what | where | does |
 |---|---|---|
-| `termbg` | here | resizes + frosts the image into `~/Pictures/terminal/current*.jpg`, runs `img2palette`, writes `~/.config/ghostty/themes/from-image`, clicks Ghostty > Reload Configuration |
-| `img2palette` | here | k-means the pixels (ImageMagick), maps clusters to the 16 ANSI slots by hue with a repulsion between hue families (`--repel`, `--tolerance`), lifts lightness so it reads on black; `--score` counts hue families; `--preview/--quantized/--remap` PNGs |
+| `termbg` | here | resizes + frosts the image into `~/Pictures/terminal/current*.jpg`, runs `img2palette`, writes `~/.config/ghostty/themes/from-image`, clicks Ghostty > Reload Configuration (~6 s) |
+| `img2palette` | here | k-means the pixels (ImageMagick), maps clusters to the 16 ANSI slots by hue with a repulsion between hue families (`--repel`, `--tolerance`), lifts lightness so it reads on black; `--score` counts hue families; `--debug` lists the picks; `--preview/--quantized/--remap PNG` diagnostics on request |
 | `termbg-daily` | here | one picture a day from `~/Pictures/terminal/daily/pool.txt` (pictures with ≥ 4 of Catppuccin's 8 hue families, `TERMBG_MIN`), shuffled so nothing repeats until all have run; `Library/LaunchAgents/com.jplk.termbg-daily.plist` runs it 05:00 + login |
 | Ghostty config | `.config/ghostty/config` | fixed lines `theme = from-image` and `background-image = ~/Pictures/terminal/current-frosted.jpg` |
 | nvim | `.config/nvim/colors/terminal.lua` | colorscheme that only names ANSI slots (no hexes, `termguicolors` off); plugins inherit via standard groups |

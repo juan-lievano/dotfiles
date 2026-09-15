@@ -66,7 +66,7 @@ next)
     ;;
 pick)
     img=$(match "${2:?usage: termbg-daily pick WORD}"); shift 2
-    TERMBG_QUICK=1 termbg "$img" "$@"   # no preview PNGs: ~6 s instead of ~20
+    termbg "$img" "$@"
     date +%F > "$state/last"   # counts as today's switch; tomorrow 05:00 moves on
     ;;
 retire)
