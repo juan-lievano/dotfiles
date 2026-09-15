@@ -19,6 +19,10 @@ background-blur = 92
 
 cursor-style-blink = false
 
+# Pointer disappears on the first keystroke, back on mouse move. WezTerm's
+# default; Ghostty defaults it off. No idle timeout exists in either.
+mouse-hide-while-typing = true
+
 # Bell off: the 🔔 tab glyph is hard-coded, the border is invisible from
 # another tab, and most rings are completion noise. Never missed it in WezTerm.
 bell-features = no-attention,no-title,no-border
