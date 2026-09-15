@@ -35,6 +35,26 @@ vim.keymap.set("n", "<leader>r", ":w <CR>:!python %<CR>")
 vim.keymap.set("n", "<leader>yf", ":%y<CR>", { desc = "Yank whole file" })
 vim.keymap.set("n", "<leader>pf", "ggVGp", { desc = "Replace whole file with clipboard" })
 
+-- Swallow every chord that includes Cmd. Ghostty forwards chords it has no
+-- binding for (accidental Ctrl+Alt+Cmd+3 and the like) over the kitty
+-- keyboard protocol, and nvim, with no mapping, types the key's name
+-- (<M-C-D-3>) into the buffer. Cmd means nothing inside nvim, so every
+-- modifier subset containing D- on every key becomes a no-op in all modes.
+do
+	local keys = {}
+	for c in ("abcdefghijklmnopqrstuvwxyz0123456789"):gmatch(".") do keys[#keys + 1] = c end
+	for c in ("`-=[]\\;',./"):gmatch(".") do keys[#keys + 1] = c end
+	for _, k in ipairs({ "Space", "Tab", "CR", "BS", "Esc", "Up", "Down", "Left", "Right",
+		"Home", "End", "PageUp", "PageDown", "Del", "Insert" }) do keys[#keys + 1] = k end
+	for i = 1, 12 do keys[#keys + 1] = "F" .. i end
+	local modes = { "i", "n", "v", "o", "c", "t" }
+	for _, mods in ipairs({ "D-", "C-D-", "M-D-", "S-D-", "M-C-D-", "C-S-D-", "M-S-D-", "M-C-S-D-" }) do
+		for _, k in ipairs(keys) do
+			vim.keymap.set(modes, "<" .. mods .. k .. ">", "<Nop>", { silent = true })
+		end
+	end
+end
+
 -- plugins
 vim.pack.add({
 	"https://github.com/echasnovski/mini.files",
