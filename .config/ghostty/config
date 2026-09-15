@@ -61,7 +61,8 @@ macos-option-as-alt = false
 # `termbg IMAGE` (~/.local/bin) writes themes/from-image from the image's
 # colors (img2palette: k-means, clusters mapped to ANSI slots by hue) and
 # drops the image at the fixed path below, so swapping the picture never
-# touches this file. A theme sets palette/fg/bg/cursor/selection at once;
+# touches this file. `termbg-daily` (LaunchAgent, 05:00 + login) runs it on
+# a different picture each day; `termbg-daily next` when today's is a dud. A theme sets palette/fg/bg/cursor/selection at once;
 # any of those keys written here would override it. nvim/zsh/ls name ANSI
 # slots only, so they follow whatever theme is loaded. Previous schemes:
 # Catppuccin Frappe/Mocha (9abd7ac), cream e6c9a8 on black (f8085c0).

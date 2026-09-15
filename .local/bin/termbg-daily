@@ -1,0 +1,104 @@
+#!/bin/sh
+# termbg-daily                       switch once per calendar day (no-op otherwise)
+# termbg-daily next [termbg options]  switch right now (today's didn't work)
+# termbg-daily pick WORD [options]    switch to the one pool picture matching WORD
+# termbg-daily retire WORD            never again: moves it into retired/ beside it
+# termbg-daily scan DIR...            score every picture in DIR into the pool
+# termbg-daily status                 what's up, what's left
+#
+# A different picture every day, from the pictures whose colors can carry a
+# palette (the pictures live in ~/dotfiles/pictures/, gitignored). `scan`
+# runs `img2palette --score` on each file and keeps the number of Catppuccin
+# hue families it holds; the rotation only draws from those with at least
+# $TERMBG_MIN (default 4) of the eight. Order is one shuffle of the whole
+# pool, so nothing repeats until every picture has had its day; a rescan
+# reshuffles. A deleted picture is skipped; `retire` also drops it from the
+# pool and the queue, and `scan` never looks inside a retired/ folder.
+#
+# State, all in ~/Pictures/terminal/daily/: pool.txt (families, path, full
+# score), queue.txt (what's left of the shuffle), last (date of the last
+# switch). ~/Library/LaunchAgents/com.jplk.termbg-daily.plist runs the
+# no-argument form at 05:00 and at login (launchd fires a missed 05:00 on
+# wake); it needs PATH to hold magick and img2palette, which the plist sets.
+set -eu
+
+state=$HOME/Pictures/terminal/daily
+min=${TERMBG_MIN:-4}
+mkdir -p "$state"
+
+pick() {
+    [ -s "$state/pool.txt" ] || { echo "no pool yet: termbg-daily scan DIR" >&2; exit 1; }
+    if [ ! -s "$state/queue.txt" ]; then
+        awk -F'\t' -v m="$min" '$1 >= m { print $2 }' "$state/pool.txt" |
+            awk 'BEGIN { srand() } { print rand() "\t" $0 }' | sort | cut -f2- \
+            > "$state/queue.txt"
+        [ -s "$state/queue.txt" ] || { echo "nothing in the pool has >= $min hue families" >&2; exit 1; }
+    fi
+    img=$(head -n 1 "$state/queue.txt")
+    tail -n +2 "$state/queue.txt" > "$state/queue.tmp" && mv "$state/queue.tmp" "$state/queue.txt"
+    if [ ! -f "$img" ]; then
+        echo "gone, skipping: $img" >&2
+        pick "$@"
+        return
+    fi
+    echo "$(date '+%F %R')  $img"
+    termbg "$img" "$@"
+    date +%F > "$state/last"
+}
+
+match() {  # match WORD -> the one pool path containing WORD (case-insensitive)
+    hits=$(cut -f2 "$state/pool.txt" | grep -i -- "$1" || true)
+    case $(printf '%s\n' "$hits" | grep -c .) in
+    0) echo "nothing in the pool matches '$1'" >&2; exit 1 ;;
+    1) printf '%s\n' "$hits" ;;
+    *) printf '%s\n' "$hits" | sed 's|.*/||' >&2; echo "-- '$1' matches all of these; be more specific" >&2; exit 1 ;;
+    esac
+}
+
+case ${1:-} in
+"")
+    [ "$(cat "$state/last" 2>/dev/null)" = "$(date +%F)" ] && exit 0
+    pick
+    ;;
+next)
+    shift
+    pick "$@"
+    ;;
+pick)
+    img=$(match "${2:?usage: termbg-daily pick WORD}"); shift 2
+    TERMBG_QUICK=1 termbg "$img" "$@"   # no preview PNGs: ~6 s instead of ~20
+    date +%F > "$state/last"   # counts as today's switch; tomorrow 05:00 moves on
+    ;;
+retire)
+    img=$(match "${2:?usage: termbg-daily retire WORD}")
+    mkdir -p "$(dirname "$img")/retired"
+    mv "$img" "$(dirname "$img")/retired/"
+    grep -vF "	$img	" "$state/pool.txt" > "$state/pool.tmp" && mv "$state/pool.tmp" "$state/pool.txt"
+    [ -f "$state/queue.txt" ] && { grep -vxF "$img" "$state/queue.txt" > "$state/queue.tmp"; mv "$state/queue.tmp" "$state/queue.txt"; }
+    echo "retired: $img -> retired/"
+    ;;
+scan)
+    shift
+    [ $# -gt 0 ] || { echo "usage: termbg-daily scan DIR..." >&2; exit 2; }
+    for d in "$@"; do (cd "$d" && pwd); done |
+        xargs -I{} find {} -name retired -prune -o -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' \) -print0 |
+        xargs -0 -P 8 -n 1 sh -c 'printf "%s\t%s\n" "$(img2palette "$0" --score)" "$0"' |
+        awk -F'\t' '{ n = $1; sub(/^families=/, "", n); sub(/ .*/, "", n); print n "\t" $2 "\t" $1 }' |
+        sort -t "$(printf '\t')" -k1,1rn -k2,2 > "$state/pool.txt"
+    rm -f "$state/queue.txt"
+    echo "$(wc -l < "$state/pool.txt" | tr -d ' ') pictures scored into $state/pool.txt"
+    awk -F'\t' '{ c[$1]++ } END { for (k in c) printf "  %s families: %d\n", k, c[k] }' "$state/pool.txt" | sort -rn
+    echo "$(awk -F'\t' -v m="$min" '$1 >= m' "$state/pool.txt" | wc -l | tr -d ' ') in rotation (>= $min; TERMBG_MIN to change)"
+    ;;
+status)
+    left=0; [ -f "$state/queue.txt" ] && left=$(wc -l < "$state/queue.txt" | tr -d ' ')
+    pool=0; [ -f "$state/pool.txt" ] && pool=$(awk -F'\t' -v m="$min" '$1 >= m' "$state/pool.txt" | wc -l | tr -d ' ')
+    echo "current : $(cat "$HOME/Pictures/terminal/current.txt" 2>/dev/null || echo none)"
+    echo "switched: $(cat "$state/last" 2>/dev/null || echo never)"
+    echo "queue   : $left left of $pool eligible (>= $min families)"
+    ;;
+*)
+    sed -n '2,5p' "$0" >&2
+    exit 2
+    ;;
+esac

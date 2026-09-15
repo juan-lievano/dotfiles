@@ -9,15 +9,24 @@ How the colors are picked
   1. `magick -kmeans` clusters the pixels in CIELAB into --clusters groups.
   2. Each cluster goes to OKLCH (perceptual lightness L, chroma C, hue h).
   3. The twelve chromatic ANSI slots (1-6, 9-14) each take the cluster that
-     best matches that slot's Catppuccin color (Mocha, or Latte with --light):
-     one min-cost assignment, so the orange cloud can be "bright red" and
-     brown "yellow". A slot with nothing close keeps Catppuccin's own color
-     (flagged in the header). Slots are NOT ordered by value: ls/git/nvim
-     assume 1 means red and 2 means green, so hue is the only ordering that
-     keeps them readable.
+     best matches that slot's Catppuccin color (Mocha, or Latte with --light),
+     so the orange cloud can be "bright red" and brown "yellow". Cost is
+     mostly hue distance; a cluster further than --tolerance degrees is
+     never taken. Slots are NOT ordered by value: ls/git/nvim assume 1 means
+     red and 2 means green, so hue is the only ordering that keeps them
+     readable. Picks go cheapest first; once a hue family (red+bright red,
+     blue+bright blue, ...) has taken a hue, clusters within --repel degrees
+     of it cost extra for every OTHER family, so a sky can't be blue, cyan,
+     bright blue and bright cyan at once (--repel 0: plain min-cost
+     assignment, no such rule).
+     A slot with no cluster in reach: if its partner in the family found one,
+     it reuses that hue at Catppuccin's lightness ("derived"); otherwise it
+     keeps Catppuccin's own color ("synthesized"). Both flagged in the header.
   4. Each slot keeps the cluster's hue and Catppuccin's lightness; chroma may
      run up to 1.6x Catppuccin's. Floor: L >= 0.80 - C/2, so text reads over
      a faint background image whose light regions composite to mid grey.
+     Two slots that still land within a hair of each other are pushed apart
+     in lightness.
   5. Greys: bg is the cluster nearest Catppuccin's base, set to its
      lightness (or --bg); fg the lightest low-chroma
      one; 0/8 lift the bg, 7/15 sit under fg; all tinted toward the image's
@@ -28,11 +37,17 @@ Options
                    Catppuccin's base, at that base's lightness)
   --fg HEX         force the foreground
   --clusters N     k for k-means (default 32; more finds smaller vivid areas)
+  --repel DEG      hue exclusion between families (default 25; 0 disables)
+  --tolerance DEG  max hue distance a slot accepts (default 64; muted and
+                   tiny clusters pay extra, so their reach is shorter)
   --light          light theme: greys flip, chroma slots land at L 0.42-0.58
   --preview PNG    also write a swatch sheet with sample text
   --quantized PNG  the image reduced to its --clusters colors (the k-means
                    result itself, i.e. GIF-style palette compression)
   --remap PNG      the image repainted with only the 16 terminal colors + bg/fg
+  --score          instead of a theme, print how many of Catppuccin's eight
+                   hue families the image holds (a cluster with chroma and
+                   >= 0.5% of pixels within 30 degrees), and each one's share
   --debug          print which cluster each slot took, and why, to stderr
 """
 import argparse
@@ -135,11 +150,14 @@ def clusters(path, k):
 #
 # Catppuccin is the reference: it already encodes what each ANSI slot should
 # look like (hue, lightness, chroma). Each chromatic slot takes the image
-# cluster that best matches its Catppuccin color, as one min-cost assignment
-# (Hungarian), so twelve slots get twelve different clusters: the orange
-# cloud lands on bright red, brown on yellow, and so on. The result keeps
-# the cluster's hue and Catppuccin's lightness; chroma may run hotter than
-# Catppuccin's so accents stay "out there" while fg stays neutral.
+# cluster that best matches its Catppuccin color: the orange cloud lands on
+# bright red, brown on yellow, and so on. Twelve different clusters is not
+# twelve different colors, though -- a painting with one sky gives k-means
+# several clusters at the same hue -- so picks are greedy, cheapest first,
+# and each pick makes that hue expensive for the other families (MMR-style
+# repulsion; --repel 0 falls back to one Hungarian assignment). The result
+# keeps the cluster's hue and Catppuccin's lightness; chroma may run hotter
+# than Catppuccin's so accents stay "out there" while fg stays neutral.
 
 REF = {  # Mocha for dark, Latte for light; slots 1-6 and 9-14
     "dark": {1: "#f38ba8", 2: "#a6e3a1", 3: "#f9e2af", 4: "#89b4fa", 5: "#f5c2e7",
@@ -157,7 +175,12 @@ MIN_CHROMA = 0.045     # below this a cluster counts as grey
 # Catppuccin's bright red is pinker than its red; nvim uses 9 for numbers
 # (Catppuccin's peach), so pull that slot's target toward orange.
 HUE_BIAS = {9: 35, 1: -5}
-SYNTH_COST = 1.6       # a slot with no cluster this close keeps Catppuccin's color
+FAMILY = {s: s % 8 for s in NAMES}   # 1 and 9 are both "red", etc.
+# --score: Catppuccin Mocha's accent hues (peach and mauve have no slot of
+# their own but are what bright red / magenta tend to become).
+FAMILIES = [("red", "#f38ba8"), ("peach", "#fab387"), ("yellow", "#f9e2af"),
+            ("green", "#a6e3a1"), ("cyan", "#94e2d5"), ("blue", "#89b4fa"),
+            ("mauve", "#cba6f7"), ("pink", "#f5c2e7")]
 
 
 def hungarian(cost):
@@ -201,12 +224,46 @@ def hungarian(cost):
     return out
 
 
-def assign(cl, light=False):
+def greedy(cost, slots, cands, repel, fallback):
+    """Cheapest (slot, cluster) pair first. After each pick, every cluster
+    within `repel` degrees of the picked hue gets dearer for slots of the
+    other families -- up to 2x the fallback cost at zero distance, so an
+    identical hue always loses to the fallback. Returns col per row like
+    hungarian(); columns >= len(cands) mean "no cluster"."""
+    n = len(cands)
+    cost = [row[:] for row in cost]
+    col, taken = [None] * len(slots), set()
+    while None in col:
+        best = None
+        for i, s in enumerate(slots):
+            if col[i] is not None:
+                continue
+            for j in range(n):
+                if j not in taken and (best is None or cost[i][j] < best[0]):
+                    best = (cost[i][j], i, j)
+            if best is None or fallback < best[0]:
+                best = (fallback, i, n)
+        _, i, j = best
+        col[i] = j
+        if j < n:
+            taken.add(j)
+            for i2, s2 in enumerate(slots):
+                if FAMILY[s2] == FAMILY[slots[i]]:
+                    continue
+                for j2 in range(n):
+                    d = hue_dist(cands[j2]["h"], cands[j]["h"])
+                    cost[i2][j2] += 2 * fallback * max(0.0, 1 - d / repel)
+    return col
+
+
+def assign(cl, light=False, repel=25, tolerance=64):
     ref = {s: hex_to_lch(h) for s, h in REF["light" if light else "dark"].items()}
     slots = sorted(ref)
     cands = [c for c in cl if c["C"] >= MIN_CHROMA]
-    # cost: hue distance dominates; a weak-chroma or tiny cluster costs extra.
-    # Columns beyond the candidates are "keep Catppuccin's color" fallbacks.
+    # cost: hue distance dominates (1.0 per 40 degrees); a weak-chroma or tiny
+    # cluster costs extra. A slot pays `fallback` to take no cluster at all,
+    # so nothing further than --tolerance is ever picked.
+    fallback = tolerance / 40
     cost = []
     for s in slots:
         L, C, h = ref[s]
@@ -216,9 +273,11 @@ def assign(cl, light=False):
             row.append(hue_dist(c["h"], h) / 40
                        + 0.6 * max(0.0, 0.09 - c["C"]) / 0.05
                        + 0.15 * max(0.0, 1 - c["share"] / 0.03))
-        row += [SYNTH_COST] * len(slots)
         cost.append(row)
-    col = hungarian(cost)
+    if repel > 0:
+        col = greedy(cost, slots, cands, repel, fallback)
+    else:
+        col = hungarian([row + [fallback] * len(slots) for row in cost])
     picked, synth, debug = {}, [], []
     for s, j in zip(slots, col):
         L, C, h = ref[s]
@@ -226,14 +285,31 @@ def assign(cl, light=False):
             c = cands[j]
             picked[s] = dict(L=L, C=min(max(c["C"], C * 0.9), C * 1.6), h=c["h"], share=c["share"])
             debug.append(f"{s:>2} {NAMES[s]:<15} cluster L={c['L']:.2f} C={c['C']:.3f} h={c['h']:4.0f} share={c['share']*100:4.1f}%  hue-dist={hue_dist(c['h'], (h + HUE_BIAS.get(s, 0)) % 360):3.0f}  cost={cost[slots.index(s)][j]:.2f}")
+    # no cluster in reach: borrow the family partner's hue (an olive green
+    # wants an olive bright green, not Catppuccin's mint), else Catppuccin's.
+    for s in slots:
+        if s in picked:
+            continue
+        L, C, h = ref[s]
+        partner = s + 8 if s < 8 else s - 8
+        if partner in picked and picked[partner]["share"]:
+            p = picked[partner]
+            picked[s] = dict(L=L, C=min(max(p["C"], C * 0.9), C * 1.6), h=p["h"], share=0)
+            synth.append(f"{NAMES[s]} (from {NAMES[partner]})")
+            debug.append(f"{s:>2} {NAMES[s]:<15} derived from {NAMES[partner]}'s hue")
         else:
             picked[s] = dict(L=L, C=C, h=h, share=0)
             synth.append(NAMES[s])
             debug.append(f"{s:>2} {NAMES[s]:<15} synthesized (Catppuccin's own)")
-    # distinctness: two picks from neighbouring clusters can land within a
-    # hair of each other; push the later one's lightness apart.
+    return picked, synth, debug
+
+
+def spread(picked):
+    """Two slots within a hair of each other (same hue, similar lightness):
+    push the later one's lightness apart. Runs after the legibility floor,
+    which would otherwise fold nudged pairs back together."""
     done = []
-    for s in slots:
+    for s in sorted(picked):
         c = picked[s]
         for o in done:
             a1, b1 = _ab(c["C"], c["h"])
@@ -242,11 +318,23 @@ def assign(cl, light=False):
                 c["L"] += 0.08 if c["L"] < 0.84 else -0.08
                 c["C"] *= 1.25
         done.append(c)
-    return picked, synth, debug
 
 
-def build(cl, bg=None, fg=None, light=False, debug=False):
-    picked, synth, dbg = assign(cl, light)
+def score(cl):
+    """Which of Catppuccin's hue families the image holds, and how much."""
+    out = {}
+    for name, hx in FAMILIES:
+        h = hex_to_lch(hx)[2]
+        out[name] = max((c["share"] for c in cl
+                         if c["C"] >= MIN_CHROMA and hue_dist(c["h"], h) <= 30), default=0.0)
+    families = sum(v >= 0.005 for v in out.values())
+    chromatic = sum(c["share"] for c in cl if c["C"] >= MIN_CHROMA)
+    return f"families={families} chromatic={chromatic*100:.0f}% " + \
+        " ".join(f"{k}={v*100:.1f}" for k, v in out.items())
+
+
+def build(cl, bg=None, fg=None, light=False, debug=False, repel=25, tolerance=64):
+    picked, synth, dbg = assign(cl, light, repel, tolerance)
     if debug:
         sys.stderr.write("\n".join(dbg) + "\n")
     weighted = sorted(cl, key=lambda c: -c["share"])
@@ -271,12 +359,12 @@ def build(cl, bg=None, fg=None, light=False, debug=False):
         fgC, fgh = min(f["C"], 0.04), f["h"]
 
     sign = -1 if light else 1
-    pal = {}
-    for slot, c in picked.items():
+    for c in picked.values():
         # legibility over a faint background image, whose light regions
         # composite to mid grey: vivid colors may sit lower than muted ones.
-        L = max(c["L"], 0.80 - c["C"] / 2) if not light else min(c["L"], 0.55)
-        pal[slot] = lch_to_hex(L, c["C"], c["h"])
+        c["L"] = max(c["L"], 0.80 - c["C"] / 2) if not light else min(c["L"], 0.55)
+    spread(picked)
+    pal = {s: lch_to_hex(c["L"], c["C"], c["h"]) for s, c in picked.items()}
     # 0/8 (comments, selection) need a floor: +0.24 over pure black is mud.
     g0, g8 = (min(bgL - 0.14, 0.72), min(bgL - 0.26, 0.58)) if light else \
              (max(bgL + 0.14, 0.36), max(bgL + 0.24, 0.64))
@@ -302,7 +390,7 @@ def build(cl, bg=None, fg=None, light=False, debug=False):
 def render(pal, theme, synth, src):
     lines = [f"# generated by img2palette from {src}"]
     if synth:
-        lines.append("# synthesized (no such hue in the image): " + ", ".join(synth))
+        lines.append("# not from a cluster of their own: " + ", ".join(synth))
     lines += [f"palette = {i}={pal[i]}" for i in range(16)]
     lines += [f"{k} = {v}" for k, v in theme.items()]
     return "\n".join(lines) + "\n"
@@ -351,14 +439,20 @@ def main():
     ap.add_argument("--bg")
     ap.add_argument("--fg")
     ap.add_argument("--clusters", type=int, default=32)
+    ap.add_argument("--repel", type=float, default=25, metavar="DEG")
+    ap.add_argument("--tolerance", type=float, default=64, metavar="DEG")
     ap.add_argument("--light", action="store_true")
     ap.add_argument("--preview", metavar="PNG")
     ap.add_argument("--quantized", metavar="PNG")
     ap.add_argument("--remap", metavar="PNG")
+    ap.add_argument("--score", action="store_true", help="print hue-family coverage instead of a theme")
     ap.add_argument("--debug", action="store_true", help="print the slot assignment to stderr")
     a = ap.parse_args()
     cl = clusters(a.image, a.clusters)
-    pal, theme, synth = build(cl, a.bg, a.fg, a.light, a.debug)
+    if a.score:
+        print(score(cl))
+        return
+    pal, theme, synth = build(cl, a.bg, a.fg, a.light, a.debug, a.repel, a.tolerance)
     sys.stdout.write(render(pal, theme, synth, a.image))
     if a.preview:
         preview(pal, theme, a.preview)

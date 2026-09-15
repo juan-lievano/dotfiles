@@ -30,7 +30,15 @@ link .config/aerc/aerc.conf   # files, not the dir: accounts.conf (secrets) live
 link .config/aerc/binds.conf
 link .local/bin/img2palette  # terminal palette from an image; needs magick
 link .local/bin/termbg       # image -> Ghostty background + palette, via img2palette
+link .local/bin/termbg-daily # a different picture every day (pool: termbg-daily scan DIR)
+link .local/bin/termbg-tour  # flip through the pool, a few seconds each
 link .w3m/keymap              # file, not dir: ~/.w3m also holds cookies/history
+
+# daily picture switch, 05:00 + login. A symlinked plist is fine for a gui/
+# agent (daemons are the ones that must be real root-owned files).
+link Library/LaunchAgents/com.jplk.termbg-daily.plist
+launchctl bootout "gui/$(id -u)/com.jplk.termbg-daily" 2>/dev/null || true
+launchctl bootstrap "gui/$(id -u)" "$HOME/Library/LaunchAgents/com.jplk.termbg-daily.plist"
 
 # Claude Code: files, not the dir — ~/.claude is mostly runtime state
 # (sessions/, history.jsonl, caches, logs) that must not be tracked.

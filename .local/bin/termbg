@@ -32,15 +32,21 @@ magick "$dir/current.jpg" -blur 0x14 -gamma "$g" "$dir/current-frosted.jpg"
 printf '%s\n' "$(cd "$(dirname "$img")" && pwd)/$(basename "$img")" > "$dir/current.txt"
 
 # quantized.png: the image in its 32 k-means colors (GIF-style compression);
-# remap.png: the image painted with only the 16 terminal colors.
-img2palette "$dir/current.jpg" --preview "$dir/preview.png" \
-    --quantized "$dir/quantized.png" --remap "$dir/remap.png" "$@" \
-    > "$themes/from-image"
+# remap.png: the image painted with only the 16 terminal colors. The three
+# PNGs are ~13 s of the ~20 s a switch takes (two more k-means runs at
+# 1024px); TERMBG_QUICK=1 (termbg-tour) skips them.
+if [ -n "${TERMBG_QUICK:-}" ]; then
+    img2palette "$dir/current.jpg" "$@" > "$themes/from-image"
+else
+    img2palette "$dir/current.jpg" --preview "$dir/preview.png" \
+        --quantized "$dir/quantized.png" --remap "$dir/remap.png" "$@" \
+        > "$themes/from-image"
+fi
 
 grep '^#' "$themes/from-image"
 echo "background : $dir/current-frosted.jpg"
 echo "theme      : $themes/from-image"
-echo "preview    : $dir/preview.png  (+ quantized.png, remap.png)"
+[ -n "${TERMBG_QUICK:-}" ] || echo "preview    : $dir/preview.png  (+ quantized.png, remap.png)"
 echo "showcase   : v ${DOTFILES_DIR:-$HOME/dotfiles}/samples/palette.py  (and palette.md)"
 
 if osascript -e 'tell application "System Events" to tell process "Ghostty" to click menu item "Reload Configuration" of menu "Ghostty" of menu bar 1' >/dev/null 2>&1; then
