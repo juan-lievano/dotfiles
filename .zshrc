@@ -75,7 +75,10 @@ export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --strip-cwd-prefix \
   --exclude .DS_Store'
 
 # Appearance + previews. cat/ls previews need no extra tools (no bat required).
+# --color=16: fzf's default 'dark' scheme is 256-color and ignores the terminal
+# palette; the 16-color base follows it (termbg / themes/from-image).
 export FZF_DEFAULT_OPTS="
+  --color=16
   --height 60%
   --layout=reverse
   --border

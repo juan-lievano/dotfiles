@@ -14,8 +14,12 @@ font-size = 15
 # Both terminals feed the blur number to the same private CoreGraphics call,
 # so 92 means the same thing here. Ghostty's docs warn >20 "may cause strange
 # rendering" -- if it does, drop toward 20.
-background-opacity = 0.90
-background-blur = 92
+# Used fullscreen ~always: there the only thing behind the window is the
+# Space's wallpaper, so transparency just leaks it (dark) into the terminal
+# and dims the painting. Keep this near 1; the frosted painting below is
+# what makes it look like glass. Blur only matters in a windowed layout.
+background-opacity = 0.95
+background-blur = 200
 
 cursor-style-blink = false
 
@@ -44,18 +48,34 @@ macos-window-buttons = hidden
 # an empty value resets to the program name.
 title = " "
 
-# WezTerm: left Option = Alt (ESC prefix), right Option composes (∫ ø etc.).
-macos-option-as-alt = left
+# Both Options compose dead keys (Opt-e then a vowel -> á), same as
+# wezterm.lua's send_composed_key_when_left_alt_is_pressed. Right Option is
+# eaten by kanata's launch layer and the home-row Option under `d` is Left,
+# so Left is the one that must compose. Nothing here uses Option as Meta
+# (zsh is in vi mode; delete-word is ^W). Must be explicit: unset defaults
+# to `true` on U.S. layouts. Combos with no printable result (Opt-Ctrl-a)
+# still reach the terminal as Alt regardless.
+macos-option-as-alt = false
 
 # --- Colors -----------------------------------------------------------------
-# Catppuccin, Ghostty-only: WezTerm keeps its own colors, zsh only names
-# palette slots, and nvim uses slate's 24-bit hexes (only its transparent
-# background shows the terminal's). Ghostty follows the macOS appearance
-# (System Settings > Appearance = Auto flips at sunset): Frappe by day,
-# Mocha at night. Known Ghostty bug: the titlebar-tabs bar doesn't repaint
-# on switch. Any explicit background/palette line here would override the
-# theme, so keep this block to just `theme`.
-theme = light:Catppuccin Frappe,dark:Catppuccin Mocha
+# `termbg IMAGE` (~/.local/bin) writes themes/from-image from the image's
+# colors (img2palette: k-means, clusters mapped to ANSI slots by hue) and
+# drops the image at the fixed path below, so swapping the picture never
+# touches this file. A theme sets palette/fg/bg/cursor/selection at once;
+# any of those keys written here would override it. nvim/zsh/ls name ANSI
+# slots only, so they follow whatever theme is loaded. Previous schemes:
+# Catppuccin Frappe/Mocha (9abd7ac), cream e6c9a8 on black (f8085c0).
+theme = from-image
+
+# Used fullscreen ~always. Opacity is relative to background-opacity
+# (0.95 * 0.35 = ~0.33 on screen). `cover` fills the window, cropping edges.
+# Ghostty 1.2+ draws it per split, not per window. current-frosted.jpg is
+# the image through `magick -blur 0x14` (background-blur only frosts what is
+# behind the window, never the image). Not in the repo: pictures are big
+# and often in copyright; current.txt beside it records the source.
+background-image = ~/Pictures/terminal/current-frosted.jpg
+background-image-opacity = 0.35
+background-image-fit = cover
 
 # --- Keys -------------------------------------------------------------------
 # Fullscreen. Hyper+F is a system-wide macOS shortcut (System Settings >

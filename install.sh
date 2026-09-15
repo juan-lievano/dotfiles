@@ -28,6 +28,8 @@ link .config/ghostty
 link .config/qalculate
 link .config/aerc/aerc.conf   # files, not the dir: accounts.conf (secrets) lives beside them
 link .config/aerc/binds.conf
+link .local/bin/img2palette  # terminal palette from an image; needs magick
+link .local/bin/termbg       # image -> Ghostty background + palette, via img2palette
 link .w3m/keymap              # file, not dir: ~/.w3m also holds cookies/history
 
 # Claude Code: files, not the dir — ~/.claude is mostly runtime state

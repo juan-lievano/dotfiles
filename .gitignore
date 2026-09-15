@@ -15,3 +15,6 @@
 # repo should be a PDF.
 *.pdf
 zsa_voyager_*_source/
+
+# Python bytecode from importing the scripts in .local/bin
+__pycache__/

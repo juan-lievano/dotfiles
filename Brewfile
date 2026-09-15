@@ -6,6 +6,7 @@
 brew "neovim"
 brew "fd"
 brew "fzf"
+brew "imagemagick"                  # termbg / img2palette (terminal palette + background from an image)
 brew "pyright"
 brew "lua-language-server"
 brew "texlab"                       # LaTeX language server (completion/diagnostics)
@@ -28,7 +29,7 @@ cask "codex"
 cask "mactex-no-gui"
 
 # --- Reinstall-on-demand (intentionally omitted; zero usage in shell history) ---
-# ffmpeg, imagemagick, glow, qalculate-qt, mouseless, rbenv, opencode, pandoc,
+# ffmpeg, glow, qalculate-qt, mouseless, rbenv, opencode, pandoc,
 # font-atkinson-hyperlegible
 #
 # --- Not via brew ---

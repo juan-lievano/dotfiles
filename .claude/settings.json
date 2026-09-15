@@ -8,7 +8,7 @@
       "~/.config/"
     ]
   },
-  "model": "fable",
+  "model": "opus",
   "statusLine": {
     "type": "command",
     "command": "sh ~/.claude/statusline-command.sh",
@@ -19,6 +19,7 @@
     "pyright-lsp@claude-plugins-official": true
   },
   "feedbackDrafts": "off",
+  "tui": "default",
   "theme": "auto",
   "editorMode": "vim",
   "preferredNotifChannel": "notifications_disabled",

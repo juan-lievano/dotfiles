@@ -1,0 +1,50 @@
+#!/bin/sh
+# termbg IMAGE [img2palette options]
+#
+# Make IMAGE the terminal's faint background and its colors the terminal's
+# palette. Nothing in any config changes: Ghostty always loads
+# ~/Pictures/terminal/current-frosted.jpg and the theme `from-image`, nvim/zsh/ls
+# only ever name ANSI slots, and this script rewrites what those two files hold.
+#
+#   termbg ~/Downloads/painting.jpg            bg + palette from the image
+#   termbg photo.png --bg 000000 --fg e6c9a8   extra args go to img2palette
+#
+# Ends by clicking Ghostty > Reload Configuration through System Events,
+# which needs Ghostty in System Settings > Privacy & Security > Accessibility
+# (one-time). Without it, the files are still written; Cmd-Shift-, reloads.
+set -eu
+
+img=${1:?usage: termbg IMAGE [img2palette options]}; shift
+dir=$HOME/Pictures/terminal
+themes=$HOME/.config/ghostty/themes
+mkdir -p "$dir" "$themes"
+
+# Ghostty reads only PNG/JPEG and keeps every copy in VRAM: cap at 2560px.
+magick "$img" -auto-orient -strip -resize '2560x2560>' -quality 92 "$dir/current.jpg"
+# background-blur can't touch the image (it frosts what's behind the window),
+# so the frosting is baked in here. 0x14 on a 2560px image: shapes, no edges.
+# Mean brightness is normalized (gamma) so every picture lands at the same
+# felt opacity: La Fortune measured 0.46 when the opacity was tuned; 0.50 a
+# smidge brighter than that.
+# A dark painting is lifted, a pale one pulled down; hues are untouched.
+g=$(magick "$dir/current.jpg" -blur 0x14 -colorspace gray -format '%[fx:ln(mean)/ln(0.50)]' info:)
+magick "$dir/current.jpg" -blur 0x14 -gamma "$g" "$dir/current-frosted.jpg"
+printf '%s\n' "$(cd "$(dirname "$img")" && pwd)/$(basename "$img")" > "$dir/current.txt"
+
+# quantized.png: the image in its 32 k-means colors (GIF-style compression);
+# remap.png: the image painted with only the 16 terminal colors.
+img2palette "$dir/current.jpg" --preview "$dir/preview.png" \
+    --quantized "$dir/quantized.png" --remap "$dir/remap.png" "$@" \
+    > "$themes/from-image"
+
+grep '^#' "$themes/from-image"
+echo "background : $dir/current-frosted.jpg"
+echo "theme      : $themes/from-image"
+echo "preview    : $dir/preview.png  (+ quantized.png, remap.png)"
+echo "showcase   : v ${DOTFILES_DIR:-$HOME/dotfiles}/samples/palette.py  (and palette.md)"
+
+if osascript -e 'tell application "System Events" to tell process "Ghostty" to click menu item "Reload Configuration" of menu "Ghostty" of menu bar 1' >/dev/null 2>&1; then
+    echo "Ghostty reloaded. Running nvim instances follow the terminal."
+else
+    echo "Ghostty: Cmd-Shift-, to reload (grant Ghostty Accessibility to automate this)."
+fi

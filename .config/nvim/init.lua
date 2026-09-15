@@ -180,77 +180,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
 -- make splash screen (home screen) be just blank
 vim.opt.shortmess:append("I")
 
-vim.opt.termguicolors = true
-vim.cmd("colorscheme slate")
-
--- better colors for mini.pick window
--- colorful + slate-friendly, pink & peach, no gray
-vim.api.nvim_set_hl(0, "MiniPickNormal", { fg = "#FFD7BA", bg = "NONE" })                       -- peach text on dark background
-vim.api.nvim_set_hl(0, "MiniPickBorder", { fg = "#FF6F91", bg = "NONE" })                       -- vibrant pink-red border
-vim.api.nvim_set_hl(0, "MiniPickPrompt", { fg = "#FFB347", bg = "NONE", bold = true })          -- peach-orange prompt
--- vim.api.nvim_set_hl(0, "MiniPickMatch",   { fg = "#FF85A1", italic = true, underline = true }) -- rosy highlight for matches
-vim.api.nvim_set_hl(0, "MiniPickMatchCurrent", { fg = "#000000", bg = "#FFB6A0", bold = true }) -- dark text on soft peach stripe
-
---- floating window (like minipick)
-vim.api.nvim_set_hl(0, "NormalFloat", { bg = "None", fg = "#ffd7ba" }) -- peach text on warm dark bg
-vim.api.nvim_set_hl(0, "FloatBorder", { bg = "None", fg = "#ff6f91" }) -- pink border
-
--- tabline (matches wezterm tab colors: peach-tan active, gray inactive)
-vim.api.nvim_set_hl(0, "TabLine", { fg = "#888888", bg = "NONE" })                  -- inactive tab
-vim.api.nvim_set_hl(0, "TabLineSel", { fg = "#e6c9a8", bg = "NONE", bold = true })  -- active tab
-vim.api.nvim_set_hl(0, "TabLineFill", { bg = "NONE" })                              -- empty fill
-
--- line numbers
-vim.api.nvim_set_hl(0, "LineNr", { fg = "#ffd7ba" })                    -- regular line numbers
-vim.api.nvim_set_hl(0, "CursorLineNr", { fg = "#ffb347", bold = true }) -- current line number
-
--- Pmenu stuff (the stuff for autocomplete words and maybe other things)
-vim.api.nvim_set_hl(0, "Pmenu", { bg = "#3b322e", fg = "#f0e6df" })                 -- very muted earthy peach background
-vim.api.nvim_set_hl(0, "PmenuSel", { bg = "#f4b183", fg = "#1c1c1c", bold = true }) -- strong peach selection
-
-vim.api.nvim_set_hl(0, "PmenuKind", { fg = "#a0c4ff", bg = "NONE" })                -- pastel blue accent
-vim.api.nvim_set_hl(0, "PmenuKindSel", { fg = "#ffffff", bg = "#a0c4ff", bold = true })
-
-vim.api.nvim_set_hl(0, "PmenuExtra", { fg = "#caffbf", bg = "NONE" }) -- pastel green accent
-vim.api.nvim_set_hl(0, "PmenuExtraSel", { fg = "#1c1c1c", bg = "#caffbf", bold = true })
-
-vim.api.nvim_set_hl(0, "PmenuSbar", { bg = "#463a34" })               -- darker muted peach for scrollbar track
-vim.api.nvim_set_hl(0, "PmenuThumb", { bg = "#ffd6a5" })              -- soft pastel peach thumb
-
-vim.api.nvim_set_hl(0, "PmenuMatch", { fg = "#eab676", bold = true }) -- amber highlight
-vim.api.nvim_set_hl(0, "PmenuMatchSel", { fg = "#1c1c1c", bg = "#eab676", bold = true })
-
--- Transparent sign column
-vim.api.nvim_set_hl(0, "SignColumn", { bg = "NONE" })
-
--- Transparent diagnostic signs
-vim.api.nvim_set_hl(0, "DiagnosticSignError", { bg = "NONE" })
-vim.api.nvim_set_hl(0, "DiagnosticSignWarn", { bg = "NONE" })
-vim.api.nvim_set_hl(0, "DiagnosticSignInfo", { bg = "NONE" })
-vim.api.nvim_set_hl(0, "DiagnosticSignHint", { bg = "NONE" })
-
---change comments color (slate is too gray and hard to read)
-
-vim.api.nvim_set_hl(0, "Comment", { fg = "#aaaaaa", italic = true })
--- vim.cmd(":hi statusline guibg=#000000, guifg=#00FFFF")
--- vim.cmd(":hi statuslineNC guibg=#FFFFFF, guifg=#999999")
-
--- make active/inactive statuslines nicer
-vim.api.nvim_set_hl(0, "StatusLine", { fg = "#FFFFFF", bg = "NONE" })
-vim.api.nvim_set_hl(0, "StatusLineNC", { fg = "#aaaaaa", bg = "NONE" })
-
--- fix the split divider color
-vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#555555", bg = "NONE" })
-
--- changing color scheme on the qf list to be nicer
-vim.api.nvim_set_hl(0, 'qfFileName', { link = 'Identifier' }) -- Usually a softer blue/cyan
-vim.api.nvim_set_hl(0, 'qfError', { link = 'WarningMsg' })    -- Usually orange/yellow, less harsh than Error
-
-vim.opt.termguicolors = true
--- vim.cmd("highlight Normal guibg=none guifg=none") --this might be making it so that kws like False aren't propery colorized
-vim.cmd("highlight Normal guibg=none")
--- Makes the Visual and VisualMode banner below not an annoying yellow
-vim.api.nvim_set_hl(0, "ModeMsg", { fg = "#ffffff", bg = "None", bold = true })
+-- colors/terminal.lua names ANSI slots only (no hexes, notermguicolors), so
+-- nvim, mini.pick, ls and the zsh prompt all draw from the one palette
+-- Ghostty holds (themes/from-image, written by `termbg IMAGE`). Was: slate +
+-- ~30 hex overrides (see git history before 2026-09-15).
+vim.cmd("colorscheme terminal")
 
 -- dictionary and spelling stuff
 -- vim.opt.spell = true
