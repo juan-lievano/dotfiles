@@ -19,7 +19,7 @@
     "pyright-lsp@claude-plugins-official": true
   },
   "feedbackDrafts": "off",
-  "tui": "default",
+  "tui": "fullscreen",
   "theme": "auto",
   "editorMode": "vim",
   "preferredNotifChannel": "notifications_disabled",
