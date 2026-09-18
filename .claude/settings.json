@@ -8,6 +8,10 @@
       "~/.config/"
     ]
   },
+  "env": {
+    "DISABLE_TELEMETRY": "1",
+    "DISABLE_ERROR_REPORTING": "1"
+  },
   "model": "fable",
   "statusLine": {
     "type": "command",
