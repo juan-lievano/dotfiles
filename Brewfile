@@ -17,6 +17,8 @@ brew "gh"
 brew "git-filter-repo"
 brew "pipenv"
 brew "poppler"                      # pdftotext / pdftoppm (PDF reading and page renders)
+brew "eza"                          # ls replacement (aliased in .zshrc); colours are ANSI slots
+brew "zsh-patina"                   # command-line syntax highlighting (config in .config/zsh-patina)
 
 # Keyboard remapping. kanata does home row mods + Ctrl rewrites on the built-in
 # keyboard; skhd catches Hyper+N (home-row chord or Voyager firmware) and runs

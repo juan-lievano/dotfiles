@@ -1,0 +1,6 @@
+# Built-in "patina" is all ANSI slot names except comments, which are hex
+# #a0a0a0. Slot 8 (bright black) instead, so termbg's palette owns it too.
+"comment" = 8
+
+[metadata]
+extends = "patina"

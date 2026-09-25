@@ -1,0 +1,4 @@
+# zsh-patina: syntax highlighting on the command line (brew "zsh-patina").
+# Custom theme = the built-in "patina" theme minus its one hardcoded hex.
+[highlighting]
+theme = "file:~/.config/zsh-patina/theme.toml"

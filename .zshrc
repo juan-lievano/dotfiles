@@ -34,9 +34,11 @@ zle -N zle-line-init
 # Enable color formatting for prompt
 autoload -U colors && colors
 
-# make ls colorful
-# export LSCOLORS=ExGxcxdxCxegedabagacad
-# alias ls='ls -G' 
+# ls -> eza (brew). Colours are ANSI slot names, so the termbg palette applies.
+alias ls='eza --icons=always --group-directories-first --sort=ext'
+# tree: eza's tree view, two levels, gitignored stuff hidden (eza has no
+# per-directory entry cap like `tree --filelimit`; -I 'glob|glob' for the rest).
+alias tree='eza --tree --icons=always --level=2 --git-ignore'
 
 # aliases
 alias v="nvim"
@@ -47,9 +49,6 @@ PROMPT="%{$fg[cyan]%}%n@%m %{$fg[green]%}%~ %# %{$reset_color%}"
 
 # Wait less after Esc (units: hundredths of a second) 
 export KEYTIMEOUT=1 # 50ms is a good starting point; try 1–10
-
-# Let my shell know where the new Ruby binaries are (installed with rbenv)
-eval "$(rbenv init -)"
 
 # Fzf stuff
 # fd is a fast, friendly replacement for `find`. fzf shells out to it to build
@@ -178,3 +177,7 @@ fpath=(/Users/jplk/.docker/completions $fpath)
 autoload -Uz compinit
 (( ${+_comps[docker]} )) || compinit
 # End of Docker CLI completions
+
+# zsh-patina syntax highlighting; must stay last (hooks zle after everything
+# above has defined its widgets). Theme: ~/.config/zsh-patina/.
+eval "$(/opt/homebrew/opt/zsh-patina/bin/zsh-patina activate)"
