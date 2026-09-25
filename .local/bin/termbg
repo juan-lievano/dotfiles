@@ -1,21 +1,61 @@
 #!/bin/sh
-# termbg IMAGE [img2palette options]
+# termbg IMAGE [--blur N] [img2palette options]
 #
-# Make IMAGE the terminal's faint background and its colors the terminal's
+# Make IMAGE the terminal's blurred background and its colors the terminal's
 # palette. Nothing in any config changes: Ghostty always loads
-# ~/Pictures/terminal/current-frosted.jpg and the theme `from-image`, nvim/zsh/ls
+# ~/Pictures/terminal/current-frosted.jpg and the theme `from-image`, nvim/zsh
 # only ever name ANSI slots, and this script rewrites what those two files hold.
-#
-#   termbg ~/Downloads/painting.jpg            bg + palette from the image
-#   termbg photo.png --bg 000000 --fg e6c9a8   extra args go to img2palette
-#   termbg photo.png --preview /tmp/p.png      ...including its diagnostic PNGs
 #
 # Ends by clicking Ghostty > Reload Configuration through System Events,
 # which needs Ghostty in System Settings > Privacy & Security > Accessibility
 # (one-time). Without it, the files are still written; Cmd-Shift-, reloads.
 set -eu
 
-img=${1:?usage: termbg IMAGE [img2palette options]}; shift
+help() {
+    cat <<'HELP'
+termbg IMAGE [--blur N] [img2palette options]
+
+  --blur N         how blurred the background is, as a Gaussian sigma on the
+                   full-size image (default 80). 20: shapes with soft edges.
+                   80: color blobs, no figures. 120+: little more than a
+                   gradient.
+
+img2palette options (passed straight through):
+  --bg HEX         force the background color (default: the cluster nearest
+                   Catppuccin's base, at that base's lightness)
+  --fg HEX         force the foreground color
+  --clusters N     k for k-means (default 32; more finds smaller vivid areas)
+  --repel DEG      hue exclusion between families (default 25; 0 disables),
+                   so one sky can't fill blue, cyan, bright blue and bright cyan
+  --tolerance DEG  max hue distance a slot accepts (default 64; lower means
+                   more slots fall back to Catppuccin's own color)
+  --light          light theme: greys flip, chroma slots land darker
+  --preview PNG    also write a swatch sheet with sample text
+  --quantized PNG  the image reduced to its --clusters colors
+  --remap PNG      the image repainted with only the 16 terminal colors
+  --debug          print which cluster each slot took, and why, to stderr
+
+  termbg ~/dotfiles/backgrounds/"1914 - Soir Bleu (70.1208).jpg"
+  termbg photo.png --blur 40 --fg e6c9a8 --repel 0
+HELP
+}
+
+case ${1:-} in ""|-h|--help) help; exit 2 ;; esac
+img=$1; shift
+blur=80; prev=
+for a in "$@"; do
+    shift
+    if [ "$prev" = --blur ]; then blur=$a; prev=; continue; fi
+    case $a in
+    --blur)   prev=--blur; continue ;;
+    --blur=*) blur=${a#--blur=}; continue ;;
+    esac
+    set -- "$@" "$a"
+done
+
+help
+echo
+
 dir=$HOME/Pictures/terminal
 themes=$HOME/.config/ghostty/themes
 mkdir -p "$dir" "$themes"
@@ -23,22 +63,20 @@ mkdir -p "$dir" "$themes"
 # Ghostty reads only PNG/JPEG and keeps every copy in VRAM: cap at 2560px.
 magick "$img" -auto-orient -strip -resize '2560x2560>' -quality 92 "$dir/current.jpg"
 # background-blur can't touch the image (it frosts what's behind the window),
-# so the frosting is baked in here. 0x14 on a 2560px image: shapes, no edges.
+# so the blur is baked in here. Shrink to 5%, blur, scale back: the same as
+# -blur 0x$blur on the full image in 0.1 s instead of seconds.
 # Mean brightness is normalized (gamma) so every picture lands at the same
-# felt opacity: La Fortune measured 0.46 when the opacity was tuned; 0.50 a
-# smidge brighter than that.
-# A dark painting is lifted, a pale one pulled down; hues are untouched.
-g=$(magick "$dir/current.jpg" -blur 0x14 -colorspace gray -format '%[fx:ln(mean)/ln(0.50)]' info:)
-magick "$dir/current.jpg" -blur 0x14 -gamma "$g" "$dir/current-frosted.jpg"
+# felt opacity (0.50; a dark painting is lifted, a pale one pulled down;
+# hues are untouched).
+frost="-resize 5% -blur 0x$(awk -v b="$blur" 'BEGIN { printf "%.2f", b / 20 }') -resize 2000%"
+g=$(magick "$dir/current.jpg" $frost -colorspace gray -format '%[fx:ln(mean)/ln(0.50)]' info:)
+magick "$dir/current.jpg" $frost -gamma "$g" "$dir/current-frosted.jpg"
 printf '%s\n' "$(cd "$(dirname "$img")" && pwd)/$(basename "$img")" > "$dir/current.txt"
 
-# To see what img2palette did, pass its picture flags through (each is an
-# extra k-means run, ~5 s): --preview swatches.png (the 16 slots with sample
-# text), --quantized q.png (the image in its 32 cluster colors), --remap
-# r.png (the image painted with only the 16 slots). --debug lists the picks.
 img2palette "$dir/current.jpg" "$@" > "$themes/from-image"
 
 grep '^#' "$themes/from-image"
+echo "blur       : $blur"
 echo "background : $dir/current-frosted.jpg"
 echo "theme      : $themes/from-image"
 echo "showcase   : v ${DOTFILES_DIR:-$HOME/dotfiles}/samples/palette.py  (and palette.md)"
