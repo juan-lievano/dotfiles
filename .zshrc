@@ -35,6 +35,10 @@ zle -N zle-line-init
 autoload -U colors && colors
 
 # ls -> eza (brew). Colours are ANSI slot names, so the termbg palette applies.
+# Drop eza's everyday underlines (build files like README/Makefile, the x perm
+# bit, headers). Values are ANSI slots, not colours; 0 = plain. Rare ones
+# (mount points, broken symlinks) keep their underline.
+export EZA_COLORS='bu=0:ux=32:hd=0'
 alias ls='eza --icons=always --group-directories-first --sort=ext'
 # tree: eza's tree view, two levels, gitignored stuff hidden (eza has no
 # per-directory entry cap like `tree --filelimit`; -I 'glob|glob' for the rest).

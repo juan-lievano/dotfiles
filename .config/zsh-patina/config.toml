@@ -2,3 +2,6 @@
 # Custom theme = the built-in "patina" theme minus its one hardcoded hex.
 [highlighting]
 theme = "file:~/.config/zsh-patina/theme.toml"
+# Keep the "unknown command shows red" check; drop the underline patina puts
+# under every argument that happens to be an existing file or directory.
+dynamic = { callables = true, paths = "none" }
