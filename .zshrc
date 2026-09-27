@@ -45,7 +45,10 @@ alias ls='eza --icons=always --group-directories-first --sort=ext'
 alias tree='eza --tree --icons=always --level=2 --git-ignore'
 
 # aliases
-alias v="nvim"
+alias n="nvim"
+# nq: networkQuality, with a reminder of the real name (a function, since an
+# alias can't print and then run).
+nq() { echo 'nq is an alias for networkQuality'; networkQuality "$@"; }
 
 # Change prompt style 
 NEWLINE=$'\n'
