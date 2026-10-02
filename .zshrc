@@ -133,6 +133,9 @@ function todo() {
   echo "$*" >> "$file"
 }
 
+# Bookmarked URLs (MYSKY_STAGE_FEED etc.); lives outside the repo, see links.zsh.
+[ -f ~/.config/zsh/links.zsh ] && source ~/.config/zsh/links.zsh
+
 # if something is below this I didn't write it
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
