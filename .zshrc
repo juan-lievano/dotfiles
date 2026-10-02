@@ -50,6 +50,25 @@ alias n="nvim"
 # alias can't print and then run).
 nq() { echo 'nq is an alias for networkQuality'; networkQuality "$@"; }
 
+# cheat [NAME]: render cheats/NAME.md from the dotfiles repo (glow, config in
+# .config/glow); no NAME lists them. A unique prefix is enough (`cheat t` -> tmux.md).
+cheat() {
+  local link="$HOME/.zshrc" dir m
+  dir="${link:A:h}/cheats"   # resolve the symlink to the repo, like dotcheck
+  [ -z "$1" ] && { ls "$dir" | sed 's/\.md$//'; return; }
+  m=("$dir/$1".md(N) "$dir/$1"*.md(N))
+  [ ${#m} -eq 0 ] && { echo "no sheet matching '$1' in $dir"; return 1; }
+  if (( $+commands[glow] )); then glow "${m[1]}"; else cat "${m[1]}"; fi
+}
+
+# t NAME [DIR]: attach to (or create) tmux session NAME, switch if already
+# inside tmux. `t` alone lists sessions; `cheat tmux` for the keys.
+t() {
+  [ -z "$1" ] && { tmux ls 2>/dev/null || echo "no tmux sessions"; return; }
+  tmux has-session -t "=$1" 2>/dev/null || tmux new-session -d -s "$1" -c "${2:-$PWD}"
+  if [ -n "$TMUX" ]; then tmux switch-client -t "=$1"; else tmux attach -t "=$1"; fi
+}
+
 # Change prompt style 
 NEWLINE=$'\n'
 PROMPT="%{$fg[cyan]%}%n@%m %{$fg[green]%}%~ %# %{$reset_color%}"

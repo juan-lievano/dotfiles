@@ -1,0 +1,94 @@
+{
+  "_comment": "Glow style using only ANSI slots so it follows the terminal theme (built-in styles hardcode hex). 2026-10-02.",
+  "document": {
+    "margin": 2,
+    "block_prefix": "\n",
+    "block_suffix": "\n"
+  },
+  "block_quote": {
+    "indent": 1,
+    "indent_token": "│ ",
+    "color": "8"
+  },
+  "paragraph": {},
+  "list": {
+    "level_indent": 2
+  },
+  "heading": {
+    "block_suffix": "\n",
+    "prefix": " ",
+    "suffix": " ",
+    "color": "0",
+    "background_color": "4",
+    "bold": true
+  },
+  "h1": {},
+  "h2": {},
+  "h3": {},
+  "h4": {},
+  "h5": {},
+  "h6": {
+    "bold": false
+  },
+  "text": {},
+  "strikethrough": {
+    "crossed_out": true
+  },
+  "emph": {
+    "italic": true
+  },
+  "strong": {
+    "bold": true
+  },
+  "hr": {
+    "color": "8",
+    "format": "\n--------\n"
+  },
+  "item": {
+    "block_prefix": "• "
+  },
+  "enumeration": {
+    "block_prefix": ". "
+  },
+  "task": {
+    "ticked": "[✓] ",
+    "unticked": "[ ] "
+  },
+  "link": {
+    "color": "6",
+    "underline": true
+  },
+  "link_text": {
+    "color": "5",
+    "bold": true
+  },
+  "image": {
+    "color": "6",
+    "underline": true
+  },
+  "image_text": {
+    "color": "8",
+    "format": "Image: {{.text}} →"
+  },
+  "code": {
+    "prefix": " ",
+    "suffix": " ",
+    "color": "6"
+  },
+  "code_block": {
+    "color": "7",
+    "margin": 2
+  },
+  "table": {
+    "center_separator": "┼",
+    "column_separator": "│",
+    "row_separator": "─"
+  },
+  "definition_list": {},
+  "definition_term": {},
+  "definition_description": {
+    "block_prefix": "\n→ "
+  },
+  "html_block": {},
+  "html_span": {}
+}

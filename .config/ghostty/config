@@ -31,22 +31,12 @@ mouse-hide-while-typing = true
 # another tab, and most rings are completion noise. Never missed it in WezTerm.
 bell-features = no-attention,no-title,no-border
 
-# WezTerm was window_decorations = "RESIZE" + hide_tab_bar_if_only_one_tab:
-# no chrome with one tab, a flat black tab bar with two. Ghostty can't do
-# that on macOS: tabs are native and live in the titlebar, and the `hidden`
-# titlebar style sets tabbingMode = .disallowed (Cmd-T opens a window
-# instead). So: keep a titlebar, but make it the tab bar and paint it the
-# terminal's background. One tab = slim black bar with the window title;
-# two+ = that same bar is the tab strip, no extra row. Traffic lights off to
-# match RESIZE. If tabs turn out unused, `hidden` gives back the bare window.
-macos-titlebar-style = tabs
-macos-window-buttons = hidden
-# Blank the window title (shell integration would otherwise put the cwd
-# there), so with one tab the bar is an empty black strip. Cost: the title is
-# also the tab label, so tabs are blank too -- Cmd-1..9 by position. Delete
-# this line to get cwd titles and named tabs back. Must be a quoted space;
-# an empty value resets to the program name.
-title = " "
+# No titlebar at all. Tabs moved to tmux (2026-10-02), so the native tab strip
+# is dead weight; `hidden` also sets tabbingMode = .disallowed (Cmd-T opens a
+# window). Before this: `macos-titlebar-style = tabs` painted the titlebar as
+# the tab strip, with `title = " "` blanking it; see git history for that
+# setup if Ghostty tabs come back.
+macos-titlebar-style = hidden
 
 # Both Options compose dead keys (Opt-e then a vowel -> á), same as
 # wezterm.lua's send_composed_key_when_left_alt_is_pressed. Right Option is
@@ -87,6 +77,11 @@ keybind = super+ctrl+alt+shift+f=toggle_fullscreen
 
 # Cmd-M: swallow it. Only ever minimize by accident. (WezTerm: CMD-m -> Nop.)
 keybind = super+m=ignore
+
+# Splits belong to tmux (prefix | and _). Cmd-D / Cmd-Shift-D only ever fired
+# by accident.
+keybind = super+d=unbind
+keybind = super+shift+d=unbind
 
 # Ghostty, unlike WezTerm, ships Cmd-Backspace = Ctrl-U (kill line) out of the
 # box -- it sees the GUI key event and synthesizes ^U before the terminal

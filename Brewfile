@@ -6,6 +6,8 @@
 brew "neovim"
 brew "fd"
 brew "fzf"
+brew "tmux"
+brew "glow"                      # renders cheats/*.md for the `cheat` zsh function
 brew "imagemagick"                  # termbg / img2palette (terminal palette + background from an image)
 brew "pyright"
 brew "lua-language-server"

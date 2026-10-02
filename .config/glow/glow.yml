@@ -1,0 +1,6 @@
+# Glow: terminal markdown renderer, used by `cheat` (.zshrc). ansi.json keeps
+# colours to ANSI slots so output follows the terminal theme. Tables stretch to
+# the render width (terminal width, capped at 120), so cap it lower.
+style: ~/.config/glow/ansi.json
+pager: false
+width: 90
