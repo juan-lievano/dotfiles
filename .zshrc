@@ -69,7 +69,11 @@ t() {
   if [ -n "$TMUX" ]; then tmux switch-client -t "=$1"; else tmux attach -t "=$1"; fi
 }
 
-# Change prompt style 
+# Claude Code drops to 256 colours whenever $TMUX is set (pale logo); tmux.conf
+# passes true colour through (xterm-ghostty:RGB), so opt out of the clamp.
+export CLAUDE_CODE_TMUX_TRUECOLOR=1
+
+# Change prompt style
 NEWLINE=$'\n'
 PROMPT="%{$fg[cyan]%}%n@%m %{$fg[green]%}%~ %# %{$reset_color%}"
 
