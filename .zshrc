@@ -106,12 +106,18 @@ export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --strip-cwd-prefix \
 # Appearance + previews. cat/ls previews need no extra tools (no bat required).
 # --color=16: fzf's default 'dark' scheme is 256-color and ignores the terminal
 # palette; the 16-color base follows it (termbg / themes/from-image).
+# Same look as the tmux switcher (tmux.conf, prefix f): one rounded border in
+# the text colour, and empty --pointer/--marker drop the left columns (the bar
+# and the tick). With no tick, Tab-selected rows (^F is multi-select) turn
+# magenta instead (selected-fg).
 export FZF_DEFAULT_OPTS="
-  --color=16
+  --color=16,border:-1,selected-fg:magenta
   --height 60%
   --layout=reverse
-  --border
+  --border=rounded
   --inline-info
+  --pointer=''
+  --marker=''
 "
 export FZF_CTRL_T_OPTS="--preview '(cat {} 2>/dev/null || ls -la {}) | head -200'"
 export FZF_ALT_C_OPTS="--preview 'ls -la {} | head -200'"
