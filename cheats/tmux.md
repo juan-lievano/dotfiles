@@ -18,6 +18,7 @@ For the common letters, keeping Ctrl held works too: Ctrl-A Ctrl-C = Ctrl-A c.
 | Key     | Does                                           |
 |---------|------------------------------------------------|
 | `c`     | new window                                     |
+| `t`     | new session: `:new -A -s ` typed, add a name   |
 | `1`-`9` | go to window N                                 |
 | `n` `p` | next / previous window                         |
 | `f`     | fuzzy-find any window in any session           |
