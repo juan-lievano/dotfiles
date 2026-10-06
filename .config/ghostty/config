@@ -96,8 +96,12 @@ keybind = super+shift+d=unbind
 # to whichever tmux has the Ctrl-A prefix. Fine if always in local tmux.
 keybind = super+t=unbind
 keybind = super+alt+w=unbind
-keybind = ctrl+tab=unbind
-keybind = ctrl+shift+tab=unbind
+#
+# Except Ctrl-Tab / Ctrl-Shift-Tab (2026-10-05): browser next / previous tab,
+# typed as Ctrl-A Tab / Ctrl-A Shift-Tab for tmux (bound in tmux.conf). Same
+# blind-send caveat as above: outside tmux it's start-of-line then completion.
+keybind = ctrl+tab=text:\x01\t
+keybind = ctrl+shift+tab=text:\x01\x1b[Z
 keybind = super+shift+[=unbind
 keybind = super+shift+]=unbind
 keybind = super+1=unbind

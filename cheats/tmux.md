@@ -17,10 +17,11 @@ For the common letters, keeping Ctrl held works too: Ctrl-A Ctrl-C = Ctrl-A c.
 
 | Key     | Does                                           |
 |---------|------------------------------------------------|
-| `c`     | new window                                     |
-| `t`     | new session: `:new -A -s ` typed, add a name   |
+| `t`     | new window (tab)                               |
+| `n`     | new session: `:new -A -s ` typed, add a name   |
 | `1`-`9` | go to window N                                 |
-| `n` `p` | next / previous window                         |
+| `Tab`   | next window (or Ctrl-Tab, no prefix)           |
+| `Shift-Tab` | previous window (or Ctrl-Shift-Tab)        |
 | `f`     | fuzzy-find any window in any session           |
 | `w`     | tree view of all sessions and windows          |
 | `,`     | rename window                                  |
