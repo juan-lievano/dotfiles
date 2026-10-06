@@ -46,6 +46,9 @@ alias tree='eza --tree --icons=always --level=2 --git-ignore'
 
 # aliases
 alias n="nvim"
+# p: python3, not python: conda envs ship both and sit first in PATH when active;
+# outside one only python3 exists.
+alias p="python3"
 # nq: networkQuality, with a reminder of the real name (a function, since an
 # alias can't print and then run).
 nq() { echo 'nq is an alias for networkQuality'; networkQuality "$@"; }
