@@ -57,6 +57,11 @@ macos-option-as-alt = false
 # Catppuccin Frappe/Mocha (9abd7ac), cream e6c9a8 on black (f8085c0).
 theme = from-image
 
+# Faint (dim) text at 0.5 vanished on coloured backgrounds, e.g. removed lines
+# in Claude Code diffs (drawn faint on dark red). 0.6 keeps it dimmer than
+# normal text but readable.
+faint-opacity = 0.6
+
 # Used fullscreen ~always. Opacity is relative to background-opacity
 # (0.95 * 0.35 = ~0.33 on screen). `cover` fills the window, cropping edges.
 # Ghostty 1.2+ draws it per split, not per window. current-frosted.jpg is

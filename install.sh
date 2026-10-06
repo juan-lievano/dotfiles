@@ -42,6 +42,7 @@ link .claude/settings.json
 link .claude/keybindings.json
 link .claude/CLAUDE.md
 link .claude/statusline-command.sh
+link .claude/themes
 
 # git hooks live in tracked hooks/ (pre-push runs the dotcheck symlink audit)
 git -C "$DOT" config core.hooksPath hooks

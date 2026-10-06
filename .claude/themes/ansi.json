@@ -1,0 +1,13 @@
+{
+  "name": "ansi",
+  "base": "dark-ansi",
+  "overrides": {
+    "userMessageBackground": "ansi:black",
+    "diffAdded": "ansi256(22)",
+    "diffRemoved": "ansi256(52)",
+    "diffAddedDimmed": "ansi256(22)",
+    "diffRemovedDimmed": "ansi256(52)",
+    "diffAddedWord": "ansi256(28)",
+    "diffRemovedWord": "ansi256(88)"
+  }
+}

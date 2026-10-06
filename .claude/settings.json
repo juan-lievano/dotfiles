@@ -28,7 +28,7 @@
   },
   "feedbackDrafts": "off",
   "tui": "fullscreen",
-  "theme": "auto",
+  "theme": "custom:ansi",
   "editorMode": "vim",
   "preferredNotifChannel": "notifications_disabled",
   "agentPushNotifEnabled": true
