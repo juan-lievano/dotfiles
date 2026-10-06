@@ -4,6 +4,19 @@ A session is a group of tabs for one project; a window is a tab in it.
 Every tmux command is two steps: press the prefix (Ctrl-A), let go, press a key.
 For the common letters, keeping Ctrl held works too: Ctrl-A Ctrl-C = Ctrl-A c.
 
+## Tabs without the prefix (Ghostty types it for you)
+
+The rule: a key skips the prefix only if programs never see it. Cmd and
+Ctrl-Tab never reach the shell or nvim, so tmux can have them for free.
+Ctrl-letters (Ctrl-T, Ctrl-N, Ctrl-W…) do reach them, so those stay behind Ctrl-A.
+
+| Key                            | Does                 |
+|--------------------------------|----------------------|
+| `Cmd-T`                        | new window (tab)     |
+| `Ctrl-Tab` / `Cmd-Shift-]`     | next window          |
+| `Ctrl-Shift-Tab` / `Cmd-Shift-[` | previous window    |
+| `Cmd-1`-`Cmd-9`                | go to window N       |
+
 ## From the shell
 
 | Command                        | Does                                                        |
@@ -20,8 +33,8 @@ For the common letters, keeping Ctrl held works too: Ctrl-A Ctrl-C = Ctrl-A c.
 | `t`     | new window (tab)                               |
 | `n`     | new session: `:new -A -s ` typed, add a name   |
 | `1`-`9` | go to window N                                 |
-| `Tab`   | next window (or Ctrl-Tab, no prefix)           |
-| `Shift-Tab` | previous window (or Ctrl-Shift-Tab)        |
+| `Tab`   | next window                                    |
+| `Shift-Tab` | previous window                            |
 | `f`     | fuzzy-find any window in any session           |
 | `w`     | tree view of all sessions and windows          |
 | `,`     | rename window                                  |
