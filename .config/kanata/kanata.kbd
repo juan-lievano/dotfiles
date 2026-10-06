@@ -320,7 +320,7 @@
 
   ;; ---- Numpad home row mods ----
   ;; The Voyager keeps mod-taps live on its numpad -- MT(MOD_RGUI, KC_4),
-  ;; MT(MOD_RALT, KC_5), MT(MOD_RCTL, KC_6), and Shift under `*` (here `.`) -- so
+  ;; MT(MOD_RALT, KC_5), MT(MOD_RCTL, KC_6), and MT(MOD_RSFT, KC_DOT) -- so
   ;; Cmd/Opt/Ctrl/Shift stay chordable without leaving the layer. Mirrored here
   ;; on the same physical keys that carry them in the alphas (j k l ;), in the
   ;; same index-inward Cmd-Opt-Ctrl-Shift order, with the same $right-hand-keys
@@ -525,7 +525,7 @@
 ;; The one group NOT ported is mouse MOVEMENT (the Voyager's left bottom row):
 ;; kanata's movemouse needs speed/acceleration tuning to not feel awful, and
 ;; the trackpad is centimeters away.
-;; Layout matches Oryx revision waLwq/x9ENX3 (Sept 2026).
+;; Layout matches Oryx revision waLwq/40xdX3 (Oct 2026).
 (deflayer nav
   _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    home _    mlft mrgt C-S-tab C-tab _    _    _

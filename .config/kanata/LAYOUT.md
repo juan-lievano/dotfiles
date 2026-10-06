@@ -103,9 +103,9 @@ The Voyager's Sym+Num layer, both halves: symbols left, a real numpad right.
 ```
   ·     ·    ·    ·    ·    ·    ·   │  ·    ·    ·    ·    ·    ·
   ·     ·    ·    ·    ·    ·        │  ·    ·    ·    ·    ·    ·    ·    ·
-  ·     !    @    #    $    %        │  -    7    8    9    =    ·    ·    ·
-  ·     ^    &    *    (    )        │  +    4    5    6    *    ·    ·
-  ·    tab   [    ]    `    ·        │  .    1    2    3    /    ·
+  ·     !    @    #    $    %        │  +    7    8    9    *    ·    ·    ·
+  ·     ^    &    *    (    )        │  =    4    5    6    .    ·    ·
+  ·    tab   [    ]    `    ·        │  -    1    2    3    /    ·
                  ·    ·    ·   held  │  0    ·
 ```
 
@@ -119,9 +119,9 @@ The numpad is **positional**: physical `u i o` / `j k l` / `m , .` spell
 that reads:
 
 ```
-   j    l    u    y    ;                -    7    8    9    =
-   m    n    e    i    o     ---->      +    4    5    6    *
-   k    h    ,    .    /                .    1    2    3    /
+   j    l    u    y    ;                +    7    8    9    *
+   m    n    e    i    o     ---->      =    4    5    6    .
+   k    h    ,    .    /                -    1    2    3    /
 ```
 
 `0` is on **Right Cmd**, the right thumb — where the Voyager puts it and where a
@@ -129,18 +129,13 @@ real numpad puts it. That doesn't conflict with Right Cmd being the nav key: a
 held layer's entry replaces the base action outright, so the tap-hold underneath
 is never consulted while Space is down.
 
-The right hand keeps its home row mods on the numpad, so modifiers stay
-chordable without leaving the layer:
+Both hands keep their home row mods on this layer, so modifiers stay chordable
+without leaving it — Shift on either pinky, Cmd innermost:
 
 ```
-   4    5    6    *
-  cmd  opt ctrl shift
+   ^    &    *    (                       4    5    6    .
+ shift ctrl opt  cmd                     cmd  opt ctrl shift
 ```
-
-The left hand's mods are shadowed on purpose — that half is for typing, not
-chording. Consequence for the launcher: Hyper is `a s d f`, which is shadowed
-here, so if you ever want Hyper plus a *numpad* digit, press the home row keys
-first and Space second.
 
 `x c v` still give `` { } ~ `` for free — `` [ ] ` `` are unshifted keys, so a
 held Shift produces the other half on its own. The digits need no such trick any
@@ -224,14 +219,14 @@ path: `h` is the Ctrl-H→Delete fork, which now lets Hyper through (README).
 
 ## Cross-reference with the Voyager
 
-`zsa_voyager_*_source/.../keymap.c`, layout `waLwq`.
+`zsa_voyager_*_source/.../keymap.c`, layout `waLwq`, revision `40xdX3` (Oct 2026).
 
 | here | Voyager |
 |------|---------|
 | Space → symbols | `LT(1, KC_SPACE)` — left thumb |
 | Right Cmd → nav, `0` on symbols | `LT(2, KC_ENTER)`, `KC_0` on layer 1 |
 | Right Option → launch | its `ALL_T(KC_BSPC)` Hyper thumb |
-| `4 5 6 *` mod-taps | `MT(MOD_RGUI, KC_4)`, `MT(MOD_RALT, KC_5)`, `MT(MOD_RCTL, KC_6)` |
+| `4 5 6 .` mod-taps | `MT(MOD_RGUI, KC_4)`, `MT(MOD_RALT, KC_5)`, `MT(MOD_RCTL, KC_6)`, `MT(MOD_RSFT, KC_DOT)` |
 | nav's `j k l ;` | `KC_RIGHT_GUI / ALT / CTRL / SHIFT`, layer 2 |
 | nav's Home/PgUp/PgDn/End, tab-switch, media | layer 2 inner column + bottom row |
 | Caps Lock as Esc | `KC_ESCAPE`, same position |

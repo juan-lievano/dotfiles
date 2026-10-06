@@ -46,6 +46,7 @@ alias tree='eza --tree --icons=always --level=2 --git-ignore'
 
 # aliases
 alias n="nvim"
+alias c="claude"
 # p: python3, not python: conda envs ship both and sit first in PATH when active;
 # outside one only python3 exists.
 alias p="python3"

@@ -72,7 +72,7 @@ config.keys = {
 -- Option under `d` is Left, so Left is the one that has to compose. Nothing in
 -- the terminal used Left Option as Meta: zsh is in vi mode and delete-word is
 -- Ctrl-W (see the config.keys note above). The Voyager has the same exposure:
--- its `s`-hold is LEFT_ALT and only `e`-hold is RIGHT_ALT (Oryx waLwq/x9ENX3),
+-- its `s`-hold is LEFT_ALT and only `e`-hold is RIGHT_ALT (Oryx waLwq/40xdX3),
 -- and WezTerm composes Right Option by default, so this setting fixes both.
 config.send_composed_key_when_left_alt_is_pressed = true
 
