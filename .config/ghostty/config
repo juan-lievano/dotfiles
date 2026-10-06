@@ -84,41 +84,42 @@ keybind = super+d=unbind
 keybind = super+shift+d=unbind
 
 # Tabs belong to tmux (2026-10-02). Ghostty's own tab actions are gone
-# (titlebar `hidden` disallows tabbing); the browser tab chords instead type
-# the tmux prefix plus a key for you (2026-10-05). Programs in the terminal
-# never see Cmd or Ctrl-Tab, so these can skip the prefix without stealing a
-# key from zsh/nvim; Ctrl-letter chords stay behind the prefix for that reason.
-# Sent blindly: outside tmux, Cmd-3 jumps to start of line and types a 3; over
-# ssh it goes to whichever tmux has the Ctrl-A prefix. Fine in local tmux.
-# Cmd-W (close_surface) and Cmd-N (new_window) stay: windows, not tabs.
-#   Cmd-T                          -> Ctrl-A t          new tab
-#   Ctrl-Tab, Cmd-Shift-]          -> Ctrl-A Tab        next tab
-#   Ctrl-Shift-Tab, Cmd-Shift-[    -> Ctrl-A Shift-Tab  previous tab
-#   Cmd-1..9                       -> Ctrl-A 1..9       tab N
-keybind = super+t=text:\x01t
+# (titlebar `hidden` disallows tabbing); the browser tab chords instead send
+# private escape codes that tmux binds without its prefix (user-keys in
+# .config/tmux/tmux.conf, 2026-10-06), so changing the tmux prefix never
+# touches this file. Programs never see Cmd or Ctrl-Tab, so taking them
+# steals nothing from zsh/nvim. Outside tmux the codes are stray junk.
+# Cmd-N (new_window) stays: windows, not tabs.
+#   Cmd-T                          -> \e[9000~  new tab
+#   Cmd-W                          -> \e[9001~  close tab (asks if busy)
+#   Ctrl-Tab, Cmd-Shift-]          -> \e[9002~  next tab
+#   Ctrl-Shift-Tab, Cmd-Shift-[    -> \e[9003~  previous tab
+#   Cmd-1..9                       -> \e[9011~..\e[9019~  tab N
+keybind = super+t=text:\x1b[9000~
+keybind = super+w=text:\x1b[9001~
 keybind = super+alt+w=unbind
-keybind = ctrl+tab=text:\x01\t
-keybind = super+shift+]=text:\x01\t
-keybind = ctrl+shift+tab=text:\x01\x1b[Z
-keybind = super+shift+[=text:\x01\x1b[Z
-keybind = super+1=text:\x011
-keybind = super+2=text:\x012
-keybind = super+3=text:\x013
-keybind = super+4=text:\x014
-keybind = super+5=text:\x015
-keybind = super+6=text:\x016
-keybind = super+7=text:\x017
-keybind = super+8=text:\x018
-keybind = super+9=text:\x019
-keybind = super+digit_1=text:\x011
-keybind = super+digit_2=text:\x012
-keybind = super+digit_3=text:\x013
-keybind = super+digit_4=text:\x014
-keybind = super+digit_5=text:\x015
-keybind = super+digit_6=text:\x016
-keybind = super+digit_7=text:\x017
-keybind = super+digit_8=text:\x018
-keybind = super+digit_9=text:\x019
+keybind = ctrl+tab=text:\x1b[9002~
+keybind = super+shift+]=text:\x1b[9002~
+keybind = ctrl+shift+tab=text:\x1b[9003~
+keybind = super+shift+[=text:\x1b[9003~
+keybind = super+1=text:\x1b[9011~
+keybind = super+2=text:\x1b[9012~
+keybind = super+3=text:\x1b[9013~
+keybind = super+4=text:\x1b[9014~
+keybind = super+5=text:\x1b[9015~
+keybind = super+6=text:\x1b[9016~
+keybind = super+7=text:\x1b[9017~
+keybind = super+8=text:\x1b[9018~
+keybind = super+9=text:\x1b[9019~
+keybind = super+digit_1=text:\x1b[9011~
+keybind = super+digit_2=text:\x1b[9012~
+keybind = super+digit_3=text:\x1b[9013~
+keybind = super+digit_4=text:\x1b[9014~
+keybind = super+digit_5=text:\x1b[9015~
+keybind = super+digit_6=text:\x1b[9016~
+keybind = super+digit_7=text:\x1b[9017~
+keybind = super+digit_8=text:\x1b[9018~
+keybind = super+digit_9=text:\x1b[9019~
 
 # Ghostty, unlike WezTerm, ships Cmd-Backspace = Ctrl-U (kill line) out of the
 # box -- it sees the GUI key event and synthesizes ^U before the terminal
