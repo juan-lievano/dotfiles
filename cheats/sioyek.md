@@ -28,7 +28,6 @@ shows one PDF, a newly opened file replaces it, and `O` is the tab list.
 | `Ctrl-D` / `Ctrl-U`     | half screen down / up                           |
 | `Space` / `Shift-Space` | screen down / up                                |
 | `gg` / `G`              | first / last page                               |
-| `Option-Down` / `Option-Up` | next / previous page (Left Option: the right one is a kanata layer) |
 | `Home`                  | go to page N (type the number)                  |
 | `gc` / `gC`             | next / previous chapter                         |
 | `t`                     | table of contents                               |
