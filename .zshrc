@@ -166,6 +166,20 @@ function todo() {
   echo "$*" >> "$file"
 }
 
+# One-shot shell for tmux's prefix o popup (tmux.conf): exits after the first
+# command that succeeds, so the popup vanishes; a failing command (typo, no such
+# file) keeps the prompt so the error can be read. Jobs put in the background
+# with & outlive the shell (no_hup), so `open x.pdf` and `sioyek x.pdf &` both
+# work; a GUI app run in the foreground holds the popup open until it quits.
+if [[ -n $TMUX_ONESHOT ]]; then
+  setopt no_hup no_check_jobs
+  _oneshot_precmd() {
+    local rc=$?
+    (( _oneshot_n++ )) && (( rc == 0 )) && exit
+  }
+  precmd_functions+=(_oneshot_precmd)
+fi
+
 # Bookmarked URLs (MYSKY_STAGE_FEED etc.); lives outside the repo, see links.zsh.
 [ -f ~/.config/zsh/links.zsh ] && source ~/.config/zsh/links.zsh
 

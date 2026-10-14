@@ -58,6 +58,7 @@ Ctrl-letters (Ctrl-T, Ctrl-N, Ctrl-W…) do reach them, so those stay behind Ctr
 | Key      | Does                                          |
 |----------|-----------------------------------------------|
 | `[`      | scroll / copy mode, `q` quits                 |
+| `o`      | one-command shell popup (`open x.pdf`); closes on success, `&` for GUI apps |
 | `?`      | this sheet                                    |
 | `:`      | type a tmux command (`:list-keys` shows all)  |
 | `r`      | reload tmux.conf                              |
