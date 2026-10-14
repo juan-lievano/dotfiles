@@ -149,7 +149,7 @@ vim.api.nvim_create_autocmd("FileType", {
           stderr_buffered = true,
           on_exit = function(_, code)
             if code == 0 then
-              vim.fn.jobstart({ "open", dir .. "/" .. name .. ".pdf" })
+              vim.fn.jobstart({ "open", dir .. "/build/" .. name .. ".pdf" })
             else
               vim.notify("latexmk failed (exit " .. code .. ")", vim.log.levels.ERROR)
               vim.cmd("cfile " .. vim.fn.fnameescape(dir .. "/build/" .. name .. ".log"))

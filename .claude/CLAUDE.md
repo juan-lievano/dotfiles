@@ -49,6 +49,21 @@ what it already provides.
   plug *into*. Check `git show origin/main:<path>` when my checkout is behind.
   Flag anything the plan got wrong or left out.
 
-**Build:** `latexmk -pdf file.tex` from anywhere; `~/.latexmkrc` puts aux files
-in `build/` beside the source and the PDF next to it. Check the log for overfull
-boxes >12pt and render pages to PNG to eyeball diagrams before calling it done.
+**Build:** `latexmk -pdf file.tex` from anywhere; `~/.latexmkrc` puts the PDF
+and every aux file in `build/` beside the source. Never copy the PDF out of
+`build/` or pass `-outdir`/`-auxdir`. Check the log for overfull boxes >12pt and
+render pages to PNG to eyeball diagrams before calling it done.
+
+## Lab / data reports (graphs-only)
+
+When I ask for a report of experiment results:
+- A `build_figures.py` draws PNGs into `report/figures/` and contains no text.
+- `report/report.tex` is written by hand once and is the only source of text.
+  No script generates, seeds or falls back to text. Build with `latexmk -pdf`.
+- Graphs only, plus TOC. Titles, legends and annotations describe what was
+  measured (index, query, what varied, how), never the conclusion.
+- 2-4 very short plain-words bullets above each figure on how its data was
+  collected: no lab-internal names, no API field paths, each term explained.
+- Distributions as box-and-whisker. Number the figures.
+- Older labs' `build_report.py` scripts that generate .tex are the previous
+  way; don't copy that pattern.
