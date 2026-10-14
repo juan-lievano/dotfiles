@@ -18,7 +18,7 @@ are no tabs: one window shows one PDF, a newly opened file replaces it, and
 | `Ctrl-O` / `Backspace`  | back to where you were, across PDFs too         |
 | `o` / `go`              | open a file: system dialog / built-in browser   |
 | `Ctrl-T` / `Ctrl-W`     | a second window if you really want one / close it |
-| `F11`                   | fullscreen                                      |
+| `F11`                   | leave / re-enter fullscreen (starts fullscreen) |
 | `gf`                    | reveal the current file in Finder               |
 | `q` / `Cmd-W`          | quit (Cmd-W closed the window but kept the app)  |
 | `cheat sioyek`          | this sheet                                      |
@@ -46,7 +46,7 @@ are no tabs: one window shows one PDF, a newly opened file replaces it, and
 | `=`                     | fit page width                                  |
 | `F10`                   | fit text width (trims margins)                  |
 | `r` / `R`               | rotate                                          |
-| `F11`                   | fullscreen                                      |
+| `F11`                   | leave / re-enter fullscreen (starts fullscreen) |
 | `F5`                    | presentation mode (one page, no UI)             |
 | `F8`                    | dark mode (inverts the page)                    |
 | `F7`                    | visual scroll: `j`/`k` move a reading ruler     |
