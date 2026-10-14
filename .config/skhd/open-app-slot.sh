@@ -11,7 +11,7 @@
 case "$1" in
   1) app="Ghostty" ;;
   2) app="Safari" ;;
-  3) app="Preview" ;;
+  3) app="sioyek" ;;   # PDF viewer, replaced Preview 2026-10-14
   4) app="Mail" ;;
   5) app="WhatsApp" ;;
   6) app="Calendar" ;;

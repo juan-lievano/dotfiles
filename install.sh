@@ -29,6 +29,7 @@ link .config/zsh-patina
 link .config/qalculate
 link .config/tmux
 link .config/glow            # markdown renderer behind the `cheat` zsh function
+link .config/sioyek           # PDF viewer (trial); app installed by hand, see Brewfile
 link .config/aerc/aerc.conf   # files, not the dir: accounts.conf (secrets) lives beside them
 link .config/aerc/binds.conf
 link .local/bin/img2palette  # terminal palette from an image; needs magick

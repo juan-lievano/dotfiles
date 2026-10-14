@@ -25,6 +25,7 @@ thing prose is bad at.
 | `.config/wezterm/`         | `~/.config/wezterm/`    | terminal config (previous daily driver, kept installed) |
 | `.config/ghostty/`         | `~/.config/ghostty/`    | terminal config (daily driver on trial since 2026-09-13, ported from wezterm) |
 | `.config/qalculate/`       | `~/.config/qalculate/`  | calculator prefs               |
+| `.config/sioyek/`          | `~/.config/sioyek/`     | PDF viewer prefs + keys (on trial since 2026-10-14, replacing Preview) |
 | `.config/aerc/aerc.conf`   | `~/.config/aerc/aerc.conf`  | aerc (email) main config   |
 | `.config/aerc/binds.conf`  | `~/.config/aerc/binds.conf` | aerc keybindings           |
 | `.w3m/keymap`              | `~/.w3m/keymap`         | w3m keys (aerc HTML viewing)   |

@@ -9,6 +9,21 @@ when it's resolved, and fold the answer into the docs.
 
 ---
 
+## 2026-10-14 — trying Sioyek instead of Preview
+
+Installed by hand (Homebrew cask disabled for Gatekeeper): the `sioyek3-alpha0`
+GitHub release, native arm64, Qt 6.7, ad-hoc signed. The "stable" v2.0.0 is a
+2022 x86_64 build that would need Rosetta, so alpha it is. Launches fine on
+Sequoia 15.6. Config in `.config/sioyek/`; DBs in
+`~/Library/Application Support/sioyek/`.
+
+Verdict pending on: reading comfort full-screen at distance (F8 dark mode,
+`custom_background_color`/`toggle_custom_color` for the black theme), alpha
+stability, and whether Hyper-3 (skhd slot 3, currently Preview) should move
+to it. Not the default PDF handler yet — Open With for now.
+
+---
+
 ## 2026-08-18 — dictation went deaf; fixed by restarting the speech daemons
 
 Symptom: the mic popup appears (Hyper-H works), the level bar in it doesn't
