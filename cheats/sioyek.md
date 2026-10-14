@@ -18,9 +18,9 @@ are no tabs: one window shows one PDF, a newly opened file replaces it, and
 | `Ctrl-O` / `Backspace`  | back to where you were, across PDFs too         |
 | `o` / `go`              | open a file: system dialog / built-in browser   |
 | `Ctrl-T` / `Ctrl-W`     | a second window if you really want one / close it |
-| `F11`                   | leave / re-enter fullscreen (starts fullscreen) |
+| `F11`                   | fullscreen                                      |
 | `gf`                    | reveal the current file in Finder               |
-| `q`                     | quit                                            |
+| `q` / `Cmd-W`          | quit (Cmd-W closed the window but kept the app)  |
 | `cheat sioyek`          | this sheet                                      |
 
 ## Move
