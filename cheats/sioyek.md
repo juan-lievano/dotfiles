@@ -2,7 +2,8 @@
 
 PDF viewer, vim-ish. Keys act straight away, no prefix; `:` opens a command
 palette where every command can be typed by name (fuzzy). Position, bookmarks
-and highlights persist per file across restarts.
+and highlights persist per file across restarts. There are no tabs: one window
+shows one PDF, a newly opened file replaces it, and `O` is the tab list.
 
 ## Open and leave
 
@@ -10,9 +11,11 @@ and highlights persist per file across restarts.
 |-------------------------|-------------------------------------------------|
 | `Hyper-3`               | launch / focus sioyek                           |
 | `open file.pdf`         | open in sioyek (default PDF app)                |
-| `o`                     | open a file (system dialog)                     |
-| `Ctrl-O`                | open a recent file (fuzzy list)                 |
-| `Ctrl-T` / `Ctrl-W`     | new window / close window                       |
+| `O`                     | fuzzy list of every PDF opened before: the "tabs" |
+| `Backspace`             | back to where you were, across PDFs too         |
+| `o` / `Ctrl-O`          | open a file: system dialog / built-in browser   |
+| `Ctrl-T` / `Ctrl-W`     | a second window if you really want one / close it |
+| `F11`                   | leave / re-enter fullscreen (starts fullscreen) |
 | `gf`                    | reveal the current file in Finder               |
 | `q`                     | quit                                            |
 | `cheat sioyek`          | this sheet                                      |
