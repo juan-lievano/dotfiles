@@ -1,9 +1,12 @@
 # sioyek
 
 PDF viewer, vim-ish. Keys act straight away, no prefix; `:` opens a command
-palette where every command can be typed by name (fuzzy). Position, bookmarks
-and highlights persist per file across restarts. There are no tabs: one window
-shows one PDF, a newly opened file replaces it, and `O` is the tab list.
+palette where every command can be typed by name (fuzzy). Inside any menu
+(`O`, `t`, `:`, `gb`...) `Ctrl-N`/`Ctrl-P` move the selection (bound in
+keys_user.config via `[m]control_menu`), `Enter` picks, `Esc` closes.
+Position, bookmarks and highlights persist per file across restarts. There
+are no tabs: one window shows one PDF, a newly opened file replaces it, and
+`O` is the tab list.
 
 ## Open and leave
 
@@ -12,8 +15,8 @@ shows one PDF, a newly opened file replaces it, and `O` is the tab list.
 | `Hyper-3`               | launch / focus sioyek                           |
 | `open file.pdf`         | open in sioyek (default PDF app)                |
 | `O`                     | fuzzy list of every PDF opened before: the "tabs" |
-| `Backspace`             | back to where you were, across PDFs too         |
-| `o` / `Ctrl-O`          | open a file: system dialog / built-in browser   |
+| `Ctrl-O` / `Backspace`  | back to where you were, across PDFs too         |
+| `o` / `go`              | open a file: system dialog / built-in browser   |
 | `Ctrl-T` / `Ctrl-W`     | a second window if you really want one / close it |
 | `F11`                   | leave / re-enter fullscreen (starts fullscreen) |
 | `gf`                    | reveal the current file in Finder               |
@@ -31,7 +34,7 @@ shows one PDF, a newly opened file replaces it, and `O` is the tab list.
 | `Home`                  | go to page N (type the number)                  |
 | `gc` / `gC`             | next / previous chapter                         |
 | `t`                     | table of contents                               |
-| `Backspace` / `Shift-Backspace` | back / forward in jump history          |
+| `Ctrl-O` / `Ctrl-I`     | back / forward in jump history, like nvim (also `Backspace` / `Shift-Backspace`) |
 | `f`                     | follow a link: labels appear, type one          |
 | `Ctrl-]` / `l`          | jump to / preview the reference under the cursor |
 
