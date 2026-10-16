@@ -11,7 +11,9 @@
 case "$1" in
   1) app="Ghostty" ;;
   2) app="Safari" ;;
-  3) app="sioyek" ;;   # PDF viewer, replaced Preview 2026-10-14
+  3) app="Open in sioyek" ;;   # PDF viewer (replaced Preview 2026-10-14); the shim
+                               # switches to sioyek's fullscreen Space, plain
+                               # `open -a sioyek` lands on the empty desktop
   4) app="Mail" ;;
   5) app="WhatsApp" ;;
   6) app="Calendar" ;;

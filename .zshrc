@@ -180,14 +180,6 @@ if [[ -n $TMUX_ONESHOT ]]; then
   precmd_functions+=(_oneshot_precmd)
 fi
 
-# `open x.pdf` into an already-running fullscreen sioyek: Qt activates the app
-# but not its window, so macOS stays on this Space (Preview, being Cocoa,
-# switches). A second activation via AppleScript takes the Cocoa path.
-open() {
-  command open "$@" || return
-  [[ "$*" == *.pdf* ]] && osascript -e 'tell application "sioyek" to activate' 2>/dev/null
-}
-
 # Bookmarked URLs (MYSKY_STAGE_FEED etc.); lives outside the repo, see links.zsh.
 [ -f ~/.config/zsh/links.zsh ] && source ~/.config/zsh/links.zsh
 

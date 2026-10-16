@@ -30,6 +30,8 @@ link .config/qalculate
 link .config/tmux
 link .config/glow            # markdown renderer behind the `cheat` zsh function
 link .config/sioyek           # PDF viewer (trial); app installed by hand, see Brewfile
+# "Open in sioyek" shim: PDF default handler that switches to sioyek's Space.
+[ -d /Applications/sioyek.app ] && "$DOT/.config/sioyek/open-in-sioyek/build.sh"
 link .config/aerc/aerc.conf   # files, not the dir: accounts.conf (secrets) lives beside them
 link .config/aerc/binds.conf
 link .local/bin/img2palette  # terminal palette from an image; needs magick

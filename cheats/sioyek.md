@@ -13,7 +13,7 @@ are no tabs: one window shows one PDF, a newly opened file replaces it, and
 | Key / command           | Does                                            |
 |-------------------------|-------------------------------------------------|
 | `Hyper-3`               | launch / focus sioyek                           |
-| `open file.pdf`         | open in sioyek (default PDF app)                |
+| `open file.pdf`         | open in sioyek, via the "Open in sioyek" shim (also Finder, Dock stacks, nvim `<leader>ll`) |
 | `O`                     | fuzzy list of every PDF opened before: the "tabs" |
 | `Ctrl-O` / `Backspace`  | back to where you were, across PDFs too         |
 | `o` / `go`              | open a file: system dialog / built-in browser   |
@@ -72,3 +72,6 @@ are no tabs: one window shows one PDF, a newly opened file replaces it, and
 Mouse: drag selects text, wheel scrolls, middle-click a word searches it.
 Config: `~/.config/sioyek/prefs_user.config` and `keys_user.config`; defaults
 with every option documented live in `/Applications/sioyek.app/Contents/MacOS/`.
+PDFs are routed through `~/Applications/Open in sioyek.app` (source in
+`~/.config/sioyek/open-in-sioyek/`), which activates sioyek so macOS switches
+to its fullscreen Space; rebuild with its `build.sh`.

@@ -39,7 +39,8 @@ cask "mactex-no-gui"
 # sioyek (PDF viewer) is NOT a cask line: the cask was disabled 2026-09-01 for
 # failing Gatekeeper. Installed by hand from the sioyek3-alpha0 GitHub release
 # (sioyek-release-mac-arm.zip -> build/sioyek.dmg -> /Applications), no
-# quarantine attr, ad-hoc signed. Config is tracked in .config/sioyek.
+# quarantine attr, ad-hoc signed. Config is tracked in .config/sioyek; install.sh
+# also builds the "Open in sioyek" PDF-handler shim from there (needs swiftc).
 cask "discord"
 cask "docker-desktop"
 
