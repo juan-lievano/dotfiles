@@ -64,6 +64,17 @@ Ctrl-letters (Ctrl-T, Ctrl-N, Ctrl-W…) do reach them, so those stay behind Ctr
 | `r`      | reload tmux.conf                              |
 | `Ctrl-A` | send a literal Ctrl-A                         |
 
+## Status bar, right side
+
+`mem 34%` is how much memory is in use (yellow/red = Apple's memory-pressure
+light). `cpu 9%` is the whole machine, so one process pegging one core shows
+as ~8%. A third item names a process that used more than 15 minutes of CPU
+in the last hour (`Python 58m` = 58 CPU-minutes). It's a fact, not a verdict:
+a build you just ran will show for an hour; something you don't recognise is
+the thing to look up (`ps -p PID` or `top -o cpu`). Refreshes every minute;
+the hour is 60 refreshes, so sleep doesn't count. Script: `sysload.sh`,
+history in `~/.cache/tmux-sysload-hist`.
+
 ## Leaving
 
 | Want                        | Do                                                   |
