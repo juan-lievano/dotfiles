@@ -15,7 +15,7 @@ Ctrl-letters (Ctrl-T, Ctrl-N, Ctrl-W…) do reach them, so those stay behind Ctr
 | `Cmd-T`                        | new window (tab)     |
 | `Cmd-W`                        | close window (asks if busy) |
 | `Ctrl-Tab` / `Cmd-Shift-]`     | next window          |
-| `Ctrl-Ahift-Tab` / `Cmd-Shift-[` | previous window    |
+| `Ctrl-Shift-Tab` / `Cmd-Shift-[` | previous window    |
 | `Cmd-1`-`Cmd-9`                | go to window N       |
 
 ## From the shell
