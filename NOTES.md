@@ -9,6 +9,43 @@ when it's resolved, and fold the answer into the docs.
 
 ---
 
+## 2026-10-17 — both boards: Permissive Hold + Tap Flow
+
+Oryx revision `aNj63V`: Permissive Hold on, Tap Flow on at 100ms, Chordal Hold
+still on, Hold-On-Other-Key-Press still off, tapping/quick-tap terms still 200.
+Keymap unchanged. Mirrored in kanata the same day after a first session on the
+Voyager ("not worse, maybe a little better"). The why is in `README.md`
+(Keyboard remapping).
+
+Two complaints drove it, and they pull in opposite directions under the old
+clock-only rule: `?` came out as `a/` (hold-`a` not yet 200ms old when `/`
+landed) and `ro` came out as Ctrl-O (ring finger still on `r` at 200ms).
+
+### ⚠️ Watch: does the new paradigm feel better?
+
+Failure looks like: shortcuts typed as letters (mod pressed too soon after
+typing → lower Tap Flow toward 75), or Ctrl-letter still firing mid-word
+(→ raise it toward 150). Word-initial rolls after a real pause can still
+misfire; that's a known residual, not a tuning target. Leave the tapping term
+alone for a few days. Tune Oryx and `tap-hold-require-prior-idle` together.
+
+New exposure on the laptop specifically: Space is now Permissive Hold too, so a
+thumb still resting on Space when the next letter is pressed and released opens
+the symbol layer (a stray `!` or `7` mid-sentence). The Voyager has the same
+rule; the laptop's wide bar under a resting hand is the difference to watch.
+
+### Open: give `?` a key on the symbol layer
+
+`?` is the only everyday symbol with no slot on the symbol layer, so it alone
+still goes through a Shift chord — and straight off the end of a word there is
+no pause before `a`, which is exactly when Tap Flow forces it to be a letter.
+On the Voyager there is no plain Shift key at all (bottom corners are mouse
+wheel), so hold-`a` is its only route today. Candidate slots: the free `b`
+position, or `?` at the `/` position with `/` moved. Change Oryx and both
+`symbols*` deflayers together.
+
+---
+
 ## 2026-10-14 — trying Sioyek instead of Preview
 
 Installed by hand (Homebrew cask disabled for Gatekeeper): the `sioyek3-alpha0`

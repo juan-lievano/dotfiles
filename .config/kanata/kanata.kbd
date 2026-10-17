@@ -54,6 +54,17 @@
   process-unmapped-keys yes   ;; keys absent from defsrc pass through untouched
   concurrent-tap-hold yes     ;; required to chord two home row mods at once
 
+  ;; Tap Flow (QMK FLOW_TAP_TERM / ZMK require-prior-idle-ms), mirroring Oryx
+  ;; rev aNj63V (2026-10-17): a tap-hold key pressed within 100ms of ANY other
+  ;; key press resolves as its tap at once, so mid-word rolls can never fire a
+  ;; modifier. QMK applies this only when both keys are "typing" keys (Space,
+  ;; letters, `, . ; /`); kanata has no such filter, so the keys whose TAP is
+  ;; not a typing key opt out below with `(require-prior-idle 0)` -- @nav
+  ;; (Return), @np4..@np6 (digits), @sy6..@sy9 (symbols). The remaining gap
+  ;; (QMK also ignores a non-typing PREVIOUS key, e.g. Backspace then hold `a`)
+  ;; is accepted.
+  tap-hold-require-prior-idle 100
+
   ;; Built-in keyboard ONLY. The Voyager has its own firmware mods and layers;
   ;; letting kanata also apply home row mods to it would double-process every
   ;; keystroke. Names come from `kanata --list`.
@@ -202,49 +213,44 @@
   ;; ctlp (fork p (unmod (lctl rctl) up)   (lctl rctl))
 
   ;; ---- Home row mods, index finger inward: Cmd Opt Ctrl Shift ----
-  ;; `tap-hold-tap-keys`, NOT `tap-hold-release-keys`, so that both keyboards
-  ;; feel the same. The Voyager runs QMK Chordal Hold with Permissive Hold and
-  ;; Hold-On-Other-Key-Press both OFF (Oryx defaults), and QMK's docs are
-  ;; explicit that with those off, "if the keys are on opposite hands, Chordal
-  ;; Hold introduces no new behavior" -- a cross-hand roll finished inside the
-  ;; tapping term is a TAP, and the mod only fires past the full timeout.
-  ;; `tap-hold-release-keys` is Permissive Hold ("activate hold early if
-  ;; another key is pressed and released"), so it fired modifiers on fast
-  ;; cross-hand rolls that the Voyager types straight through.
-  ;; `tap-hold-tap-keys` has the identical signature but waits out the full
-  ;; $hold-time, which is the QMK-default behaviour.
+  ;; `tap-hold-release-keys` = QMK Permissive Hold + Chordal Hold, matching
+  ;; the Voyager since Oryx rev aNj63V (2026-10-17): the mod fires as soon as
+  ;; another key is pressed AND released while this one is still down, so a
+  ;; chord no longer has to wait out $hold-time; a same-hand key (the list)
+  ;; settles it as a tap instead. Combined with `tap-hold-require-prior-idle`
+  ;; in defcfg (Tap Flow), mid-word rolls are letters no matter how long a
+  ;; finger lingers, and a deliberate mod needs a ~100ms pause BEFORE it rather
+  ;; than a 200ms hold after it.
   ;;
-  ;; Cost of parity: deliberate mods are slower. Ctrl-W is hold `l` for the
-  ;; full 200ms, THEN w -- you can't roll into it. Same as on the Voyager.
-  ;;
-  ;; Do NOT add `tap-hold-require-prior-idle` (ZMK's require-prior-idle-ms /
-  ;; QMK's Flow Tap). It would cut misfires further, but FLOW_TAP_TERM is off
-  ;; on the Voyager, so it would make the two keyboards diverge again. If it's
-  ;; ever wanted, turn it on in Oryx first.
+  ;; History: until 2026-10-17 both boards ran the QMK default (Chordal Hold
+  ;; alone, `tap-hold-tap-keys` here), where only the clock decided -- still
+  ;; down at $hold-time means mod. That failed in both directions: `?` typed
+  ;; as `a/` when `/` beat the 200ms, and `ro` typed as Ctrl-O when the ring
+  ;; finger outlasted it. No single tapping term fixes both.
   ;; $tap-time here is the tap-repress timeout = QMK's QUICK_TAP_TERM (200),
-  ;; and $hold-time = TAPPING_TERM (200). Both already match Oryx.
-  hma (tap-hold-tap-keys $tap-time $hold-time a     lsft $left-hand-keys)
-  hms (tap-hold-tap-keys $tap-time $hold-time s     lctl $left-hand-keys)
-  hmd (tap-hold-tap-keys $tap-time $hold-time d     lalt $left-hand-keys)
-  hmf (tap-hold-tap-keys $tap-time $hold-time f     lmet $left-hand-keys)
-  hmj (tap-hold-tap-keys $tap-time $hold-time j     rmet $right-hand-keys)
-  hmk (tap-hold-tap-keys $tap-time $hold-time k     ralt $right-hand-keys)
-  hml (tap-hold-tap-keys $tap-time $hold-time l     rctl $right-hand-keys)
-  hmsc (tap-hold-tap-keys $tap-time $hold-time ;     rsft $right-hand-keys)
+  ;; and $hold-time = TAPPING_TERM (200). Both match Oryx.
+  hma (tap-hold-release-keys $tap-time $hold-time a     lsft $left-hand-keys)
+  hms (tap-hold-release-keys $tap-time $hold-time s     lctl $left-hand-keys)
+  hmd (tap-hold-release-keys $tap-time $hold-time d     lalt $left-hand-keys)
+  hmf (tap-hold-release-keys $tap-time $hold-time f     lmet $left-hand-keys)
+  hmj (tap-hold-release-keys $tap-time $hold-time j     rmet $right-hand-keys)
+  hmk (tap-hold-release-keys $tap-time $hold-time k     ralt $right-hand-keys)
+  hml (tap-hold-release-keys $tap-time $hold-time l     rctl $right-hand-keys)
+  hmsc (tap-hold-release-keys $tap-time $hold-time ;     rsft $right-hand-keys)
 
   ;; ---- The same eight mods, with Colemak-DH letters under them ----
   ;; Physical a s d f / j k l ; carry Shift Ctrl Opt Cmd inward exactly as above;
   ;; only the tap letters change (a r s t / n e i o). Timings, chordal behaviour
   ;; and every argument in the block above are unchanged -- if you retune one set
   ;; of eight, retune the other, or the two layouts stop feeling alike.
-  cma (tap-hold-tap-keys $tap-time $hold-time a lsft $left-hand-keys-cmk)
-  cmr (tap-hold-tap-keys $tap-time $hold-time r lctl $left-hand-keys-cmk)
-  cms (tap-hold-tap-keys $tap-time $hold-time s lalt $left-hand-keys-cmk)
-  cmt (tap-hold-tap-keys $tap-time $hold-time t lmet $left-hand-keys-cmk)
-  cmn (tap-hold-tap-keys $tap-time $hold-time n rmet $right-hand-keys)
-  cme (tap-hold-tap-keys $tap-time $hold-time e ralt $right-hand-keys)
-  cmi (tap-hold-tap-keys $tap-time $hold-time i rctl $right-hand-keys)
-  cmo (tap-hold-tap-keys $tap-time $hold-time o rsft $right-hand-keys)
+  cma (tap-hold-release-keys $tap-time $hold-time a lsft $left-hand-keys-cmk)
+  cmr (tap-hold-release-keys $tap-time $hold-time r lctl $left-hand-keys-cmk)
+  cms (tap-hold-release-keys $tap-time $hold-time s lalt $left-hand-keys-cmk)
+  cmt (tap-hold-release-keys $tap-time $hold-time t lmet $left-hand-keys-cmk)
+  cmn (tap-hold-release-keys $tap-time $hold-time n rmet $right-hand-keys)
+  cme (tap-hold-release-keys $tap-time $hold-time e ralt $right-hand-keys)
+  cmi (tap-hold-release-keys $tap-time $hold-time i rctl $right-hand-keys)
+  cmo (tap-hold-release-keys $tap-time $hold-time o rsft $right-hand-keys)
 
   ;; Angle mod: the left bottom row slides one key left onto Left Shift, so that
   ;; key becomes `z`. Tap-hold rather than a plain `z` because the alternative is
@@ -256,7 +262,7 @@
   ;; This does NOT interfere with `<hold spc>z` -> Tab: a held layer's entry
   ;; replaces the base action outright, so the tap-hold underneath is never
   ;; consulted. See the `symbols-cmk` layer for where Tab actually sits.
-  cmz (tap-hold-tap-keys $tap-time $hold-time z lsft $left-hand-keys)
+  cmz (tap-hold-release-keys $tap-time $hold-time z lsft $left-hand-keys)
 
   ;; Colemak swaps the letters h and m, and the Ctrl rewrites follow the LETTER,
   ;; not the physical key, so the two forks simply trade physical keys:
@@ -297,16 +303,21 @@
   ;; picks, exactly as it used to pick between @symm and @symh.
   ;;
   ;; KNOWN RISK, taken deliberately: Space is the most-pressed key on the board,
-  ;; and any press held past $hold-time now opens a layer instead of doing
-  ;; nothing. The Voyager has run precisely this arrangement without trouble,
-  ;; which is the whole argument for trying it. If it does misfire in practice,
-  ;; the cheap knob is a longer hold time on THIS key alone -- write a literal
-  ;; 250 or 300 in place of $hold-time here and leave every other timing at 200,
-  ;; since this is the only key whose hold is fighting ordinary prose. The
-  ;; expensive fix is moving symbols back off the thumb, which costs the numpad.
-  ;; Space also loses key repeat; it already had, under the old launcher.
-  spc  (tap-hold $tap-time $hold-time spc (layer-while-held symbols))
-  spck (tap-hold $tap-time $hold-time spc (layer-while-held symbols-cmk))
+  ;; and a press held past $hold-time -- or, since `tap-hold-release`
+  ;; (Permissive Hold, as QMK applies it to LT() thumbs too), one still down
+  ;; when the next key is pressed and released -- opens a layer instead of
+  ;; doing nothing. The Voyager has run precisely this arrangement without
+  ;; trouble, which is the whole argument for trying it. If it does misfire in
+  ;; practice, the cheap knob is a longer hold time on THIS key alone -- write
+  ;; a literal 250 or 300 in place of $hold-time here and leave every other
+  ;; timing at 200, since this is the only key whose hold is fighting ordinary
+  ;; prose. The expensive fix is moving symbols back off the thumb, which
+  ;; costs the numpad. Space also loses key repeat; it already had, under the
+  ;; old launcher.
+  ;; Space keeps the global Tap Flow (Space IS a typing key in QMK's filter),
+  ;; so hold-Space within 100ms of a letter is a plain space. Pause, then hold.
+  spc  (tap-hold-release $tap-time $hold-time spc (layer-while-held symbols))
+  spck (tap-hold-release $tap-time $hold-time spc (layer-while-held symbols-cmk))
 
   ;; Right Cmd: tap Return, hold nav -- the Voyager's LT(2, KC_ENTER). The same
   ;; key carries `0` on the symbol layer, which is NOT a conflict: a held
@@ -314,7 +325,7 @@
   ;; consulted while Space is down. Same mechanism as `<hold spc>z` -> Tab.
   ;; Physical Right Cmd is consumed. Cmd survives on physical Left Cmd, on
   ;; @hmf/@cmt (left hand) and on @hmj/@cmn (right hand).
-  nav  (tap-hold $tap-time $hold-time ret (layer-while-held nav))
+  nav  (tap-hold-release $tap-time $hold-time ret (layer-while-held nav) (require-prior-idle 0))
 
   ;; Right Option: the launch layer and nothing else. No tap action, so it is a
   ;; plain layer key with no timing behaviour at all -- press and it is open,
@@ -333,10 +344,10 @@
   ;; no slower than typing letters.
   ;; Cost: holding 4/5/6/. no longer key-repeats. Physical j is deliberately
   ;; skipped in the Voyager's own numpad too (`+` there is a plain key).
-  np4 (tap-hold-tap-keys $tap-time $hold-time 4   rmet $right-hand-keys)
-  np5 (tap-hold-tap-keys $tap-time $hold-time 5   ralt $right-hand-keys)
-  np6 (tap-hold-tap-keys $tap-time $hold-time 6   rctl $right-hand-keys)
-  npd (tap-hold-tap-keys $tap-time $hold-time .   rsft $right-hand-keys)
+  np4 (tap-hold-release-keys $tap-time $hold-time 4   rmet $right-hand-keys (require-prior-idle 0))
+  np5 (tap-hold-release-keys $tap-time $hold-time 5   ralt $right-hand-keys (require-prior-idle 0))
+  np6 (tap-hold-release-keys $tap-time $hold-time 6   rctl $right-hand-keys (require-prior-idle 0))
+  npd (tap-hold-release-keys $tap-time $hold-time .   rsft $right-hand-keys)
   ;; Left hand, same idea: the Voyager's layer 1 has MT(MOD_LSFT, KC_CIRC),
   ;; MT(MOD_LCTL, KC_AMPR), MT(MOD_LALT, KC_ASTR), MT(MOD_LGUI, KC_LPRN) on
   ;; a s d f. Without these the only Shift on the layer was `;`, which is
@@ -357,10 +368,10 @@
   ;; remaining keys (s d f, the other mods) get permissive hold so chords still
   ;; chain. The numpad mods on the right keep the full wait on purpose: digit
   ;; rolls like "456" have nested releases and would misfire as Cmd-5.
-  sy6 (tap-hold-keys $tap-time $hold-time S-6 lsft $sy-tap-on-press $sy-hold-on-press)
-  sy7 (tap-hold-keys $tap-time $hold-time S-7 lctl $sy-tap-on-press $sy-hold-on-press)
-  sy8 (tap-hold-keys $tap-time $hold-time S-8 lalt $sy-tap-on-press $sy-hold-on-press)
-  sy9 (tap-hold-keys $tap-time $hold-time S-9 lmet $sy-tap-on-press $sy-hold-on-press)
+  sy6 (tap-hold-keys $tap-time $hold-time S-6 lsft $sy-tap-on-press $sy-hold-on-press (require-prior-idle 0))
+  sy7 (tap-hold-keys $tap-time $hold-time S-7 lctl $sy-tap-on-press $sy-hold-on-press (require-prior-idle 0))
+  sy8 (tap-hold-keys $tap-time $hold-time S-8 lalt $sy-tap-on-press $sy-hold-on-press (require-prior-idle 0))
+  sy9 (tap-hold-keys $tap-time $hold-time S-9 lmet $sy-tap-on-press $sy-hold-on-press (require-prior-idle 0))
 )
 
 ;; Ctrl-; -> ~  (exact input-combo -> output-combo rewrite)
