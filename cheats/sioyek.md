@@ -57,7 +57,8 @@ are no tabs: one window shows one PDF, a newly opened file replaces it, and
 |-------------------------|-------------------------------------------------|
 | `/` or `Ctrl-F`         | search; `n` / `N` next / previous hit           |
 | `c/`                    | search within the current chapter               |
-| `s`                     | web-search the selected text (Google Scholar)   |
+| `ss`                    | Google the selection (also middle-click a word) |
+| `sd`                    | the selection in Dictionary.app                 |
 
 ## Mark
 
@@ -67,9 +68,9 @@ are no tabs: one window shows one PDF, a newly opened file replaces it, and
 | `h` / `gh` / `dh`       | highlight the selection (then a colour letter) / go to / delete |
 | `m` + letter / `` ` `` + letter | set / jump to a mark, like vim          |
 | `v`                     | keyboard text selection                         |
-| `Ctrl-C`                | copy the selection                              |
+| `y` / `Ctrl-C`          | copy the selection                              |
 
-Mouse: drag selects text, wheel scrolls, middle-click a word searches it.
+Mouse: drag selects text, double-click selects a word, wheel scrolls.
 Config: `~/.config/sioyek/prefs_user.config` and `keys_user.config`; defaults
 with every option documented live in `/Applications/sioyek.app/Contents/MacOS/`.
 PDFs are routed through `~/Applications/Open in sioyek.app` (source in
