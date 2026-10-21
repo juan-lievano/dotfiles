@@ -78,31 +78,13 @@ is what makes home row mods tolerable. Consequence worth remembering: reach for
 the Ctrl on the **opposite hand** from the letter (`l`+w for Ctrl-W, `s`+h for
 Ctrl-H). Caps Lock is still Ctrl and works regardless of hand.
 
-The variant **matches the Voyager**, which since 2026-10-17 (Oryx revision
-`aNj63V`) runs Getreuer's "timeless" recipe: Chordal Hold **plus Permissive Hold
-plus Tap Flow at 100ms**, tapping and quick-tap terms 200. In kanata that is
-`tap-hold-release-keys` on every home row alias (Permissive Hold with the
-per-hand list as Chordal Hold), `tap-hold-release` on the layer thumbs, and
-`tap-hold-require-prior-idle 100` in `defcfg` (Tap Flow), with `$hold-time` =
-`TAPPING_TERM` and `$tap-time` = `QUICK_TAP_TERM`.
-
-Permissive Hold fires the mod as soon as the other key is pressed *and released*
-while the mod key is down, so a shortcut no longer needs a 200ms hold. Tap Flow
-(QMK `FLOW_TAP_TERM`, ZMK `require-prior-idle-ms`) forces a mod-tap to be its
-letter when pressed within 100ms of the previous key, so mid-word rolls can't
-fire mods. The wait moves from *after* the mod press (a hold) to *before* it (a
-pause you make anyway). QMK applies Tap Flow only between "typing" keys; kanata
-has no such filter, so the keys whose tap is not a letter (nav's Return, the
-numpad digits, the symbol layer's `^ & * (`) opt out with
-`(require-prior-idle 0)`.
-
-Until 2026-10-17 both boards ran the QMK default, Chordal Hold alone
-(`tap-hold-tap-keys` here): the mod fired only when the key was still down at
-the full tapping term, whatever was pressed next. That failed in both
-directions — `?` came out as `a/` when the `/` beat the 200ms, and `ro` came out
-as Ctrl-O when a ring finger outlasted it — and no single tapping term fixes
-both. Anything tuned on one board should be changed on the other, or the two
-stop feeling alike.
+The variant is `tap-hold-tap-keys`, QMK's default Chordal Hold: the mod fires
+only when the key is still down at the full 200ms (`$hold-time` =
+`TAPPING_TERM`, `$tap-time` = `QUICK_TAP_TERM`), so deliberate mods mean holding
+before the other key. The Voyager moved to Permissive Hold + Tap Flow on
+2026-10-17 (Oryx `aNj63V`); the laptop tried the same and went back on
+2026-10-20 because it felt bad on the built-in keyboard, so the two boards now
+differ on purpose.
 
 ### Two alpha layouts: QWERTY and Colemak-DH (hold Right Option, tap `\`)
 

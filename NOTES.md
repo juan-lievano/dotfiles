@@ -34,6 +34,12 @@ thumb still resting on Space when the next letter is pressed and released opens
 the symbol layer (a stray `!` or `7` mid-sentence). The Voyager has the same
 rule; the laptop's wide bar under a resting hand is the difference to watch.
 
+### 2026-10-20 — laptop reverted
+
+The laptop is back on `tap-hold-tap-keys` with no Tap Flow (the pre-90cbd3f
+config). 75ms didn't save it: still fine on the Voyager, bad on the built-in
+keyboard. The Voyager keeps `aNj63V`.
+
 ### Open: give `?` a key on the symbol layer
 
 `?` is the only everyday symbol with no slot on the symbol layer, so it alone

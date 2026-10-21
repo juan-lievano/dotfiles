@@ -220,9 +220,6 @@ path: `h` is the Ctrl-H→Delete fork, which now lets Hyper through (README).
 ## Cross-reference with the Voyager
 
 `zsa_voyager_*_source/.../keymap.c`, layout `waLwq`, revision `40xdX3` (Oct 2026).
-Revision `aNj63V` (2026-10-17) changed only the tap-hold settings, not the
-keymap; its source wasn't kept, so the settings row below is from Oryx, not
-from a `config.h`.
 
 | here | Voyager |
 |------|---------|
@@ -233,7 +230,7 @@ from a `config.h`.
 | nav's `j k l ;` | `KC_RIGHT_GUI / ALT / CTRL / SHIFT`, layer 2 |
 | nav's Home/PgUp/PgDn/End, tab-switch, media | layer 2 inner column + bottom row |
 | Caps Lock as Esc | `KC_ESCAPE`, same position |
-| `tap-hold-release-keys` + `tap-hold-require-prior-idle 100`, 200/200 | Chordal Hold + Permissive Hold + Tap Flow 100 (since 2026-10-17), `TAPPING_TERM` / `QUICK_TAP_TERM` 200 |
+| `tap-hold-tap-keys`, 200/200 (laptop only; reverted 2026-10-20) | Chordal Hold + Permissive Hold + Tap Flow 100 since 2026-10-17, `TAPPING_TERM` / `QUICK_TAP_TERM` 200 |
 | angle mod, dead `b` | same |
 
 **Not ported.** Only the Voyager's layer-2 mouse keys now: movement on its left
