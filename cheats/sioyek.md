@@ -45,7 +45,7 @@ are no tabs: one window shows one PDF, a newly opened file replaces it, and
 | `+` / `-`               | zoom in / out                                   |
 | `=`                     | fit page width                                  |
 | `F10`                   | fit text width (trims margins)                  |
-| `r` / `R`               | rotate                                          |
+| `Ctrl-R` / `Ctrl-Shift-R` | rotate clockwise / counter (`r` / `R` disabled) |
 | `F11`                   | leave / re-enter fullscreen (starts fullscreen) |
 | `F5`                    | presentation mode (one page, no UI)             |
 | `F8`                    | dark mode (inverts the page)                    |
@@ -64,8 +64,10 @@ are no tabs: one window shows one PDF, a newly opened file replaces it, and
 
 | Key                     | Does                                            |
 |-------------------------|-------------------------------------------------|
-| `b` / `gb` / `db`       | add / go to / delete a bookmark                 |
-| `h` / `gh` / `dh`       | highlight the selection (then a colour letter) / go to / delete |
+| `b` / `gb` / `db`       | add a bookmark (asks for its text) / list them and jump / delete one |
+| `h` / `gh`              | highlight the selection (then a colour letter) / go to one |
+| click it, then `ch`     | add a comment to that highlight; clicking it shows the comment in the status bar |
+| click it, then `dh`     | delete that highlight (and its comment)         |
 | `m` + letter / `` ` `` + letter | set / jump to a mark, like vim          |
 | `v`                     | keyboard text selection                         |
 | `y` / `Ctrl-C`          | copy the selection                              |
