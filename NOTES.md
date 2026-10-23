@@ -52,6 +52,22 @@ position, or `?` at the `/` position with `/` moved. Change Oryx and both
 
 ---
 
+## 2026-10-23 — Sioyek moved to the development branch
+
+Wanted `tag_font_face` and the typed-prefix recolouring for the `v` labels,
+both dev-only. No tagged release since sioyek3-alpha0 (2024-09), but CI still
+builds every push, so: `gh run download 38654187276 -R ahrm/sioyek -n
+mac-arm-uploads` (commit bfcd3a75, artifacts expire after 90 days), unzip,
+mount build/sioyek.dmg, copy to /Applications, `xattr -cr`, `codesign --force
+--deep --sign -`, rerun open-in-sioyek/build.sh. Bundled keys/prefs defaults
+are byte-identical to the alpha's (now under Contents/Resources, not MacOS).
+Config in `.config/sioyek/` carried over unchanged. `--version` still says
+2.0.0. DBs backed up to `~/Library/Application Support/sioyek-backup-2026-10-23`
+and the alpha parked at `~/Applications/sioyek-alpha0.app`; delete both once
+the dev build has proven itself.
+
+---
+
 ## 2026-10-14 — trying Sioyek instead of Preview
 
 Installed by hand (Homebrew cask disabled for Gatekeeper): the `sioyek3-alpha0`

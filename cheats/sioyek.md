@@ -74,7 +74,7 @@ are no tabs: one window shows one PDF, a newly opened file replaces it, and
 
 Mouse: drag selects text, double-click selects a word, wheel scrolls.
 Config: `~/.config/sioyek/prefs_user.config` and `keys_user.config`; defaults
-with every option documented live in `/Applications/sioyek.app/Contents/MacOS/`.
+with every option documented live in `/Applications/sioyek.app/Contents/Resources/`.
 PDFs are routed through `~/Applications/Open in sioyek.app` (source in
 `~/.config/sioyek/open-in-sioyek/`), which activates sioyek so macOS switches
 to its fullscreen Space; rebuild with its `build.sh`.

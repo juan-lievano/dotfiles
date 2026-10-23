@@ -37,9 +37,11 @@ cask "karabiner-elements"           # VirtualHIDDevice driver provider for kanat
 cask "codex"
 cask "mactex-no-gui"
 # sioyek (PDF viewer) is NOT a cask line: the cask was disabled 2026-09-01 for
-# failing Gatekeeper. Installed by hand from the sioyek3-alpha0 GitHub release
-# (sioyek-release-mac-arm.zip -> build/sioyek.dmg -> /Applications), no
-# quarantine attr, ad-hoc signed. Config is tracked in .config/sioyek; install.sh
+# failing Gatekeeper. Installed by hand from a GitHub Actions artifact of the
+# development branch (the author stopped tagging releases after sioyek3-alpha0,
+# 2024-09): `gh run download <run id> -R ahrm/sioyek -n mac-arm-uploads`, then
+# sioyek-release-mac-arm.zip -> build/sioyek.dmg -> /Applications, xattr -cr,
+# ad-hoc codesign. Currently run 38654187276 (commit bfcd3a75, 2026-10-14). Config is tracked in .config/sioyek; install.sh
 # also builds the "Open in sioyek" PDF-handler shim from there (needs swiftc).
 cask "discord"
 cask "docker-desktop"
