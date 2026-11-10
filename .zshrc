@@ -59,7 +59,7 @@ nq() { echo 'nq is an alias for networkQuality'; networkQuality "$@"; }
 cheat() {
   local link="$HOME/.zshrc" dir m
   dir="${link:A:h}/cheats"   # resolve the symlink to the repo, like dotcheck
-  [ -z "$1" ] && { ls "$dir" | sed 's/\.md$//'; return; }
+  [ -z "$1" ] && { print -l "$dir"/*.md(:t:r); return; }   # names only: some sheets are links into their project's repo
   m=("$dir/$1".md(N) "$dir/$1"*.md(N))
   [ ${#m} -eq 0 ] && { echo "no sheet matching '$1' in $dir"; return 1; }
   if (( $+commands[glow] )); then glow "${m[1]}"; else cat "${m[1]}"; fi
