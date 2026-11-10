@@ -15,7 +15,7 @@
     "level_indent": 2
   },
   "heading": {
-    "block_suffix": "\n",
+    "block_suffix": "",
     "prefix": " ",
     "suffix": " ",
     "color": "0",
@@ -38,6 +38,10 @@
     "italic": true
   },
   "strong": {
+    "prefix": " ",
+    "suffix": " ",
+    "color": "0",
+    "background_color": "4",
     "bold": true
   },
   "hr": {

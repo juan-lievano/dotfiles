@@ -5,4 +5,4 @@
 # path is absolute.
 style: /Users/jplk/.config/glow/ansi.json
 pager: false
-width: 90
+width: 110

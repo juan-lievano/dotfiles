@@ -62,7 +62,11 @@ cheat() {
   [ -z "$1" ] && { print -l "$dir"/*.md(:t:r); return; }   # names only: some sheets are links into their project's repo
   m=("$dir/$1".md(N) "$dir/$1"*.md(N))
   [ ${#m} -eq 0 ] && { echo "no sheet matching '$1' in $dir"; return 1; }
-  if (( $+commands[glow] )); then glow "${m[1]}"; else cat "${m[1]}"; fi
+  (( $+commands[glow] )) || { cat "${m[1]}"; return; }
+  # Piped, glow ignores its config, so the style and width (as in glow.yml) are passed. perl blanks
+  # the first column's piece of the header rule in a three-column sheet (section | command | does).
+  glow -s "${link:A:h}/.config/glow/ansi.json" -w 110 "${m[1]}" |
+    perl -Mutf8 -CSD -pe 's/^(\s*)(─+)┼(?=─+┼)/$1 . (" " x length($2)) . "│"/e'
 }
 
 # t NAME [DIR]: attach to (or create) tmux session NAME, switch if already
