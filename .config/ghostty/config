@@ -8,7 +8,7 @@
 
 # font-family is deliberately unset: Ghostty ships JetBrains Mono built in
 # (same face WezTerm bundles), so unset = JetBrains Mono, no font install.
-font-size = 15
+font-size = 16
 
 # WezTerm: window_background_opacity 0.90 / macos_window_background_blur 92.
 # Both terminals feed the blur number to the same private CoreGraphics call,

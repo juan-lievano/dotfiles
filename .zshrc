@@ -191,6 +191,7 @@ fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="/opt/homebrew/opt/rustup/bin:$HOME/.cargo/bin:$PATH"  # rust: brew rustup (keg-only) + cargo install bins
 
 # ---------------------------------------------------------------------------
 # fzf keybindings (defined AFTER sourcing fzf so the widgets exist)
