@@ -1,80 +1,57 @@
 # sioyek
+Config `~/.config/sioyek/`; stock keys in `/Applications/sioyek.app/Contents/Resources/keys.config`.
 
-PDF viewer, vim-ish. Keys act straight away, no prefix; `:` opens a command
-palette where every command can be typed by name (fuzzy). Inside any menu
-(`O`, `t`, `:`, `gb`...) `Ctrl-N`/`Ctrl-P` move the selection (bound in
-keys_user.config via `[m]control_menu`), `Enter` picks, `Esc` closes.
-Position, bookmarks and highlights persist per file across restarts. There
-are no tabs: one window shows one PDF, a newly opened file replaces it, and
-`O` is the tab list.
-
-## Open and leave
-
-| Key / command           | Does                                            |
-|-------------------------|-------------------------------------------------|
-| `Hyper-3`               | launch / focus sioyek                           |
-| `open file.pdf`         | open in sioyek, via the "Open in sioyek" shim (also Finder, Dock stacks, nvim `<leader>ll`) |
-| `O`                     | fuzzy list of every PDF opened before: the "tabs" |
-| `Ctrl-O` / `Backspace`  | back to where you were, across PDFs too         |
-| `o` / `go`              | open a file: system dialog / built-in browser   |
-| `Ctrl-T` / `Ctrl-W`     | a second window if you really want one / close it |
-| `F11`                   | leave / re-enter fullscreen (starts fullscreen) |
-| `gf`                    | reveal the current file in Finder               |
-| `q` / `Cmd-W`          | quit (Cmd-W closed the window but kept the app)  |
-| `cheat sioyek`          | this sheet                                      |
-
-## Move
-
-| Key                     | Does                                            |
-|-------------------------|-------------------------------------------------|
-| `j` / `k`               | scroll a line down / up                         |
-| `Ctrl-D` / `Ctrl-U`     | half screen down / up                           |
-| `Space` / `Shift-Space` | screen down / up                                |
-| `gg` / `G`              | first / last page                               |
-| `Home`                  | go to page N (type the number)                  |
-| `gc` / `gC`             | next / previous chapter                         |
-| `t`                     | table of contents                               |
-| `Ctrl-O` / `Ctrl-I`     | back / forward in jump history, like nvim (also `Backspace` / `Shift-Backspace`) |
-| `f`                     | follow a link: labels appear, type one          |
-| `Ctrl-]` / `l`          | jump to / preview the reference under the cursor |
-
-## Look
-
-| Key                     | Does                                            |
-|-------------------------|-------------------------------------------------|
-| `+` / `-`               | zoom in / out                                   |
-| `=`                     | fit page width                                  |
-| `F10`                   | fit text width (trims margins)                  |
-| `Ctrl-R` / `Ctrl-Shift-R` | rotate clockwise / counter (`r` / `R` disabled) |
-| `F11`                   | leave / re-enter fullscreen (starts fullscreen) |
-| `F5`                    | presentation mode (one page, no UI)             |
-| `F8`                    | dark mode (inverts the page)                    |
-| `F7`                    | visual scroll: `j`/`k` move a reading ruler     |
-
-## Find
-
-| Key                     | Does                                            |
-|-------------------------|-------------------------------------------------|
-| `/` or `Ctrl-F`         | search; `n` / `N` next / previous hit           |
-| `c/`                    | search within the current chapter               |
-| `ss`                    | Google the selection (also middle-click a word) |
-| `sd`                    | the selection in Dictionary.app                 |
-
-## Mark
-
-| Key                     | Does                                            |
-|-------------------------|-------------------------------------------------|
-| `b` / `gb` / `db`       | add a bookmark (asks for its text) / list them and jump / delete one |
-| `h` / `gh`              | highlight the selection (then a colour letter) / go to one |
-| click it, then `ch`     | add a comment to that highlight; clicking it shows the comment in the status bar |
-| click it, then `dh`     | delete that highlight (and its comment)         |
-| `m` + letter / `` ` `` + letter | set / jump to a mark, like vim          |
-| `v`                     | keyboard text selection                         |
-| `y` / `Ctrl-C`          | copy the selection                              |
-
-Mouse: drag selects text, double-click selects a word, wheel scrolls.
-Config: `~/.config/sioyek/prefs_user.config` and `keys_user.config`; defaults
-with every option documented live in `/Applications/sioyek.app/Contents/Resources/`.
-PDFs are routed through `~/Applications/Open in sioyek.app` (source in
-`~/.config/sioyek/open-in-sioyek/`), which activates sioyek so macOS switches
-to its fullscreen Space; rebuild with its `build.sh`.
+|                | Key                           | Does                                         |
+|----------------|-------------------------------|----------------------------------------------|
+| **Open**       | `Hyper-3`                     | launch / focus                               |
+|                | `open x.pdf`                  | replaces the PDF on screen (one window)      |
+|                | `O`                           | every PDF opened before: the tabs            |
+|                | `o` / `go`                    | open: system dialog / built-in browser       |
+|                | `gf`                          | reveal the file in Finder                    |
+|                | `Ctrl-T` / `Ctrl-W`           | second window / close it                     |
+|                | `q`, `Cmd-W`                  | quit                                         |
+|                | `open-in-sioyek/build.sh`     | rebuild `~/Applications/Open in sioyek.app`  |
+|   | ──────────────────────────────── | ──────────────────────────────────────────────────────── |
+| **Move**       | `j` / `k`                     | line down / up                               |
+|                | `Ctrl-D` / `Ctrl-U`           | half screen down / up                        |
+|                | `Space` / `Shift-Space`       | the same                                     |
+|                | `gg` / `G`                    | first / last page                            |
+|                | `Home`                        | page N                                       |
+|                | `gc` / `gC`                   | next / previous chapter                      |
+|                | `t`                           | contents                                     |
+|                | `Ctrl-O` / `Ctrl-I`           | back / forward, across PDFs                  |
+|                | `Backspace` / `Shift-Backspace` | the same                                   |
+|                | `f`                           | follow a link: type its label                |
+|                | `Ctrl-]` / `l`                | jump to / preview the reference under the mouse |
+|   | ──────────────────────────────── | ──────────────────────────────────────────────────────── |
+| **Menus**      | `:`                           | any command by name                          |
+|                | `Ctrl-N` / `Ctrl-P`           | down / up                                    |
+|                | `Enter` / `Esc`               | pick / close                                 |
+|   | ──────────────────────────────── | ──────────────────────────────────────────────────────── |
+| **Look**       | `+` / `-`                     | zoom                                         |
+|                | `=`                           | fit page width                               |
+|                | `F10`                         | fit text width                               |
+|                | `Ctrl-R` / `Ctrl-Shift-R`     | rotate; `r` `R` disabled                     |
+|                | `F11`                         | fullscreen; starts on                        |
+|                | `F5`                          | presentation mode                            |
+|                | `F8`                          | dark mode (invert)                           |
+|                | `:toggle_custom_color`        | page in the terminal's colours               |
+|                | `F7`                          | reading ruler; `j` / `k` move it             |
+|   | ──────────────────────────────── | ──────────────────────────────────────────────────────── |
+| **Find**       | `/`, `Ctrl-F`                 | search; `n` / `N` next / previous            |
+|                | `c/`                          | search this chapter                          |
+|                | `ss`, middle-click            | Google the selection / the word              |
+|                | `sd`                          | the selection in Dictionary.app              |
+|   | ──────────────────────────────── | ──────────────────────────────────────────────────────── |
+| **Mark**       | `b` / `gb` / `db`             | bookmark: add / list / delete                |
+|                | `h` + letter                  | highlight the selection in that colour       |
+|                | `gh`                          | list highlights                              |
+|                | &nbsp;click one, `ch`               | comment on it; shows in the status bar       |
+|                | &nbsp;click one, `dh`               | delete it                                    |
+|                | `m` / backtick + letter       | set / jump to a mark                         |
+|                | `v`                           | select by keyboard: numbered labels          |
+|                | `y`, `Ctrl-C`                 | copy the selection                           |
+|   | ──────────────────────────────── | ──────────────────────────────────────────────────────── |
+| **Settings**   | &nbsp;font                          | JetBrains Mono 15                            |
+|                | &nbsp;colours                       | copied from Ghostty by hand; redo after `termbg` |
+|                | &nbsp;bookmarks, highlights, position | `~/Library/Application Support/sioyek/` |

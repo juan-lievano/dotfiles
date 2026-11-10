@@ -1,84 +1,68 @@
 # tmux
+Config `~/.config/tmux/tmux.conf`. Prefix `Ctrl-A`; for `t c n p w d v s x z f o e` Ctrl may stay held.
 
-A session is a group of tabs for one project; a window is a tab in it.
-Every tmux command is two steps: press the prefix (Ctrl-A), let go, press a key.
-For the common letters, keeping Ctrl held works too: Ctrl-A Ctrl-C = Ctrl-A c.
-
-## Tabs without the prefix (Ghostty sends tmux a private code)
-
-The rule: a key skips the prefix only if programs never see it. Cmd and
-Ctrl-Tab never reach the shell or nvim, so tmux can have them for free.
-Ctrl-letters (Ctrl-T, Ctrl-N, Ctrl-W…) do reach them, so those stay behind Ctrl-A.
-
-| Key                            | Does                 |
-|--------------------------------|----------------------|
-| `Cmd-T`                        | new window (tab)     |
-| `Cmd-W`                        | close window (asks if busy) |
-| `Ctrl-Tab` / `Cmd-Shift-]`     | next window          |
-| `Ctrl-Shift-Tab` / `Cmd-Shift-[` | previous window    |
-| `Cmd-1`-`Cmd-9`                | go to window N       |
-
-## From the shell
-
-| Command                        | Does                                                        |
-|--------------------------------|-------------------------------------------------------------|
-| `t`                            | list sessions                                               |
-| `t NAME [DIR]`                 | attach to NAME, creating it if needed; switch if in tmux    |
-| `tmux kill-session -t NAME`    | close a session and everything running in it                |
-| `cheat tmux`                   | this sheet (`cheat` alone lists all sheets)                 |
-
-## Windows and sessions (Ctrl-A, then…)
-
-| Key     | Does                                           |
-|---------|------------------------------------------------|
-| `t`     | new window (tab)                               |
-| `n`     | new session: `:new -A -s ` typed, add a name   |
-| `1`-`9` | go to window N                                 |
-| `Tab`   | next window                                    |
-| `Shift-Tab` | previous window                            |
-| `f`     | fuzzy-find any window in any session           |
-| `w`     | tree view of all sessions and windows          |
-| `,`     | rename window                                  |
-| `$`     | rename session                                 |
-| `&`     | close window (asks)                            |
-| `d`     | detach: leave it all running, back to Ghostty  |
-
-## Panes (Ctrl-A, then…)
-
-| Key      | Does                                          |
-|----------|-----------------------------------------------|
-| `v`      | split side by side (like nvim Ctrl-W v)       |
-| `s`      | split top / bottom (like nvim Ctrl-W s)       |
-| arrows   | move between panes                            |
-| `z`      | zoom pane to full size (again to undo)        |
-| `x`      | close pane (asks)                             |
-
-## Other (Ctrl-A, then…)
-
-| Key      | Does                                          |
-|----------|-----------------------------------------------|
-| `[`      | scroll / copy mode, `q` quits                 |
-| `o`      | one-command shell popup (`open x.pdf`); closes on success, `&` for GUI apps |
-| `:`      | type a tmux command (`:list-keys` shows all)  |
-| `r`      | reload tmux.conf                              |
-| `Ctrl-A` | send a literal Ctrl-A                         |
-
-## Status bar, right side
-
-`mem 34%` is how much memory is in use (yellow/red = Apple's memory-pressure
-light). `cpu 9%` is the whole machine, so one process pegging one core shows
-as ~8%. A third item names a process that used more than 15 minutes of CPU
-in the last hour (`Python 58m` = 58 CPU-minutes). It's a fact, not a verdict:
-a build you just ran will show for an hour; something you don't recognise is
-the thing to look up (`ps -p PID` or `top -o cpu`). Refreshes every minute;
-the hour is 60 refreshes, so sleep doesn't count. Script: `sysload.sh`,
-history in `~/.cache/tmux-sysload-hist`.
-
-## Leaving
-
-| Want                        | Do                                                   |
-|-----------------------------|------------------------------------------------------|
-| come back later             | `Ctrl-A d`, then `t NAME` when you return             |
-| done with the project       | `Ctrl-D` in every shell, or `tmux kill-session -t NAME` |
-
-Mouse wheel scrolls; selecting with the mouse copies. Config: `~/.config/tmux/tmux.conf`.
+|                | Key                           | Does                                         |
+|----------------|-------------------------------|----------------------------------------------|
+| **No prefix**  | `Cmd-T`                       | new window                                   |
+|                | `Cmd-W`                       | close window; asks unless one idle zsh       |
+|                | `Ctrl-Tab`, `Cmd-Shift-]`     | next window                                  |
+|                | `Ctrl-Shift-Tab`, `Cmd-Shift-[` | previous window                            |
+|                | `Cmd-1`-`Cmd-9`               | window N                                     |
+|                | &nbsp;outside tmux            | these keys print junk (Ghostty sends codes)  |
+|   | ─────────────────────────────── | ──────────────────────────────────────────────── |
+| **Shell**      | `t`                           | list sessions                                |
+|                | `t NAME [DIR]`                | attach or create; switches inside tmux       |
+|                | `tmux kill-session -t NAME`   | end a session                                |
+|   | ─────────────────────────────── | ──────────────────────────────────────────────── |
+| **Windows**    | `t`, `c`                      | new window, same directory                   |
+|                | `Tab` / `Shift-Tab`           | next / previous (`p` previous too)           |
+|                | `1`-`9`                       | window N                                     |
+|                | `f`                           | fuzzy-pick a window in any session           |
+|                | `w`                           | tree of sessions and windows                 |
+|                | `,`                           | rename                                       |
+|                | `&`                           | close (asks)                                 |
+|   | ─────────────────────────────── | ──────────────────────────────────────────────── |
+| **Sessions**   | `n`                           | types `:new -A -s `; a name creates or switches |
+|                | `$`                           | rename                                       |
+|                | `d`                           | detach                                       |
+|                | &nbsp;last window closed      | lands in another session, not out of tmux    |
+|   | ─────────────────────────────── | ──────────────────────────────────────────────── |
+| **Panes**      | `v` / `s`                     | split side by side / stacked, same directory |
+|                | &nbsp;arrows                        | move                                         |
+|                | `z`                           | zoom, again to undo                          |
+|                | `x`                           | close (asks)                                 |
+|   | ─────────────────────────────── | ──────────────────────────────────────────────── |
+| **Copy mode**  | `e`, `[`                      | enter: frozen pane, scroll and copy          |
+|                | `PageUp`                      | enter, one page up                           |
+|                | `j` `k`, `Ctrl-D` `Ctrl-U`    | line, half page                              |
+|                | `g` / `G`                     | oldest line / bottom                         |
+|                | `/` `?`, then `n` `N`         | search down / up, next / previous            |
+|                | `w` `b` `0` `$` `H` `M` `L`   | move like nvim                               |
+|                | `v` / `V` / `Ctrl-V`          | select / lines / block                       |
+|                | `y`, `Enter`                  | copy and leave; `Cmd-V` pastes               |
+|                | `yy` / `Y`                    | copy the line / to its end                   |
+|                | `yiw` / `yaw`                 | copy the word / with the spaces after it     |
+|                | `]`                           | paste the last copy into the pane            |
+|                | `Esc` / `q`                   | drop selection / leave                       |
+|                | &nbsp;in Claude               | only what's on screen; scroll Claude first   |
+|   | ─────────────────────────────── | ──────────────────────────────────────────────── |
+| **Other**      | `o`                           | one-command shell popup; closes on success   |
+|                | `:`                           | command prompt (`:list-keys`)                |
+|                | `r`                           | reload tmux.conf                             |
+|                | `Ctrl-A`                      | literal Ctrl-A                               |
+|                | &nbsp;mouse                         | wheel scrolls, selecting copies              |
+|   | ─────────────────────────────── | ──────────────────────────────────────────────── |
+| **Status bar** | `+N` after the session name   | other sessions running                       |
+|                | `mem 34%`                     | memory in use; yellow / red = pressure       |
+|                | `cpu 9%`                      | whole machine; one busy core is ~8%          |
+|                | `Python 58m`                  | over 15 CPU-minutes in the last hour         |
+|                | &nbsp;refresh                 | 60 s, `sysload.sh`; `~/.cache/tmux-sysload-hist` |
+|   | ─────────────────────────────── | ──────────────────────────────────────────────── |
+| **Settings**   | &nbsp;windows                       | numbered from 1, gaps closed                 |
+|                | &nbsp;window name                   | running command; for Claude the pane title   |
+|                | &nbsp;scrollback                    | 50000 lines                                  |
+|                | &nbsp;clipboard                     | copies reach macOS (OSC 52)                  |
+|                | `Shift-Enter`                 | reaches programs that ask (extended keys)    |
+|                | &nbsp;inline images                 | pass through                                 |
+|                | `Esc`                         | no delay                                     |
+|                | &nbsp;look                          | bar on top, transparent; terminal's colours  |
