@@ -63,10 +63,15 @@ cheat() {
   m=("$dir/$1".md(N) "$dir/$1"*.md(N))
   [ ${#m} -eq 0 ] && { echo "no sheet matching '$1' in $dir"; return 1; }
   (( $+commands[glow] )) || { cat "${m[1]}"; return; }
-  # Piped, glow ignores its config, so the style and width (as in glow.yml) are passed. perl blanks
-  # the first column's piece of the header rule in a three-column sheet (section | command | does).
-  glow -s "${link:A:h}/.config/glow/ansi.json" -w 110 "${m[1]}" |
-    perl -Mutf8 -CSD -pe 's/^(\s*)(─+)┼(?=─+┼)/$1 . (" " x length($2)) . "│"/e'
+  # Piped, glow ignores its config, so the style is passed, and the width: 110 (as in glow.yml)
+  # or the terminal's, if narrower. The sheets' ─── divider rows have a fixed length and would
+  # wrap in a narrow terminal, so sed empties them and perl draws them back at the rendered
+  # column widths (glow pads with no-break spaces). perl also blanks the first column's piece
+  # of the header rule in a three-column sheet (section | command | does).
+  sed -E 's/^\|[^|]*(\|[ ─]*─[ ─]*)+\|$/| | | |/' "${m[1]}" |
+    glow -s "${link:A:h}/.config/glow/ansi.json" -w $(( COLUMNS < 110 ? COLUMNS : 110 )) - |
+    perl -Mutf8 -CSD -pe 's/^(\s*)(─+)┼(?=─+┼)/$1 . (" " x length($2)) . "│"/e;
+      s/(?<=│)(\h+)(?=│|$)/" " . ("─" x (length($1) - 2)) . " "/ge if /^\s*│\s*│\s*$/'
 }
 
 # t NAME [DIR]: attach to (or create) tmux session NAME, switch if already
