@@ -22,7 +22,7 @@
 ;;     that position, and home row Ctrl made a second hatch redundant.)
 ;;   * Layer keys are THUMB keys, mirroring the Voyager's LT() thumbs 1:1:
 ;;         spc   tap Space  / hold symbols   (Voyager: LT(1, KC_SPACE))
-;;         rmet  tap Return / hold nav       (Voyager: LT(2, KC_ENTER))
+;;         rmet  hold nav, no tap action     (Voyager: LT(2, KC_ENTER))
 ;;         ralt  hold launch                 (real F1-F12, layout toggle)
 ;;     They used to sit on the right index (`m` and `n`), which is exactly why
 ;;     the symbol layer's payload had to be confined to the left hand. On a
@@ -129,16 +129,20 @@
     z x c v b
   )
 
-  ;; The symbol layer's left mods (@sy6..@sy9) are `tap-hold-keys`, whose key
+  ;; The symbol layer's left mods (@sya..@syf) are `tap-hold-keys`, whose key
   ;; lists are option forms, so these two hold the whole form (a variable can
   ;; stand in for a list but cannot be spliced into one). The tap list is
-  ;; `left-hand-keys` verbatim. The hold list is EVERY right-hand key, home row
+  ;; `left-hand-keys` plus the other left home row keys: their taps are now
+  ;; `[ ] ( )`, typed as pairs, and a nested `[]` roll must not come out as
+  ;; Shift-] = `}`. Chaining two of these mods still works once the first is
+  ;; held past $hold-time. The hold list is EVERY right-hand key, home row
   ;; included: pressing any of them settles the mod as a hold at once, no 200ms
   ;; wait. The other lists leave the home row out so same-hand mods can chain;
   ;; this one is for the opposite hand, where `a`-hold + `j` must be `$` and
   ;; `a`-hold + `h` must be `+`.
   sy-tap-on-press (tap-on-press
     q w e r t
+    a s d f
     g
     z x c v b
   )
@@ -146,6 +150,25 @@
     y u i o p [ ]
     h j k l ; '
     n m , . /
+  )
+
+  ;; The same split for @npd, the right-pinky Shift on the symbols layers. The
+  ;; laptop keyboard cannot report Space + `a` + `h` or Space + `;` + `h` at
+  ;; once (verified in Karabiner-EventViewer, 2026-11-10: the `h` never
+  ;; arrives), which is why `=` left physical h for physical c. Digits force a
+  ;; tap, so ".5" rolls stay literal; the operators and the left-hand pairs
+  ;; settle Shift at once: `=`->`+`, `-`->`_`, `/`->`?`, `[`->`{`, `]`->`}`,
+  ;; `` ` ``->`~`.
+  np-tap-on-press (tap-on-press
+    u i o
+    j k l
+    m , .
+  )
+  np-hold-on-press (hold-on-press
+    y h n p /
+    q w e r t
+    a s d f g
+    z x c v b
   )
 )
 
@@ -298,13 +321,14 @@
   spc  (tap-hold $tap-time $hold-time spc (layer-while-held symbols))
   spck (tap-hold $tap-time $hold-time spc (layer-while-held symbols-cmk))
 
-  ;; Right Cmd: tap Return, hold nav -- the Voyager's LT(2, KC_ENTER). The same
-  ;; key carries `0` on the symbol layer, which is NOT a conflict: a held
-  ;; layer's entry replaces the base action outright, so this tap-hold is never
-  ;; consulted while Space is down. Same mechanism as `<hold spc>z` -> Tab.
+  ;; Right Cmd: hold nav, no tap action -- the Voyager's LT(2, KC_ENTER) minus
+  ;; the Enter, which only ever misfired (Return lives on Ctrl-M and the real
+  ;; Return key). The same key carries `0` on the symbol layer, which is NOT a
+  ;; conflict: a held layer's entry replaces the base action outright, so this
+  ;; key is never consulted while Space is down. Same mechanism as `<hold spc>z` -> Tab.
   ;; Physical Right Cmd is consumed. Cmd survives on physical Left Cmd, on
   ;; @hmf/@cmt (left hand) and on @hmj/@cmn (right hand).
-  nav  (tap-hold $tap-time $hold-time ret (layer-while-held nav))
+  nav  (layer-while-held nav)
 
   ;; Right Option: the launch layer and nothing else. No tap action, so it is a
   ;; plain layer key with no timing behaviour at all -- press and it is open,
@@ -326,7 +350,7 @@
   np4 (tap-hold-tap-keys $tap-time $hold-time 4   rmet $right-hand-keys)
   np5 (tap-hold-tap-keys $tap-time $hold-time 5   ralt $right-hand-keys)
   np6 (tap-hold-tap-keys $tap-time $hold-time 6   rctl $right-hand-keys)
-  npd (tap-hold-tap-keys $tap-time $hold-time .   rsft $right-hand-keys)
+  npd (tap-hold-keys $tap-time $hold-time .   rsft $np-tap-on-press $np-hold-on-press)
   ;; Left hand, same idea: the Voyager's layer 1 has MT(MOD_LSFT, KC_CIRC),
   ;; MT(MOD_LCTL, KC_AMPR), MT(MOD_LALT, KC_ASTR), MT(MOD_LGUI, KC_LPRN) on
   ;; a s d f. Without these the only Shift on the layer was `;`, which is
@@ -347,10 +371,11 @@
   ;; remaining keys (s d f, the other mods) get permissive hold so chords still
   ;; chain. The numpad mods on the right keep the full wait on purpose: digit
   ;; rolls like "456" have nested releases and would misfire as Cmd-5.
-  sy6 (tap-hold-keys $tap-time $hold-time S-6 lsft $sy-tap-on-press $sy-hold-on-press)
-  sy7 (tap-hold-keys $tap-time $hold-time S-7 lctl $sy-tap-on-press $sy-hold-on-press)
-  sy8 (tap-hold-keys $tap-time $hold-time S-8 lalt $sy-tap-on-press $sy-hold-on-press)
-  sy9 (tap-hold-keys $tap-time $hold-time S-9 lmet $sy-tap-on-press $sy-hold-on-press)
+  ;; Except @npd, which is the layer's working Shift (see np-hold-on-press).
+  sya (tap-hold-keys $tap-time $hold-time [   lsft $sy-tap-on-press $sy-hold-on-press)
+  sys (tap-hold-keys $tap-time $hold-time ]   lctl $sy-tap-on-press $sy-hold-on-press)
+  syd (tap-hold-keys $tap-time $hold-time S-9 lalt $sy-tap-on-press $sy-hold-on-press)
+  syf (tap-hold-keys $tap-time $hold-time S-0 lmet $sy-tap-on-press $sy-hold-on-press)
 )
 
 ;; Ctrl-; -> ~  (exact input-combo -> output-combo rewrite)
@@ -430,8 +455,8 @@
 ;; still has - = / + * / . in those slots):
 ;;
 ;;     ! @ # $ %        +  7 8 9 *      <- q w e r t  /  y u i o p
-;;     ^ & * ( )        =  4 5 6 .      <- a s d f g  /  h j k l ;
-;;     tab [ ] `        -  1 2 3 /      <- z x c v    /  n m , . /
+;;     [ ] ( ) `        _  4 5 6 .      <- a s d f g  /  h j k l ;
+;;     tab _ _ =        -  1 2 3 /      <- z x c v    /  n m , . /
 ;;                            0         <- rmet, the right thumb
 ;;
 ;; The right half is why the layer key had to leave the right index and move to
@@ -447,17 +472,20 @@
 ;; the LEFT hand only because it keeps the mapping to the number row legible at
 ;; a glance -- there is no Shift trick left to read into it.
 ;;
-;; Home row mods stay live on BOTH hands (@sy6..@sy9 left, @np4..@npd right),
+;; Home row mods stay live on BOTH hands (@sya..@syf left, @np4..@npd right),
 ;; matching the Voyager's layer 1. The left ones exist so Shift is reachable
 ;; for the right hand's operators: `a`-hold + `h` is `+`, `a`-hold + `n` is
-;; `_`. They used to be shadowed as plain `^ & * (`, and the note about pressing
+;; `_`. Their taps are `[ ] ( )` (Nov 2026; the Voyager had `^ & * (`, and the
+;; old bottom-row `[ ] `` slots are dead; `` ` `` moved up to g). `[`, `]` and
+;; `` ` `` are unshifted keys, so a held Shift makes `{ } ~`. They used to be
+;; shadowed as plain `^ & * (`, and the note about pressing
 ;; Hyper before Space no longer applies -- a+s+d+f is Hyper here too.
 (deflayer symbols
   _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
   _    S-1  S-2  S-3  S-4  S-5  S-=  7    8    9    S-8  _    _    _
-  _    @sy6 @sy7 @sy8 @sy9 S-0  =    @np4 @np5 @np6 @npd _   _
-  _    tab  [    ]    grv  _    -    1    2    3    /    _
+  _    @sya @sys @syd @syf grv  XX   @np4 @np5 @np6 @npd _   _
+  _    tab  XX   XX   =    _    -    1    2    3    /    _
   _    _    _    _    0    _
 )
 
@@ -468,8 +496,8 @@
 ;; half, because that is all the angle mod touches:
 ;;
 ;;     ! @ # $ %        +  7 8 9 *      <- q w e r t  /  y u i o p
-;;     ^ & * ( )        =  4 5 6 .      <- a r s t g  /  h j k l ;
-;;   tab [ ] `          -  1 2 3 /      <- lsft z x c /  n m , . /
+;;     [ ] ( ) `        _  4 5 6 .      <- a r s t g  /  h j k l ;
+;;   tab _ _ =          -  1 2 3 /      <- lsft z x c /  n m , . /
 ;;                            0         <- rmet, the right thumb
 ;;
 ;; The right half is a verbatim copy of `symbols` and has to stay that way; see
@@ -480,8 +508,8 @@
   _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
   _    S-1  S-2  S-3  S-4  S-5  S-=  7    8    9    S-8  _    _    _
-  _    @sy6 @sy7 @sy8 @sy9 S-0  =    @np4 @np5 @np6 @npd _   _
-  tab  [    ]    grv  _    _    -    1    2    3    /    _
+  _    @sya @sys @syd @syf grv  XX   @np4 @np5 @np6 @npd _   _
+  tab  XX   XX   =    _    _    -    1    2    3    /    _
   _    _    _    _    0    _
 )
 

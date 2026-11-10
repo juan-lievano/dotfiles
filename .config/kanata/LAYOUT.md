@@ -27,7 +27,7 @@ mirrors the Voyager's `LT()` thumbs one for one.
 | key | tap | hold |
 |-----|-----|------|
 | **Space** | Space | `symbols` / `symbols-cmk` |
-| **Right Cmd** | Return | `nav` |
+| **Right Cmd** | — | `nav` |
 | **Right Option** | — | `launch` |
 
 Physical Right Cmd and Right Option are consumed as modifiers. Both survive on
@@ -43,7 +43,7 @@ their left-hand physical keys and on the home row mods of either hand.
  tab    q    w    e    r    t        │  y    u    i    o    p    [    ]    \
  esc    A    S    D    F    g        │  h    J    K    L    :    '   ret
  shift  z    x    c    v    b        │  n    m    ,    .    /   shift
-                ctrl  opt  cmd  SPACE│ RET   FN
+                ctrl  opt  cmd  SPACE│ NAV   FN
 ```
 
 Home row mods (`A S D F` / `J K L :` above), Cmd innermost:
@@ -71,7 +71,7 @@ Ctrl rewrites on this layer: `h` → Delete, `m` → Return, `[` → Esc, `;` �
  tab    q    w    f    p    b        │  j    l    u    y    ;    [    ]    \
  esc    A    R    S    T    g        │  m    N    E    I    O    '   ret
   z     x    c    d    v   (XX)      │  k    h    ,    .    /   shift
-                ctrl  opt  cmd  SPACE│ RET   FN
+                ctrl  opt  cmd  SPACE│ NAV   FN
 ```
 
 The **angle mod** slides the left bottom row one key left onto Left Shift, so
@@ -104,13 +104,13 @@ The Voyager's Sym+Num layer, both halves: symbols left, a real numpad right.
   ·     ·    ·    ·    ·    ·    ·   │  ·    ·    ·    ·    ·    ·
   ·     ·    ·    ·    ·    ·        │  ·    ·    ·    ·    ·    ·    ·    ·
   ·     !    @    #    $    %        │  +    7    8    9    *    ·    ·    ·
-  ·     ^    &    *    (    )        │  =    4    5    6    .    ·    ·
-  ·    tab   [    ]    `    ·        │  -    1    2    3    /    ·
+  ·     [    ]    (    )    `        │  ·    4    5    6    .    ·    ·
+  ·    tab   ·    ·    =    ·        │  -    1    2    3    /    ·
                  ·    ·    ·   held  │  0    ·
 ```
 
 `symbols-cmk` is identical except that the bottom-left four slide one key left
-with the angle mod — ``tab [ ] ` `` land on `lsft z x c` instead of `z x c v`.
+with the angle mod — `tab` and the dead keys land on `lsft z x c` instead of `z x c v`.
 **The right half is byte-identical in both** and must be edited in both places
 together.
 
@@ -133,12 +133,19 @@ Both hands keep their home row mods on this layer, so modifiers stay chordable
 without leaving it — Shift on either pinky, Cmd innermost:
 
 ```
-   ^    &    *    (                       4    5    6    .
+   [    ]    (    )                       4    5    6    .
  shift ctrl opt  cmd                     cmd  opt ctrl shift
 ```
 
-`x c v` still give `` { } ~ `` for free — `` [ ] ` `` are unshifted keys, so a
-held Shift produces the other half on its own. The digits need no such trick any
+`[ ]` on `a s` give `{ }` and `` ` `` on `g` gives `~` for free — they are
+unshifted keys, so a held Shift produces the other half on its own. `^ & *`
+are off this layer (Shift + number row).
+
+`=` sits on physical `c` (Colemak `d`), not `h`: the laptop keyboard can't
+report Space + `a` + `h` or Space + `;` + `h` together, so `+` from `h` was
+impossible (verified in EventViewer, 2026-11-10). Shift it with `;` held or the
+real Shift; `a` is same-hand there and taps. `;`-hold shifts every operator and
+the left half at once; digits still force it to type `.`, so `.5` stays literal. The digits need no such trick any
 more; they are literal.
 
 > ⚠️ This puts a layer on the most-pressed key on the board. Any Space press
@@ -224,7 +231,7 @@ path: `h` is the Ctrl-H→Delete fork, which now lets Hyper through (README).
 | here | Voyager |
 |------|---------|
 | Space → symbols | `LT(1, KC_SPACE)` — left thumb |
-| Right Cmd → nav, `0` on symbols | `LT(2, KC_ENTER)`, `KC_0` on layer 1 |
+| Right Cmd → nav (no tap), `0` on symbols | `LT(2, KC_ENTER)`, `KC_0` on layer 1 |
 | Right Option → launch | its `ALL_T(KC_BSPC)` Hyper thumb |
 | `4 5 6 .` mod-taps | `MT(MOD_RGUI, KC_4)`, `MT(MOD_RALT, KC_5)`, `MT(MOD_RCTL, KC_6)`, `MT(MOD_RSFT, KC_DOT)` |
 | nav's `j k l ;` | `KC_RIGHT_GUI / ALT / CTRL / SHIFT`, layer 2 |
