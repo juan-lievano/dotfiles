@@ -16,7 +16,7 @@
       "~/.config/"
     ]
   },
-  "model": "fable",
+  "model": "opus",
   "statusLine": {
     "type": "command",
     "command": "sh ~/.claude/statusline-command.sh",
