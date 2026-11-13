@@ -19,6 +19,7 @@ case "$1" in
   6) app="Calendar" ;;
   7) app="Spotify" ;;
   8) app="Dictionary" ;;
+  9) app="Discord" ;;
   *) exit 1 ;;
 esac
 exec open -a "$app"
